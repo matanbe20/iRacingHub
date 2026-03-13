@@ -522,6 +522,33 @@ body {
 
 .my-race-remove:hover { background: #ef4444; border-color: #ef4444; color: #fff; }
 
+/* This Week panel */
+.week-view-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.week-view-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+.week-view-count { font-size: 0.8rem; color: var(--text-dim); }
+
+.tw-category-group { margin-bottom: 1.5rem; }
+.tw-category-header { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.25rem 0.6rem; border-radius: 4px; display: inline-block; margin-bottom: 0.6rem; }
+.tw-category-header.oval { background: rgba(239,68,68,0.15); color: var(--oval); }
+.tw-category-header.sports { background: rgba(34,197,94,0.15); color: var(--sports); }
+.tw-category-header.formula { background: rgba(168,85,247,0.15); color: var(--formula); }
+.tw-category-header.dirt-oval { background: rgba(245,158,11,0.15); color: var(--dirt-oval); }
+.tw-category-header.dirt-road { background: rgba(236,72,153,0.15); color: var(--dirt-road); }
+.tw-category-header.unranked { background: rgba(107,114,128,0.15); color: var(--unranked); }
+
+.tw-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; position: relative; transition: border-color 0.15s; }
+.tw-card:hover { border-color: #3d4260; }
+.tw-card-info { flex: 1; min-width: 0; }
+.tw-card-title { font-weight: 600; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-card-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.15rem; }
+
+/* Share button */
+.export-btn-copied { background: #16a34a !important; border-color: #16a34a !important; color: #fff !important; }
+
+/* Toast notification */
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(6px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.85rem; box-shadow: 0 4px 20px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 500; white-space: nowrap; }
+.toast.toast-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 @media (max-width: 768px) {
   .header-inner { padding: 1rem; }
   .header h1 { margin-top: 25px; font-size: 1.75rem; }

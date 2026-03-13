@@ -15,6 +15,15 @@ function getCurrentWeek() {
 
 const currentWeek = getCurrentWeek();
 
+function getWeekDateRange(weekNum) {
+  const seasonStart = new Date('2026-03-17');
+  const start = new Date(seasonStart.getTime() + (weekNum - 1) * 7 * 24 * 60 * 60 * 1000);
+  const end = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmt = d => months[d.getMonth()] + ' ' + d.getDate();
+  return 'Week ' + weekNum + ' \u2014 ' + fmt(start) + ' \u2013 ' + fmt(end);
+}
+
 // Category to CSS class mapping
 function catClass(cat) {
   return {
@@ -89,7 +98,7 @@ function saveState() {
   if (!allCatsActive) params.set('cat', [...activeCategories].join(','));
   if (!allClsActive) params.set('cls', [...activeClasses].join(','));
   if (searchQuery) params.set('q', searchQuery);
-  if (activeTab === 'my') params.set('tab', 'my');
+  if (activeTab === 'my' || activeTab === 'week') params.set('tab', activeTab);
 
   const qs = params.toString();
   const url = window.location.pathname + (qs ? '?' + qs : '');
@@ -173,9 +182,12 @@ function switchTab(tab) {
   activeTab = tab;
   document.getElementById('all-series-panel').style.display = tab === 'all' ? '' : 'none';
   document.getElementById('my-schedule-panel').style.display = tab === 'my' ? '' : 'none';
+  document.getElementById('this-week-panel').style.display = tab === 'week' ? '' : 'none';
   document.getElementById('tab-all').classList.toggle('active', tab === 'all');
   document.getElementById('tab-my').classList.toggle('active', tab === 'my');
+  document.getElementById('tab-week').classList.toggle('active', tab === 'week');
   if (tab === 'my') renderMySchedule();
+  if (tab === 'week') renderThisWeek();
   saveState();
 }
 
@@ -210,6 +222,7 @@ function renderMySchedule() {
   const headerHtml = `<div class="my-schedule-header">
     <span class="count-label">${entries.length} race${entries.length !== 1 ? 's' : ''} saved</span>
     <div class="export-group">
+      <button class="export-btn" onclick="shareSchedule(this)">Share</button>
       <button class="export-btn" onclick="exportCSV()">Download CSV</button>
       <button class="export-btn" onclick="exportICS()">Download .ics</button>
     </div>
@@ -279,6 +292,119 @@ function downloadFile(filename, content, mimeType) {
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('toast-visible');
+  setTimeout(() => toast.classList.remove('toast-visible'), 3500);
+}
+
+function shareSchedule(btn) {
+  const ids = Object.keys(mySchedule);
+  const encoded = btoa(JSON.stringify(ids));
+  const url = location.origin + location.pathname + '?share=' + encoded + '&tab=my';
+  const orig = btn.textContent;
+  function onCopied() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('export-btn-copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('export-btn-copied'); }, 2000);
+  }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(onCopied).catch(() => { prompt('Copy this URL:', url); });
+  } else {
+    prompt('Copy this URL:', url);
+    onCopied();
+  }
+}
+
+function loadSharedSchedule(ids) {
+  let added = 0;
+  ids.forEach(id => {
+    if (mySchedule[id]) return;
+    const sep = id.lastIndexOf('_');
+    if (sep === -1) return;
+    const rawName = id.slice(0, sep);
+    const weekNum = Number(id.slice(sep + 1));
+    const series = SCHEDULE_DATA.find(s => s.name === rawName);
+    if (!series) return;
+    const week = series.weeks.find(w => w.week === weekNum);
+    if (!week) return;
+    mySchedule[id] = {
+      id, rawName, weekNum,
+      displayName: cleanName(rawName),
+      category: series.category,
+      cls: series.class,
+      cars: series.cars,
+      track: week.track,
+      date: week.date,
+      laps: week.laps || ''
+    };
+    added++;
+  });
+  if (added > 0) {
+    saveMySchedule();
+    updateMyScheduleBadge();
+    showToast(added + ' race' + (added !== 1 ? 's' : '') + ' added to your schedule');
+  }
+}
+
+function renderThisWeek() {
+  const panel = document.getElementById('this-week-panel');
+  const q = searchQuery.toLowerCase();
+  const results = [];
+  SCHEDULE_DATA.forEach(s => {
+    if (!activeCategories.has(s.category)) return;
+    if (!activeClasses.has(s.class)) return;
+    const week = s.weeks.find(w => w.week === currentWeek);
+    if (!week) return;
+    if (q) {
+      const haystack = (s.name + ' ' + s.cars + ' ' + week.track + ' ' + (week.car || '')).toLowerCase();
+      if (!haystack.includes(q)) return;
+    }
+    results.push({ s, week });
+  });
+
+  const dateRange = getWeekDateRange(currentWeek);
+  const headerHtml = `<div class="week-view-header">
+    <span class="week-view-title">${dateRange}</span>
+    <span class="week-view-count">${results.length} series</span>
+  </div>`;
+
+  if (!results.length) {
+    panel.innerHTML = headerHtml + '<div class="no-results">0 races this week match your filters</div>';
+    return;
+  }
+
+  const groups = {};
+  ALL_CATEGORIES.forEach(cat => { groups[cat] = []; });
+  results.forEach(r => groups[r.s.category].push(r));
+
+  const groupsHtml = ALL_CATEGORIES.filter(cat => groups[cat].length > 0).map(cat => {
+    const cc = catClass(cat);
+    const cardsHtml = groups[cat].map(({ s, week: w }) => {
+      const raceId = s.name + '_' + w.week;
+      const isAdded = !!mySchedule[raceId];
+      const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      const meta = [w.track, w.laps, s.cars].filter(Boolean).join(' \xb7 ');
+      return `<div class="tw-card">
+        <span class="cat-badge ${cc}">${catLabel(cat)}</span>
+        <span class="class-badge ${s.class}">${s.class}</span>
+        <div class="tw-card-info">
+          <div class="tw-card-title">${cleanName(s.name)}</div>
+          <div class="tw-card-meta">${meta}</div>
+        </div>
+        <button class="week-add-btn${isAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" data-week="${w.week}" onclick="toggleRace(event,'${safeRawName}',${w.week})" title="${isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}">${isAdded ? '&#x2713;' : '+'}</button>
+      </div>`;
+    }).join('');
+    return `<div class="tw-category-group">
+      <div class="tw-category-header ${cc}">${catLabel(cat)}</div>
+      ${cardsHtml}
+    </div>`;
+  }).join('');
+
+  panel.innerHTML = headerHtml + groupsHtml;
 }
 
 // Initialize state
@@ -385,6 +511,7 @@ document.getElementById('cat-filters').addEventListener('click', e => {
   }
   saveState();
   renderSeries();
+  if (activeTab === 'week') renderThisWeek();
 });
 
 document.getElementById('class-filters').addEventListener('click', e => {
@@ -399,21 +526,38 @@ document.getElementById('class-filters').addEventListener('click', e => {
   }
   saveState();
   renderSeries();
+  if (activeTab === 'week') renderThisWeek();
 });
 
 document.getElementById('search').addEventListener('input', e => {
   searchQuery = e.target.value;
   saveState();
   renderSeries();
+  if (activeTab === 'week') renderThisWeek();
 });
 
 // Load my schedule and restore tab from URL
 loadMySchedule();
+
+const shareParam = new URLSearchParams(window.location.search).get('share');
+if (shareParam) {
+  try {
+    const sharedIds = JSON.parse(atob(shareParam));
+    if (Array.isArray(sharedIds)) loadSharedSchedule(sharedIds);
+  } catch {}
+  const cleanParams = new URLSearchParams(window.location.search);
+  cleanParams.delete('share');
+  const qs = cleanParams.toString();
+  history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+}
+
 const tabParam = new URLSearchParams(window.location.search).get('tab');
 if (tabParam === 'my') activeTab = 'my';
+else if (tabParam === 'week') activeTab = 'week';
 
 // Initial render
 syncUI();
 renderSeries();
 updateMyScheduleBadge();
 if (activeTab === 'my') switchTab('my');
+else if (activeTab === 'week') switchTab('week');

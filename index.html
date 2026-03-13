@@ -45,6 +45,7 @@
 <div class="tab-nav">
   <div class="tab-nav-inner">
     <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">All Series</button>
+    <button class="tab-btn" id="tab-week" onclick="switchTab('week')">This Week</button>
     <button class="tab-btn" id="tab-my" onclick="switchTab('my')">My Schedule <span class="tab-badge" id="my-schedule-count"></span></button>
   </div>
 </div>
@@ -55,7 +56,10 @@
     <div class="series-grid" id="series-grid"></div>
   </div>
   <div id="my-schedule-panel" style="display:none"></div>
+  <div id="this-week-panel" style="display:none"></div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
 <script src="script.js"></script>
