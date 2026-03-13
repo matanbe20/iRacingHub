@@ -1,3 +1,8 @@
+// Populate season info from data.js
+document.getElementById('season-label').textContent = SEASON_LABEL;
+document.getElementById('season-dates').textContent = SEASON_DATES;
+document.title = 'iRacing ' + SEASON_LABEL + ' Schedule';
+
 // Determine current week
 function getCurrentWeek() {
   const seasonStart = new Date('2026-03-17');

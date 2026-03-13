@@ -34,14 +34,15 @@ body {
 }
 
 .header {
-  background: linear-gradient(180deg, #1a1d27 0%, #0f1117 100%);
+  background: linear-gradient(160deg, #1e2235 0%, #0f1117 60%);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
 .header-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: 2rem 2rem 1.5rem;
   position: relative;
 }
 
@@ -69,16 +70,26 @@ body {
 .kofi-btn svg { flex-shrink: 0; color: #ff5e5b; }
 
 .header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.3rem;
+  line-height: 1.1;
 }
 
 .header h1 span { color: var(--accent); }
 
+.header .season-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.01em;
+}
+
 .header .subtitle {
   color: var(--text-dim);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
 }
 
 .filters {
@@ -513,7 +524,8 @@ body {
 
 @media (max-width: 768px) {
   .header-inner { padding: 1rem; }
-  .header h1 { margin-top: 25px; }
+  .header h1 { margin-top: 25px; font-size: 1.75rem; }
+  .header .season-label { font-size: 1rem; }
   .kofi-btn {
     position: static;
     display: inline-flex;
