@@ -52,7 +52,9 @@ const ALL_CATEGORIES = ["OVAL", "SPORTS CAR", "FORMULA CAR", "DIRT OVAL", "DIRT 
 const ALL_CLASSES = ["R", "D", "C", "B", "A"];
 const STORAGE_KEY = 'iracing-2026s2-filters';
 const MY_SCHEDULE_KEY = 'iracing-2026s2-my-schedule';
+const FAVORITES_KEY = 'iracing-2026s2-favorites';
 let mySchedule = {};
+let favorites = new Set();
 let activeTab = 'all';
 
 // Load state: URL params take priority > localStorage > defaults (all active)
@@ -115,6 +117,27 @@ function loadMySchedule() {
 
 function saveMySchedule() {
   localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(mySchedule));
+}
+
+function loadFavorites() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(FAVORITES_KEY));
+    if (Array.isArray(saved)) favorites = new Set(saved);
+  } catch {}
+}
+
+function saveFavorites() {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
+}
+
+function toggleFavorite(rawName) {
+  if (favorites.has(rawName)) {
+    favorites.delete(rawName);
+  } else {
+    favorites.add(rawName);
+  }
+  saveFavorites();
+  renderThisWeek();
 }
 
 function addRace(rawName, weekNum) {
@@ -376,34 +399,50 @@ function renderThisWeek() {
     return;
   }
 
+  function makeCard({ s, week: w }) {
+    const cc = catClass(s.category);
+    const raceId = s.name + '_' + w.week;
+    const isAdded = !!mySchedule[raceId];
+    const isFav = favorites.has(s.name);
+    const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const meta = [w.track, w.laps, s.cars].filter(Boolean).join(' \xb7 ');
+    return `<div class="tw-card">
+      <span class="cat-badge ${cc}">${catLabel(s.category)}</span>
+      <span class="class-badge ${s.class}">${s.class}</span>
+      <div class="tw-card-info">
+        <div class="tw-card-title">${cleanName(s.name)}</div>
+        <div class="tw-card-meta">${meta}</div>
+      </div>
+      <button class="tw-fav-btn${isFav ? ' active' : ''}" onclick="toggleFavorite('${safeRawName}')" title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">${isFav ? '\u2605' : '\u2606'}</button>
+      <button class="week-add-btn${isAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" data-week="${w.week}" onclick="toggleRace(event,'${safeRawName}',${w.week})" title="${isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}">${isAdded ? '&#x2713;' : '+'}</button>
+    </div>`;
+  }
+
+  const favResults = results.filter(r => favorites.has(r.s.name));
+  const otherResults = results.filter(r => !favorites.has(r.s.name));
+
+  let html = headerHtml;
+
+  if (favResults.length > 0) {
+    html += `<div class="tw-category-group">
+      <div class="tw-category-header tw-favorites-header">\u2605 Favorites</div>
+      ${favResults.map(makeCard).join('')}
+    </div>`;
+  }
+
   const groups = {};
   ALL_CATEGORIES.forEach(cat => { groups[cat] = []; });
-  results.forEach(r => groups[r.s.category].push(r));
+  otherResults.forEach(r => groups[r.s.category].push(r));
 
-  const groupsHtml = ALL_CATEGORIES.filter(cat => groups[cat].length > 0).map(cat => {
+  html += ALL_CATEGORIES.filter(cat => groups[cat].length > 0).map(cat => {
     const cc = catClass(cat);
-    const cardsHtml = groups[cat].map(({ s, week: w }) => {
-      const raceId = s.name + '_' + w.week;
-      const isAdded = !!mySchedule[raceId];
-      const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-      const meta = [w.track, w.laps, s.cars].filter(Boolean).join(' \xb7 ');
-      return `<div class="tw-card">
-        <span class="cat-badge ${cc}">${catLabel(cat)}</span>
-        <span class="class-badge ${s.class}">${s.class}</span>
-        <div class="tw-card-info">
-          <div class="tw-card-title">${cleanName(s.name)}</div>
-          <div class="tw-card-meta">${meta}</div>
-        </div>
-        <button class="week-add-btn${isAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" data-week="${w.week}" onclick="toggleRace(event,'${safeRawName}',${w.week})" title="${isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}">${isAdded ? '&#x2713;' : '+'}</button>
-      </div>`;
-    }).join('');
     return `<div class="tw-category-group">
       <div class="tw-category-header ${cc}">${catLabel(cat)}</div>
-      ${cardsHtml}
+      ${groups[cat].map(makeCard).join('')}
     </div>`;
   }).join('');
 
-  panel.innerHTML = headerHtml + groupsHtml;
+  panel.innerHTML = html;
 }
 
 // Initialize state
@@ -535,8 +574,9 @@ document.getElementById('search').addEventListener('input', e => {
   if (activeTab === 'week') renderThisWeek();
 });
 
-// Load my schedule and restore tab from URL
+// Load my schedule, favorites, and restore tab from URL
 loadMySchedule();
+loadFavorites();
 
 const shareParam = new URLSearchParams(window.location.search).get('share');
 if (shareParam) {
