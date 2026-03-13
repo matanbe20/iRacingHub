@@ -37,7 +37,6 @@
   .header {
     background: linear-gradient(180deg, #1a1d27 0%, #0f1117 100%);
     border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -46,6 +45,7 @@
   .header-inner {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 1.5rem 2rem;
   }
 
   .header h1 {
@@ -290,9 +290,202 @@
     font-size: 1rem;
   }
 
+  /* Tab navigation */
+  .tab-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 99;
+  }
+
+  .tab-nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-dim);
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    display: none;
+  }
+
+  .tab-badge:not(:empty) { display: inline-block; }
+
+  /* Week add button */
+  .week-cell { position: relative; }
+
+  .week-add-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-family: inherit;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .week-add-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .week-add-btn.added {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+  }
+
+  /* My Schedule panel */
+  .my-schedule-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-dim);
+  }
+
+  .my-schedule-empty p { font-size: 1rem; margin-bottom: 0.5rem; }
+  .my-schedule-empty small { font-size: 0.8rem; }
+
+  .my-schedule-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .my-schedule-header .count-label {
+    font-size: 0.875rem;
+    color: var(--text-dim);
+    flex: 1;
+  }
+
+  .export-group { display: flex; gap: 0.5rem; }
+
+  .export-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .export-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .my-week-group { margin-bottom: 1.5rem; }
+
+  .my-week-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .my-race-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+    transition: border-color 0.15s;
+  }
+
+  .my-race-card:hover { border-color: #3d4260; }
+
+  .my-race-info { flex: 1; min-width: 0; }
+
+  .my-race-title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .my-race-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.15rem; }
+
+  .my-race-remove {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .my-race-remove:hover { background: #ef4444; border-color: #ef4444; color: #fff; }
+
   @media (max-width: 768px) {
-    .header { padding: 1rem; }
+    .header-inner { padding: 1rem; }
     .container { padding: 1rem; }
+    .tab-nav-inner { padding: 0 1rem; }
     .filters { gap: 0.5rem; }
     .series-cars, .series-freq { display: none; }
     .search-box { width: 100%; }
@@ -331,8 +524,18 @@
   </div>
 </div>
 
+<div class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">All Series</button>
+    <button class="tab-btn" id="tab-my" onclick="switchTab('my')">My Schedule <span class="tab-badge" id="my-schedule-count"></span></button>
+  </div>
+</div>
+
 <div class="container">
-  <div class="series-grid" id="series-grid"></div>
+  <div id="all-series-panel">
+    <div class="series-grid" id="series-grid"></div>
+  </div>
+  <div id="my-schedule-panel" style="display:none"></div>
 </div>
 
 <script>
@@ -377,6 +580,9 @@ function catLabel(cat) {
 const ALL_CATEGORIES = ["OVAL", "SPORTS CAR", "FORMULA CAR", "DIRT OVAL", "DIRT ROAD", "UNRANKED"];
 const ALL_CLASSES = ["R", "D", "C", "B", "A"];
 const STORAGE_KEY = 'iracing-2026s2-filters';
+const MY_SCHEDULE_KEY = 'iracing-2026s2-my-schedule';
+let mySchedule = {};
+let activeTab = 'all';
 
 // Load state: URL params take priority > localStorage > defaults (all active)
 function loadState() {
@@ -421,10 +627,196 @@ function saveState() {
   if (!allCatsActive) params.set('cat', [...activeCategories].join(','));
   if (!allClsActive) params.set('cls', [...activeClasses].join(','));
   if (searchQuery) params.set('q', searchQuery);
+  if (activeTab === 'my') params.set('tab', 'my');
 
   const qs = params.toString();
   const url = window.location.pathname + (qs ? '?' + qs : '');
   history.replaceState(null, '', url);
+}
+
+// My Schedule functions
+function loadMySchedule() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(MY_SCHEDULE_KEY));
+    if (saved && typeof saved === 'object') mySchedule = saved;
+  } catch {}
+}
+
+function saveMySchedule() {
+  localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(mySchedule));
+}
+
+function addRace(rawName, weekNum) {
+  const series = SCHEDULE_DATA.find(s => s.name === rawName);
+  if (!series) return;
+  const week = series.weeks.find(w => w.week === weekNum);
+  if (!week) return;
+  const id = rawName + '_' + weekNum;
+  mySchedule[id] = {
+    id,
+    rawName,
+    weekNum,
+    displayName: cleanName(rawName),
+    category: series.category,
+    cls: series.class,
+    cars: series.cars,
+    track: week.track,
+    date: week.date,
+    laps: week.laps || ''
+  };
+  saveMySchedule();
+  refreshWeekCellState(rawName, weekNum);
+  updateMyScheduleBadge();
+}
+
+function removeRace(id) {
+  if (!mySchedule[id]) return;
+  const { rawName, weekNum } = mySchedule[id];
+  delete mySchedule[id];
+  saveMySchedule();
+  refreshWeekCellState(rawName, weekNum);
+  updateMyScheduleBadge();
+  if (activeTab === 'my') renderMySchedule();
+}
+
+function toggleRace(event, rawName, weekNum) {
+  event.stopPropagation();
+  const id = rawName + '_' + weekNum;
+  if (mySchedule[id]) {
+    removeRace(id);
+  } else {
+    addRace(rawName, weekNum);
+  }
+}
+
+function refreshWeekCellState(rawName, weekNum) {
+  const id = rawName + '_' + weekNum;
+  const isAdded = !!mySchedule[id];
+  document.querySelectorAll('.week-add-btn').forEach(btn => {
+    if (btn.dataset.rawName === rawName && Number(btn.dataset.week) === weekNum) {
+      btn.classList.toggle('added', isAdded);
+      btn.title = isAdded ? 'Remove from My Schedule' : 'Add to My Schedule';
+      btn.textContent = isAdded ? '✓' : '+';
+    }
+  });
+}
+
+function updateMyScheduleBadge() {
+  const count = Object.keys(mySchedule).length;
+  const badge = document.getElementById('my-schedule-count');
+  if (badge) badge.textContent = count > 0 ? String(count) : '';
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('all-series-panel').style.display = tab === 'all' ? '' : 'none';
+  document.getElementById('my-schedule-panel').style.display = tab === 'my' ? '' : 'none';
+  document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+  document.getElementById('tab-my').classList.toggle('active', tab === 'my');
+  if (tab === 'my') renderMySchedule();
+  saveState();
+}
+
+function parseDateStr(dateStr) {
+  try { return new Date(dateStr + ', 2026').getTime(); } catch { return 0; }
+}
+
+function renderMySchedule() {
+  const panel = document.getElementById('my-schedule-panel');
+  const entries = Object.values(mySchedule);
+  if (!entries.length) {
+    panel.innerHTML = `<div class="my-schedule-empty">
+      <p>No races saved yet.</p>
+      <small>Click the <strong>+</strong> button on any week cell to add races to your schedule.</small>
+    </div>`;
+    return;
+  }
+
+  entries.sort((a, b) => {
+    const da = parseDateStr(a.date), db = parseDateStr(b.date);
+    if (da !== db) return da - db;
+    return a.displayName.localeCompare(b.displayName);
+  });
+
+  const groups = {}, groupOrder = [];
+  entries.forEach(e => {
+    const key = 'Week ' + e.weekNum + ' \u2014 ' + e.date;
+    if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
+    groups[key].push(e);
+  });
+
+  const headerHtml = `<div class="my-schedule-header">
+    <span class="count-label">${entries.length} race${entries.length !== 1 ? 's' : ''} saved</span>
+    <div class="export-group">
+      <button class="export-btn" onclick="exportCSV()">Download CSV</button>
+      <button class="export-btn" onclick="exportICS()">Download .ics</button>
+    </div>
+  </div>`;
+
+  const groupsHtml = groupOrder.map(key => {
+    const racesHtml = groups[key].map(e => {
+      const cc = catClass(e.category);
+      const safeId = e.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return `<div class="my-race-card">
+        <span class="cat-badge ${cc}">${catLabel(e.category)}</span>
+        <span class="class-badge ${e.cls}">${e.cls}</span>
+        <div class="my-race-info">
+          <div class="my-race-title">${e.displayName}</div>
+          <div class="my-race-meta">${e.track}${e.laps ? ' \xb7 ' + e.laps : ''}${e.cars ? ' \xb7 ' + e.cars : ''}</div>
+        </div>
+        <button class="my-race-remove" onclick="removeRace('${safeId}')" title="Remove">&#x2715;</button>
+      </div>`;
+    }).join('');
+    return `<div class="my-week-group"><div class="my-week-label">${key}</div>${racesHtml}</div>`;
+  }).join('');
+
+  panel.innerHTML = headerHtml + groupsHtml;
+}
+
+function exportICS() {
+  const entries = Object.values(mySchedule);
+  if (!entries.length) return;
+  entries.sort((a, b) => parseDateStr(a.date) - parseDateStr(b.date));
+  const lines = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0',
+    'PRODID:-//iRacing Schedule//2026 Season 2//EN',
+    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'
+  ];
+  entries.forEach(e => {
+    const d = new Date(e.date + ', 2026');
+    const ds = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+    const uid = 'iracing-2026s2-' + e.id.replace(/[^a-zA-Z0-9]/g, '-') + '@iracing-schedule';
+    lines.push(
+      'BEGIN:VEVENT',
+      'DTSTART;VALUE=DATE:' + ds,
+      'DTEND;VALUE=DATE:' + ds,
+      'SUMMARY:iRacing: ' + e.displayName + ' @ ' + e.track,
+      'DESCRIPTION:Series: ' + e.displayName + '\\nTrack: ' + e.track + '\\nClass: ' + e.cls + '\\nCars: ' + e.cars + (e.laps ? '\\nLaps: ' + e.laps : ''),
+      'UID:' + uid,
+      'END:VEVENT'
+    );
+  });
+  lines.push('END:VCALENDAR');
+  downloadFile('iracing-2026s2-my-schedule.ics', lines.join('\r\n'), 'text/calendar');
+}
+
+function exportCSV() {
+  const entries = Object.values(mySchedule);
+  if (!entries.length) return;
+  entries.sort((a, b) => a.weekNum !== b.weekNum ? a.weekNum - b.weekNum : a.displayName.localeCompare(b.displayName));
+  const esc = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+  const rows = [['Week','Date','Series','Category','Class','Cars','Track','Laps'].map(esc).join(',')];
+  entries.forEach(e => rows.push([e.weekNum, e.date, e.displayName, e.category, e.cls, e.cars, e.track, e.laps].map(esc).join(',')));
+  downloadFile('iracing-2026s2-my-schedule.csv', rows.join('\n'), 'text/csv');
+}
+
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 // Initialize state
@@ -475,10 +867,14 @@ function renderSeries() {
 
     const weeksHtml = s.weeks.map(w => {
       const isCurrent = w.week === currentWeek;
+      const raceId = s.name + '_' + w.week;
+      const isAdded = !!mySchedule[raceId];
+      const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       return `<div class="week-cell${isCurrent ? ' current' : ''}">
         <div class="week-num">Week ${w.week} ${isCurrent ? '(Current)' : ''}<span style="float:right;color:var(--text-dim);font-weight:400">${w.date}</span></div>
         <div class="week-track">${w.track}</div>
         <div class="week-meta">${w.laps || ''}</div>
+        <button class="week-add-btn${isAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" data-week="${w.week}" onclick="toggleRace(event,'${safeRawName}',${w.week})" title="${isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}">${isAdded ? '&#x2713;' : '+'}</button>
       </div>`;
     }).join('');
 
@@ -548,9 +944,16 @@ document.getElementById('search').addEventListener('input', e => {
   renderSeries();
 });
 
+// Load my schedule and restore tab from URL
+loadMySchedule();
+const tabParam = new URLSearchParams(window.location.search).get('tab');
+if (tabParam === 'my') activeTab = 'my';
+
 // Initial render
 syncUI();
 renderSeries();
+updateMyScheduleBadge();
+if (activeTab === 'my') switchTab('my');
 </script>
 </body>
 </html>
