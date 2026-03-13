@@ -46,6 +46,13 @@ body {
   position: relative;
 }
 
+.kofi-img-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 2rem;
+  line-height: 0;
+}
+
 .kofi-btn {
   position: absolute;
   top: 1.25rem;
@@ -560,6 +567,7 @@ body {
   .header-inner { padding: 1rem; }
   .header h1 { margin-top: 25px; font-size: 1.75rem; }
   .header .season-label { font-size: 1rem; }
+  .kofi-img-btn { top: 0.75rem; right: 1rem; }
   .kofi-btn {
     position: static;
     display: inline-flex;
