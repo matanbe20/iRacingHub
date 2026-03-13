@@ -25,6 +25,7 @@ body {
   color: var(--text);
   line-height: 1.5;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .header {
@@ -526,6 +527,7 @@ body {
     font-size: 0.72rem;
     white-space: nowrap;
   }
+  .filter-group { flex-wrap: wrap; }
   .series-cars, .series-freq { display: none; }
   .search-box { width: 100%; }
   .stats { display: none; }
