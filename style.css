@@ -382,7 +382,7 @@ body {
 .series-cars {
   font-size: 0.75rem;
   color: var(--text-dim);
-  max-width: 300px;
+  max-width: 160px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
