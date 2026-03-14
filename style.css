@@ -730,6 +730,8 @@ body {
   }
   .export-btn .btn-label { display: none; }
   .export-btn { padding: 0.35rem 0.5rem; }
+  .cat-badge { min-width: unset; padding: 0.15rem 0.35rem; font-size: 0.6rem; }
+  .class-badge { width: 18px; height: 18px; font-size: 0.65rem; }
   .series-cars, .series-freq { display: none; }
   .search-box { flex: 1; min-width: 0; }
   .stats { display: none; }
