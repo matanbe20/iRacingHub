@@ -801,20 +801,21 @@ body {
   .header-inner { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
   .header-left { flex-shrink: unset; width: 100%; }
   .header-right { max-width: 100%; width: 100%; flex-direction: row; align-items: center; gap: 0.75rem; }
-  .header h1 { margin-top: 25px; font-size: 1.75rem; }
+  .header h1 { margin-top: 0; font-size: 1.75rem; }
   .header .season-label { font-size: 1rem; }
   .kofi-img-btn { display: none; }
   .kofi-mobile-btn {
-    display: block;
+    display: flex;
+    align-items: center;
     position: absolute;
-    top: 0.85rem;
+    top: 1rem;
     right: 1rem;
-    font-size: 1.35rem;
-    line-height: 1;
+    line-height: 0;
     text-decoration: none;
     opacity: 0.75;
     transition: opacity 0.15s;
   }
+  .kofi-mobile-btn img { height: 28px; width: auto; }
   .kofi-mobile-btn:hover { opacity: 1; }
   .kofi-img-btn img { height: 24px; }
   .kofi-btn {
