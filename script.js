@@ -47,6 +47,17 @@ function catLabel(cat) {
   }[cat] || cat;
 }
 
+function catLabelShort(cat) {
+  return {
+    'OVAL': 'Oval',
+    'SPORTS CAR': 'S.Car',
+    'FORMULA CAR': 'Formula',
+    'DIRT OVAL': 'D.Oval',
+    'DIRT ROAD': 'D.Road',
+    'UNRANKED': 'Unrnk'
+  }[cat] || cat;
+}
+
 // All possible values
 const ALL_CATEGORIES = ["OVAL", "SPORTS CAR", "FORMULA CAR", "DIRT OVAL", "DIRT ROAD", "UNRANKED"];
 const ALL_CLASSES = ["R", "D", "C", "B", "A"];
@@ -314,7 +325,7 @@ function renderMySchedule() {
       const cc = catClass(e.category);
       const safeId = e.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       return `<div class="my-race-card">
-        <span class="cat-badge ${cc}">${catLabel(e.category)}</span>
+        <span class="cat-badge ${cc}" data-short="${catLabelShort(e.category)}">${catLabel(e.category)}</span>
         <span class="class-badge ${e.cls}">${e.cls}</span>
         <div class="my-race-info">
           <div class="my-race-title">${e.displayName}</div>
@@ -472,7 +483,7 @@ function renderThisWeek() {
     const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     const meta = [w.track, w.laps, s.cars].filter(Boolean).join(' \xb7 ');
     return `<div class="tw-card">
-      <span class="cat-badge ${cc}">${catLabel(s.category)}</span>
+      <span class="cat-badge ${cc}" data-short="${catLabelShort(s.category)}">${catLabel(s.category)}</span>
       <span class="class-badge ${s.class}">${s.class}</span>
       <div class="tw-card-info">
         <div class="tw-card-title">${cleanName(s.name)}</div>
@@ -583,7 +594,7 @@ function renderSeries() {
     const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     return `<div class="series-card" data-idx="${i}">
       <div class="series-header" onclick="toggleCard(this)">
-        <span class="cat-badge ${cc}">${catLabel(s.category)}</span>
+        <span class="cat-badge ${cc}" data-short="${catLabelShort(s.category)}">${catLabel(s.category)}</span>
         <span class="class-badge ${s.class}">${s.class}</span>
         <span class="series-title">${displayName}${fixed}</span>
         <span class="series-cars">${s.cars}</span>
