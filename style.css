@@ -599,6 +599,9 @@ body {
 .export-group { display: flex; gap: 0.5rem; }
 
 .export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text);
@@ -725,6 +728,8 @@ body {
     padding: 0.6rem 0.75rem;
     font-size: 0.8rem;
   }
+  .export-btn .btn-label { display: none; }
+  .export-btn { padding: 0.35rem 0.5rem; }
   .series-cars, .series-freq { display: none; }
   .search-box { flex: 1; min-width: 0; }
   .stats { display: none; }
