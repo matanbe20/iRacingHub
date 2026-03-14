@@ -343,7 +343,7 @@ body {
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   white-space: nowrap;
-  min-width: 70px;
+  width: 86px;
   text-align: center;
 }
 
