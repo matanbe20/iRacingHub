@@ -11,12 +11,17 @@
 <div class="sticky-top">
 <div class="header">
   <div class="header-inner">
-    <h1><span>iRacing</span> Schedule</h1>
-    <p class="season-label" id="season-label"></p>
-    <p class="subtitle" id="season-dates"></p>
-    <a href='https://ko-fi.com/R5R41VWUGJ' target='_blank' class='kofi-img-btn' style='position:absolute;top:1.25rem;right:2rem;line-height:0;'><img style='border:0px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-    <div class="header-controls">
-      <input type="text" class="search-box" id="search" placeholder="Search series or track...">
+    <div class="header-left">
+      <h1><span>iRacing</span> Schedule</h1>
+      <p class="season-label" id="season-label"></p>
+      <p class="subtitle" id="season-dates"></p>
+    </div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg class="search-icon-svg" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.6"/><line x1="12.5" y1="12.5" x2="17" y2="17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input type="text" class="search-box" id="search" placeholder="">
+        <div class="search-typewriter" id="search-typewriter" aria-hidden="true"><span class="tw-text"></span><span class="tw-cursor"></span></div>
+      </div>
       <button class="mobile-filter-btn" id="mobile-filter-btn" onclick="openFilterDrawer()">Filters <span id="filter-active-count"></span></button>
       <span class="stats" id="stats"></span>
     </div>
@@ -85,6 +90,7 @@
       </div>
       <div class="selected-tags" id="track-tags"></div>
     </div>
+    <a href='https://ko-fi.com/R5R41VWUGJ' target='_blank' class='kofi-img-btn'><img style='border:0px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
   </aside>
   <div class="drawer-overlay" id="drawer-overlay" onclick="closeFilterDrawer()"></div>
   <div class="content-area">

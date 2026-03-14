@@ -471,7 +471,7 @@ function renderThisWeek() {
   </div>`;
 
   if (!results.length) {
-    panel.innerHTML = headerHtml + '<div class="no-results">0 races this week match your filters</div>';
+    panel.innerHTML = headerHtml + '<div class="no-results">0 races this week match your filters<br><span class="no-results-hint">Check the filters applied</span></div>';
     return;
   }
 
@@ -567,7 +567,7 @@ function renderSeries() {
   document.getElementById('stats').textContent = `${filtered.length} series`;
 
   if (!filtered.length) {
-    grid.innerHTML = '<div class="no-results">No series match your filters</div>';
+    grid.innerHTML = '<div class="no-results">No series match your filters<br><span class="no-results-hint">Check the filters applied</span></div>';
     return;
   }
 
@@ -821,5 +821,46 @@ window.addEventListener('resize', updateSidebarTop);
 syncUI();
 renderSeries();
 updateMyScheduleBadge();
+
+function animateTypewriter(input, overlay, phrases) {
+  const twText = overlay.querySelector('.tw-text');
+  const typeSpeed = 80, deleteSpeed = 40, pauseMs = 2000, pauseEmptyMs = 500;
+  let pi = 0, ci = 0, deleting = false, running = true;
+
+  function show(text) { twText.textContent = text; }
+
+  function tick() {
+    if (!running) return;
+    if (searchQuery !== '' || document.activeElement === input) {
+      overlay.classList.add('hidden');
+      return;
+    }
+    overlay.classList.remove('hidden');
+    const phrase = phrases[pi];
+    if (!deleting) {
+      ci++;
+      show('Search ' + phrase.slice(0, ci));
+      if (ci === phrase.length) { deleting = true; setTimeout(tick, pauseMs); return; }
+    } else {
+      ci--;
+      show(ci ? 'Search ' + phrase.slice(0, ci) : 'Search');
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, pauseEmptyMs); return; }
+    }
+    setTimeout(tick, deleting ? deleteSpeed : typeSpeed);
+  }
+
+  input.addEventListener('focus', () => overlay.classList.add('hidden'));
+  input.addEventListener('blur', () => {
+    if (!input.value) { overlay.classList.remove('hidden'); tick(); }
+  });
+
+  tick();
+}
+
+animateTypewriter(
+  document.getElementById('search'),
+  document.getElementById('search-typewriter'),
+  ['Spa', 'Porsche Cup', 'GT3', 'Daytona', 'Formula 4', 'Dirt Oval', 'N\xfcrburgring', 'IMSA', 'Late Model']
+);
 if (activeTab === 'my') switchTab('my');
 else if (activeTab === 'week') switchTab('week');
