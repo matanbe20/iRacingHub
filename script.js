@@ -603,7 +603,9 @@ function renderSeries() {
         <span class="expand-icon">&#9662;</span>
       </div>
       <div class="schedule-body">
-        <div class="week-grid">${weeksHtml}</div>
+        <div class="schedule-body-inner">
+          <div class="week-grid">${weeksHtml}</div>
+        </div>
       </div>
     </div>`;
   }).join('');

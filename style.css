@@ -483,17 +483,26 @@ body {
 .series-card.expanded .expand-icon { transform: rotate(180deg); }
 
 .schedule-body {
-  display: none;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.18s ease;
+}
+
+.schedule-body-inner {
+  overflow: hidden;
+  min-height: 0;
   border-top: 1px solid var(--border);
 }
 
-.series-card.expanded .schedule-body { display: block; }
+.series-card.expanded .schedule-body {
+  grid-template-rows: 1fr;
+}
 
 .week-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 6px;
-  padding: 8px;
+  gap: 10px;
+  padding: 10px;
   background: var(--bg);
 }
 
