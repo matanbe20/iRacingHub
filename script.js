@@ -576,21 +576,24 @@ function renderSeries() {
     const displayName = cleanName(s.name);
     const fixed = isFixed(s.name) ? ' <span style="opacity:0.5;font-size:0.75rem">[Fixed]</span>' : '';
 
+    const rainDropSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 9.5 4 13.5 4 17a8 8 0 0 0 16 0c0-3.5-2.5-7.5-8-15z"/></svg>`;
     const weeksHtml = s.weeks.map(w => {
       const isCurrent = w.week === currentWeek;
       const raceId = s.name + '_' + w.week;
       const isAdded = !!mySchedule[raceId];
       const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      const rainHtml = w.rain > 0 ? `<span class="week-rain">${rainDropSvg} ${w.rain}%</span>` : '';
       return `<div class="week-cell${isCurrent ? ' current' : ''}" style="padding-bottom:1.8rem">
         <div class="week-num">Week ${w.week} ${isCurrent ? '(Current)' : ''}<span style="float:right;color:var(--text-dim);font-weight:400">${w.date}</span></div>
         <div class="week-track">${w.track}</div>
         ${w.car ? `<div class="week-meta" style="font-style:italic">${w.car}</div>` : ''}
-        ${w.laps ? `<span class="week-laps">${w.laps}</span>` : ''}
+        ${w.laps ? `<span class="week-laps">${w.laps}</span>` : ''}${rainHtml}
         <button class="week-add-btn${isAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" data-week="${w.week}" onclick="toggleRace(event,'${safeRawName}',${w.week})" title="${isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}">${isAdded ? '&#x2713;' : '+'}</button>
       </div>`;
     }).join('');
 
     const allAdded = s.weeks.every(w => !!mySchedule[s.name + '_' + w.week]);
+    const hasRain = s.weeks.some(w => w.rain > 0);
     const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     return `<div class="series-card" data-idx="${i}">
       <div class="series-header" onclick="toggleCard(this)">
@@ -599,6 +602,7 @@ function renderSeries() {
         <span class="series-title">${displayName}${fixed}</span>
         <span class="series-cars" title="${s.cars}">${s.cars}</span>
         <span class="series-freq">${s.frequency}</span>
+        ${hasRain ? `<span class="series-rain-icon" title="Rain forecast in some weeks"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 9.5 4 13.5 4 17a8 8 0 0 0 16 0c0-3.5-2.5-7.5-8-15z"/></svg></span>` : ''}
         <button class="series-add-btn${allAdded ? ' added' : ''}" data-raw-name="${s.name.replace(/"/g, '&quot;')}" onclick="toggleSeries(event,'${safeRawName}')" title="${allAdded ? 'Remove all weeks from My Schedule' : 'Add all weeks to My Schedule'}">${allAdded ? '&#x2713; All' : '+ All'}</button>
         <span class="expand-icon">&#9662;</span>
       </div>
