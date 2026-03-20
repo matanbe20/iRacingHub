@@ -1,0 +1,51 @@
+import React from 'react';
+import useStore from '../store/useStore.js';
+import { getCurrentWeek } from '../utils/schedule.js';
+
+const currentWeek = getCurrentWeek();
+
+const RainDropSvg = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.5 9.5 4 13.5 4 17a8 8 0 0 0 16 0c0-3.5-2.5-7.5-8-15z"/>
+  </svg>
+);
+
+export default function WeekCell({ series, week }) {
+  const mySchedule = useStore(s => s.mySchedule);
+  const toggleRace = useStore(s => s.toggleRace);
+
+  const isCurrent = week.week === currentWeek;
+  const raceId = series.name + '_' + week.week;
+  const isAdded = !!mySchedule[raceId];
+
+  function handleToggle(e) {
+    e.stopPropagation();
+    toggleRace(series.name, week.week);
+  }
+
+  return (
+    <div className={'week-cell' + (isCurrent ? ' current' : '')} style={{ paddingBottom: '1.8rem' }}>
+      <div className="week-num">
+        Week {week.week} {isCurrent ? '(Current)' : ''}
+        <span style={{ float: 'right', color: 'var(--text-dim)', fontWeight: 400 }}>{week.date}</span>
+      </div>
+      <div className="week-track">{week.track}</div>
+      {week.car && <div className="week-meta" style={{ fontStyle: 'italic' }}>{week.car}</div>}
+      {week.laps && <span className="week-laps">{week.laps}</span>}
+      {week.rain > 0 && (
+        <span className="week-rain">
+          <RainDropSvg /> {week.rain}%
+        </span>
+      )}
+      <button
+        className={'week-add-btn' + (isAdded ? ' added' : '')}
+        data-raw-name={series.name}
+        data-week={week.week}
+        onClick={handleToggle}
+        title={isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}
+      >
+        {isAdded ? '✓' : '+'}
+      </button>
+    </div>
+  );
+}

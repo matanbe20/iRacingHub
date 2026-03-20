@@ -1,0 +1,40 @@
+import React from 'react';
+import useStore from '../store/useStore.js';
+
+export default function TabNav() {
+  const activeTab = useStore(s => s.activeTab);
+  const setActiveTab = useStore(s => s.setActiveTab);
+  const mySchedule = useStore(s => s.mySchedule);
+  const count = Object.keys(mySchedule).length;
+
+  return (
+    <div className="tab-nav">
+      <div className="tab-nav-inner">
+        <button
+          className={'tab-btn' + (activeTab === 'all' ? ' active' : '')}
+          id="tab-all"
+          onClick={() => setActiveTab('all')}
+        >
+          All Series
+        </button>
+        <button
+          className={'tab-btn' + (activeTab === 'week' ? ' active' : '')}
+          id="tab-week"
+          onClick={() => setActiveTab('week')}
+        >
+          This Week
+        </button>
+        <button
+          className={'tab-btn' + (activeTab === 'my' ? ' active' : '')}
+          id="tab-my"
+          onClick={() => setActiveTab('my')}
+        >
+          My Schedule{' '}
+          <span className="tab-badge" id="my-schedule-count">
+            {count > 0 ? String(count) : ''}
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}

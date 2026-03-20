@@ -1,0 +1,5 @@
+.playwright-mcp
+2026s2.pdf
+.screenshots/
+/node_modules/
+dist/
