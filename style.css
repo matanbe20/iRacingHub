@@ -183,6 +183,7 @@ body {
   color: var(--text-dim);
   opacity: 0.5;
   width: 86px;
+  height: 22px;
   text-align: center;
   white-space: nowrap;
 }
