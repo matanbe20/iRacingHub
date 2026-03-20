@@ -436,10 +436,11 @@ function shareSchedule(btn) {
   }
 }
 
-function loadSharedSchedule(ids) {
-  let added = 0;
+let _sharedEntries = [];
+
+function showShareModal(ids) {
+  _sharedEntries = [];
   ids.forEach(id => {
-    if (mySchedule[id]) return;
     const sep = id.lastIndexOf('_');
     if (sep === -1) return;
     const rawName = id.slice(0, sep);
@@ -448,7 +449,7 @@ function loadSharedSchedule(ids) {
     if (!series) return;
     const week = series.weeks.find(w => w.week === weekNum);
     if (!week) return;
-    mySchedule[id] = {
+    _sharedEntries.push({
       id, rawName, weekNum,
       displayName: cleanName(rawName),
       category: series.category,
@@ -457,14 +458,94 @@ function loadSharedSchedule(ids) {
       track: week.track,
       date: week.date,
       laps: week.laps || ''
-    };
-    added++;
+    });
+  });
+
+  if (!_sharedEntries.length) return;
+
+  _sharedEntries.sort((a, b) => {
+    if (a.weekNum !== b.weekNum) return a.weekNum - b.weekNum;
+    return a.displayName.localeCompare(b.displayName);
+  });
+
+  const groups = {}, groupOrder = [];
+  _sharedEntries.forEach(e => {
+    const key = 'Week ' + e.weekNum + ' \u2014 ' + e.date;
+    if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
+    groups[key].push(e);
+  });
+
+  const groupsHtml = groupOrder.map(key => {
+    const racesHtml = groups[key].map(e => {
+      const cc = catClass(e.category);
+      const alreadyAdded = !!mySchedule[e.id];
+      return `<div class="my-race-card">
+        <span class="cat-badge ${cc}" data-short="${catLabelShort(e.category)}">${catLabel(e.category)}</span>
+        <span class="class-badge ${e.cls}">${e.cls}</span>
+        <div class="my-race-info">
+          <div class="my-race-title">${e.displayName}</div>
+          <div class="my-race-meta">${e.track}${e.laps ? ' \xb7 ' + e.laps : ''}${e.cars ? ' \xb7 ' + e.cars : ''}</div>
+        </div>
+        <button class="share-modal-add-btn${alreadyAdded ? ' added' : ''}" id="share-add-btn-${e.id.replace(/[^a-zA-Z0-9]/g, '-')}" onclick="addSharedRace('${e.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}')" ${alreadyAdded ? 'disabled' : ''}>${alreadyAdded ? '&#x2713;' : '+'}</button>
+      </div>`;
+    }).join('');
+    return `<div class="my-week-group"><div class="my-week-label">${key}</div>${racesHtml}</div>`;
+  }).join('');
+
+  document.getElementById('share-modal-body').innerHTML = groupsHtml;
+  _updateAddAllBtn();
+  document.body.classList.add('share-modal-open');
+}
+
+function _updateAddAllBtn() {
+  const remaining = _sharedEntries.filter(e => !mySchedule[e.id]).length;
+  const btn = document.getElementById('share-modal-add-all');
+  if (!btn) return;
+  if (remaining === 0) {
+    btn.textContent = '\u2713 All Added';
+    btn.disabled = true;
+  } else {
+    btn.textContent = '+ Add All (' + remaining + ')';
+    btn.disabled = false;
+  }
+}
+
+function addSharedRace(id) {
+  if (mySchedule[id]) return;
+  const entry = _sharedEntries.find(e => e.id === id);
+  if (!entry) return;
+  mySchedule[id] = { ...entry };
+  saveMySchedule();
+  updateMyScheduleBadge();
+  if (activeTab === 'my') renderMySchedule();
+  const safeId = id.replace(/[^a-zA-Z0-9]/g, '-');
+  const btn = document.getElementById('share-add-btn-' + safeId);
+  if (btn) { btn.innerHTML = '&#x2713;'; btn.classList.add('added'); btn.disabled = true; }
+  _updateAddAllBtn();
+}
+
+function addAllShared() {
+  let added = 0;
+  _sharedEntries.forEach(e => {
+    if (!mySchedule[e.id]) { mySchedule[e.id] = { ...e }; added++; }
   });
   if (added > 0) {
     saveMySchedule();
     updateMyScheduleBadge();
+    if (activeTab === 'my') renderMySchedule();
+    _sharedEntries.forEach(e => {
+      const safeId = e.id.replace(/[^a-zA-Z0-9]/g, '-');
+      const btn = document.getElementById('share-add-btn-' + safeId);
+      if (btn) { btn.innerHTML = '&#x2713;'; btn.classList.add('added'); btn.disabled = true; }
+    });
+    _updateAddAllBtn();
     showToast(added + ' race' + (added !== 1 ? 's' : '') + ' added to your schedule');
   }
+}
+
+function closeShareModal(event) {
+  if (event && event.target !== document.getElementById('share-modal-overlay')) return;
+  document.body.classList.remove('share-modal-open');
 }
 
 function renderThisWeek() {
@@ -830,7 +911,7 @@ const shareParam = new URLSearchParams(window.location.search).get('share');
 if (shareParam) {
   try {
     const sharedIds = JSON.parse(atob(shareParam));
-    if (Array.isArray(sharedIds)) loadSharedSchedule(sharedIds);
+    if (Array.isArray(sharedIds)) showShareModal(sharedIds);
   } catch {}
   const cleanParams = new URLSearchParams(window.location.search);
   cleanParams.delete('share');

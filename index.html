@@ -109,6 +109,19 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="share-modal-overlay" id="share-modal-overlay" onclick="closeShareModal(event)">
+  <div class="share-modal" id="share-modal">
+    <div class="share-modal-header">
+      <span class="share-modal-title">Shared Schedule</span>
+      <button class="share-modal-close" onclick="closeShareModal()" title="Close">&#x2715;</button>
+    </div>
+    <div class="share-modal-body" id="share-modal-body"></div>
+    <div class="share-modal-footer">
+      <button class="share-modal-add-all" id="share-modal-add-all" onclick="addAllShared()">+ Add All</button>
+    </div>
+  </div>
+</div>
+
 <script src="data.js"></script>
 <script src="script.js"></script>
 </body>
