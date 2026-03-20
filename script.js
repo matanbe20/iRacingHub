@@ -648,6 +648,22 @@ function isFixed(name) {
   return /fixed/i.test(name);
 }
 
+function filterByCategory(event, cat) {
+  event.stopPropagation();
+  if (ALL_CATEGORIES.every(c => activeCategories.has(c))) activeCategories.clear();
+  activeCategories.add(cat);
+  syncUI();
+  applyFilters();
+}
+
+function filterByClass(event, cls) {
+  event.stopPropagation();
+  if (ALL_CLASSES.every(c => activeClasses.has(c))) activeClasses.clear();
+  activeClasses.add(cls);
+  syncUI();
+  applyFilters();
+}
+
 function renderSeries() {
   const grid = document.getElementById('series-grid');
   const q = searchQuery.toLowerCase();
@@ -711,8 +727,8 @@ function renderSeries() {
     const safeRawName = s.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     return `<div class="series-card" data-idx="${i}">
       <div class="series-header" onclick="toggleCard(this)">
-        <span class="cat-badge ${cc}" data-short="${catLabelShort(s.category)}">${catLabel(s.category)}</span>
-        <span class="class-badge ${s.class}">${s.class}</span>
+        <span class="cat-badge ${cc} filterable" data-short="${catLabelShort(s.category)}" onclick="filterByCategory(event,'${s.category}')" title="Filter by ${catLabel(s.category)}">${catLabel(s.category)}</span>
+        <span class="class-badge ${s.class} filterable" onclick="filterByClass(event,'${s.class}')" title="Filter by class ${s.class}">${s.class}</span>
         <span class="series-title">${displayName}${fixed}</span>
         <span class="series-cars" title="${s.cars}">${s.cars}</span>
         <span class="series-freq">${s.frequency}</span>
@@ -843,6 +859,24 @@ function updateCarFilterBadge() {
   const total = activeCars.size + activeTracks.size;
   const badge = document.getElementById('filter-active-count');
   if (badge) badge.textContent = total > 0 ? String(total) : '';
+  const allDefault = ALL_CATEGORIES.every(c => activeCategories.has(c)) &&
+    ALL_CLASSES.every(c => activeClasses.has(c)) &&
+    activeCars.size === 0 && activeTracks.size === 0 && !searchQuery;
+  const allClear = document.getElementById('all-clear-btn');
+  if (allClear) allClear.classList.toggle('visible', !allDefault);
+}
+
+function clearAllFilters() {
+  activeCategories = new Set(ALL_CATEGORIES);
+  activeClasses = new Set(ALL_CLASSES);
+  activeCars.clear();
+  activeTracks.clear();
+  searchQuery = '';
+  document.getElementById('search').value = '';
+  renderTags('car');
+  renderTags('track');
+  syncUI();
+  applyFilters();
 }
 
 function clearCarFilter() {
