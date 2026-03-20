@@ -669,6 +669,8 @@ function renderSeries() {
     return true;
   });
 
+  filtered.sort((a, b) => ALL_CLASSES.indexOf(a.class) - ALL_CLASSES.indexOf(b.class));
+
   document.getElementById('stats').textContent = `${filtered.length} series`;
 
   if (!filtered.length) {
