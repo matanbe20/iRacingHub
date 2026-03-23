@@ -6834,7 +6834,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'SPORTS CAR',
     class: 'B',
     name: 'Global Endurance Tour - 2026 Season 2',
-    cars: 'Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
+    cars: 'BMW M Hybrid V8, Cadillac V-Series.R GTP, Acura ARX-06 GTP, Porsche 963 GTP, Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
     license: 'Class C (4.0) --> Pro/WC (4.0), Team racing',
     frequency: 'Races every other Saturday at 7, 18 GMT and Sunday at 14 GMT',
     weeks: [
@@ -7168,7 +7168,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'SPORTS CAR',
     class: 'B',
     name: 'IMSA Endurance Series - 2026 Season 2',
-    cars: 'Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
+    cars: 'BMW M Hybrid V8, Cadillac V-Series.R GTP, Acura ARX-06 GTP, Porsche 963 GTP, Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
     license: 'Class C (4.0) --> Pro/WC (4.0), Team racing',
     frequency:
       'Races every other Saturday at 2, 7, 18 GMT and Sunday at 14 GMT',
@@ -7685,7 +7685,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'SPORTS CAR',
     class: 'B',
     name: 'Prototype Challenge  - 2026 Season 2 - Fixed',
-    cars: 'BMW M Hybrid V8, Cadillac V-Series.R GTP, Acura ARX-06 GTP, Porsche',
+    cars: 'BMW M Hybrid V8, Cadillac V-Series.R GTP, Acura ARX-06 GTP, Porsche 963 GTP',
     license: 'Class C (4.0) --> Pro/WC (4.0)',
     frequency: 'Races every 2 hours at :00',
     weeks: [
@@ -7779,7 +7779,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'SPORTS CAR',
     class: 'A',
     name: 'IMSA iRacing Series - 2026 Season 2',
-    cars: 'Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
+    cars: 'BMW M Hybrid V8, Cadillac V-Series.R GTP, Acura ARX-06 GTP, Porsche 963 GTP, Dallara P217, BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, McLaren 720S GT3 EVO, Acura NSX GT3 EVO 22, Aston Martin Vantage GT3 EVO',
     license: 'Class B (4.0) --> Pro/WC (4.0)',
     frequency: 'Races every 2 hours at :45 past',
     weeks: [

@@ -42,6 +42,48 @@ export function catLabelShort(cat: string): string {
   } as Record<string, string>)[cat] || cat;
 }
 
+const CLASS_PATTERNS: [RegExp, string][] = [
+  [/\bGT3\b/i, 'GT3'],
+  [/\bGT4\b/i, 'GT4'],
+  [/\bGTE\b/i, 'GTE'],
+  [/\bGT1\b/i, 'GT1'],
+  [/\bGTP\b|BMW M Hybrid|Porsche 963/i, 'GTP'],
+  [/\bTCR\b/i, 'TCR'],
+  [/P320|\bLMP3\b/i, 'LMP3'],
+  [/P217|\bLMP2\b/i, 'LMP2'],
+  [/NASCAR Truck/i, 'NASCAR Truck'],
+  [/NASCAR Cup/i, 'NASCAR Cup'],
+  [/NASCAR Legends/i, 'NASCAR Legends'],
+  [/Street Stock/i, 'Street Stock'],
+  [/\bARCA\b/i, 'ARCA'],
+  [/\bGen 4\b/i, 'Gen 4'],
+  [/Super Formula/i, 'Super Formula'],
+  [/\bSupercars\b/i, 'Supercars'],
+  [/Stock Car Brasil/i, 'Stock Car Brasil'],
+];
+
+export interface CarGroup {
+  label: string;
+  cars: string[];
+}
+
+/** Returns null if ≤4 cars (use individual badges). Otherwise groups cars by class. */
+export function groupCarsByClass(cars: string): CarGroup[] | null {
+  const list = cars.split(',').map(c => c.trim()).filter(Boolean);
+  if (list.length < 4) return null;
+  const grouped = new Map<string, string[]>();
+  for (const car of list) {
+    const match = CLASS_PATTERNS.find(([re]) => re.test(car));
+    const cls = match ? match[1] : 'Other';
+    if (!grouped.has(cls)) grouped.set(cls, []);
+    grouped.get(cls)!.push(car);
+  }
+  return Array.from(grouped.entries()).map(([cls, carList]) => ({
+    label: cls === 'Other' ? 'Other' : cls + ' Class',
+    cars: carList,
+  }));
+}
+
 export function baseTrackName(name: string): string {
   const idx = name.indexOf(' - ');
   return (idx !== -1 ? name.slice(0, idx) : name).trim();
