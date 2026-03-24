@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, cleanName, isFixed } from '../utils/helpers';
+import CarBadges from './CarBadges';
 import WeekCell from './WeekCell';
 import type { Series } from '../types';
 
@@ -68,7 +69,7 @@ export default function SeriesCard({ series }: SeriesCardProps) {
           {displayName}
           {fixed && <span style={{ opacity: 0.5, fontSize: '0.75rem' }}> [Fixed]</span>}
         </span>
-        <span className="series-cars" title={series.cars}>{series.cars}</span>
+        <span className="series-cars"><CarBadges cars={series.cars} /></span>
         <span className="series-freq">{series.frequency}</span>
         {hasRain && (
           <span className="series-rain-icon" title="Rain forecast in some weeks">

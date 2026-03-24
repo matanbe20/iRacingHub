@@ -31,13 +31,13 @@ export default function TwCard({ series, week }: TwCardProps) {
   }
 
   return (
-    <div className={'tw-card' + (trackOwned ? ' owned' : '')}>
+    <div className="tw-card">
       <span className={'cat-badge ' + cc} data-short={catLabelShort(series.category)}>{catLabel(series.category)}</span>
       <span className={'class-badge ' + series.class}>{series.class}</span>
       <div className="tw-card-info">
         <div className="tw-card-title">{cleanName(series.name)}</div>
         <div className="tw-card-meta">
-          <span className="tw-card-track">{week.track}</span>
+          <span className="tw-card-track">{week.track}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
           {week.laps && <span className="tw-card-laps">{week.laps}</span>}
           {week.rain != null && week.rain > 0 && <span className="week-rain">💧 {week.rain}%</span>}
           {series.cars && <CarBadges cars={series.cars} />}

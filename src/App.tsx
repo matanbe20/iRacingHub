@@ -54,7 +54,7 @@ export default function App() {
         <TabNav />
       </div>
 
-      <div className="main-layout">
+      <main className="main-layout">
         <FilterSidebar />
         <div className="content-area">
           <div className="container">
@@ -63,7 +63,7 @@ export default function App() {
             {activeTab === 'my' && <MySchedulePanel />}
           </div>
         </div>
-      </div>
+      </main>
 
       <Toast />
       <ShareModal />

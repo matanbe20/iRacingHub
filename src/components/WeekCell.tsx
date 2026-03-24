@@ -2,6 +2,7 @@ import React from 'react';
 import useStore from '../store/useStore';
 import { getCurrentWeek } from '../utils/schedule';
 import { baseTrackName } from '../utils/helpers';
+import CarBadges from './CarBadges';
 import type { Series, Week } from '../types';
 
 const currentWeek = getCurrentWeek();
@@ -33,13 +34,16 @@ export default function WeekCell({ series, week }: WeekCellProps) {
   }
 
   return (
-    <div className={'week-cell' + (isCurrent ? ' current' : '') + (isOwned ? ' owned' : '')} style={{ paddingBottom: '1.8rem' }}>
+    <div className={'week-cell' + (isCurrent ? ' current' : '')} style={{ paddingBottom: '1.8rem' }}>
       <div className="week-num">
         Week {week.week} {isCurrent ? '(Current)' : ''}
         <span style={{ float: 'right', color: 'var(--text-dim)', fontWeight: 400 }}>{week.date}</span>
       </div>
-      <div className="week-track">{week.track}</div>
-      {week.car && <div className="week-meta" style={{ fontStyle: 'italic' }}>{week.car}</div>}
+      <div className="week-track">
+        {week.track}
+        {isOwned && <span className="track-owned-badge">Owned</span>}
+      </div>
+      {week.car && <div className="week-meta"><CarBadges cars={week.car} /></div>}
       {week.laps && <span className="week-laps">{week.laps}</span>}
       {week.rain != null && week.rain > 0 && (
         <span className="week-rain">
