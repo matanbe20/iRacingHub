@@ -557,13 +557,23 @@ body {
   align-items: center;
   gap: 0.35rem;
   flex-wrap: wrap;
-  max-width: 220px;
+  max-width: 400px;
 }
 
 .series-freq {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--text-dim);
   white-space: nowrap;
+  width: 0.95rem;
+  height: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--text-dim);
+  cursor: default;
+  flex-shrink: 0;
+  position: relative;
 }
 
 .expand-icon {

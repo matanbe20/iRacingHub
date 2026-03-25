@@ -70,7 +70,7 @@ export default function SeriesCard({ series }: SeriesCardProps) {
           {fixed && <span style={{ opacity: 0.5, fontSize: '0.75rem' }}> [Fixed]</span>}
         </span>
         <span className="series-cars"><CarBadges cars={series.cars} /></span>
-        <span className="series-freq">{series.frequency}</span>
+        <span className="series-freq" title={series.frequency}>!</span>
         {hasRain && (
           <span className="series-rain-icon" title="Rain forecast in some weeks">
             <RainDropSvg />
