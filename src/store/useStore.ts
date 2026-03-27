@@ -4,7 +4,7 @@ import { cleanName } from '../utils/helpers';
 import { FREE_CARS, FREE_TRACKS } from '../data/garage-defaults';
 import type { Tab, Theme, MySchedule, RaceEntry } from '../types';
 
-const ALL_CATEGORIES = ['OVAL', 'SPORTS CAR', 'FORMULA CAR', 'DIRT OVAL', 'DIRT ROAD', 'UNRANKED'];
+const ALL_CATEGORIES = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT ROAD', 'DIRT OVAL', 'UNRANKED'];
 const ALL_CLASSES = ['R', 'D', 'C', 'B', 'A'];
 const STORAGE_KEY = 'iracing-2026s2-filters';
 const MY_SCHEDULE_KEY = 'iracing-2026s2-my-schedule';
