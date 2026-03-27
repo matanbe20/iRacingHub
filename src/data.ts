@@ -5996,7 +5996,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 2,
         date: '2026-03-24',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '15 laps',
         rain: 33,
       },
@@ -6090,7 +6090,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 2,
         date: '2026-03-24',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '15 laps',
         rain: 0,
       },
@@ -6855,7 +6855,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 3,
         date: '2026-04-25',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '',
         rain: 0,
       },
@@ -7088,7 +7088,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 2,
         date: '2026-03-24',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '45 mins',
         rain: 0,
       },
@@ -7452,7 +7452,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 7,
         date: '2026-04-28',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '20 mins',
         rain: 0,
       },
@@ -7539,7 +7539,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 6,
         date: '2026-04-21',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '20 mins',
         rain: 0,
       },
@@ -7661,7 +7661,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 10,
         date: '2026-05-19',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '30 mins',
         rain: 0,
       },
@@ -7727,7 +7727,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 6,
         date: '2026-04-21',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '20 mins',
         rain: 0,
       },
@@ -7821,7 +7821,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 6,
         date: '2026-04-21',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '45 mins',
         rain: 27,
       },
@@ -7915,7 +7915,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 6,
         date: '2026-04-21',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '35 mins',
         rain: 0,
       },
@@ -8936,7 +8936,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 5,
         date: '2026-04-16',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '63 laps',
         rain: 0,
       },
@@ -9325,7 +9325,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 10,
         date: '2026-05-19',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '20 mins',
         rain: 0,
       },
@@ -9413,7 +9413,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 10,
         date: '2026-05-19',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '30 mins',
         rain: 0,
       },
@@ -9817,7 +9817,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 5,
         date: '2026-04-17',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '63 laps',
         rain: 0,
       },
@@ -9975,7 +9975,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 3,
         date: '2026-03-31',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '25 laps',
         rain: 0,
       },
@@ -10192,7 +10192,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 8,
         date: '2026-05-05',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '15 laps',
         rain: 0,
       },
@@ -10280,7 +10280,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 8,
         date: '2026-05-05',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '25 laps',
         rain: 0,
       },
@@ -10535,7 +10535,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 5,
         date: '2026-04-14',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '32 laps',
         rain: 0,
       },
@@ -10629,7 +10629,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 5,
         date: '2026-04-14',
-        track: 'Autodromo Internazionale Enzo e Dino Ferrari -',
+        track: 'Autodromo Internazionale Enzo e Dino Ferrari',
         laps: '16 laps',
         rain: 0,
       },
