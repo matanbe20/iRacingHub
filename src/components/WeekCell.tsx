@@ -41,11 +41,11 @@ export default function WeekCell({ series, week }: WeekCellProps) {
         {week.track}
         {isOwned && <span className="track-owned-badge">Owned</span>}
       </span>
-      {week.laps && <span className="week-laps">{week.laps}</span>}
+      {week.car && <CarBadges cars={week.car} />}
       {week.rain != null && week.rain > 0 && (
         <span className="week-rain"><RainDropSvg /> {week.rain}%</span>
       )}
-      {week.car && <CarBadges cars={week.car} />}
+      {week.laps && <span className="week-laps">{week.laps}</span>}
       <button
         className={'week-add-btn' + (isAdded ? ' added' : '')}
         data-raw-name={series.name}
