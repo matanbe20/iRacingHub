@@ -31,6 +31,10 @@ export default function FilterSidebar() {
   const removeTrackFilter = useStore(s => s.removeTrackFilter);
   const ownedCars = useStore(s => s.ownedCars);
   const ownedTracks = useStore(s => s.ownedTracks);
+  const filterOwnedCars = useStore(s => s.filterOwnedCars);
+  const filterOwnedTracks = useStore(s => s.filterOwnedTracks);
+  const toggleFilterOwnedCars = useStore(s => s.toggleFilterOwnedCars);
+  const toggleFilterOwnedTracks = useStore(s => s.toggleFilterOwnedTracks);
   const openGarageModal = useStore(s => s.openGarageModal);
 
   const allDefault =
@@ -38,7 +42,9 @@ export default function FilterSidebar() {
     ALL_CLASSES.every(c => activeClasses.has(c)) &&
     activeCars.size === 0 &&
     activeTracks.size === 0 &&
-    !searchQuery;
+    !searchQuery &&
+    !filterOwnedCars &&
+    !filterOwnedTracks;
 
   return (
     <>
@@ -111,6 +117,24 @@ export default function FilterSidebar() {
               {ownedCars.size}c / {ownedTracks.size}t
             </span>
           </button>
+          <div className="garage-filter-row">
+            <button
+              className={'garage-filter-btn' + (filterOwnedCars ? ' active' : '')}
+              onClick={toggleFilterOwnedCars}
+              disabled={ownedCars.size === 0}
+              title="Show only series where you own a car"
+            >
+              Owned Cars
+            </button>
+            <button
+              className={'garage-filter-btn' + (filterOwnedTracks ? ' active' : '')}
+              onClick={toggleFilterOwnedTracks}
+              disabled={ownedTracks.size === 0}
+              title="Show only series where you own the track"
+            >
+              Owned Tracks
+            </button>
+          </div>
         </div>
 
         <a

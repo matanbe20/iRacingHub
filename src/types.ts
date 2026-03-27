@@ -34,6 +34,7 @@ export interface RaceEntry {
   date: string;
   laps: string;
   rain?: number;
+  frequency: string;
 }
 
 export type MySchedule = Record<string, RaceEntry>;

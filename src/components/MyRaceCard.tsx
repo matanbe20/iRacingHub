@@ -3,6 +3,7 @@ import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, baseTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
 import SeriesLogo from './SeriesLogo';
+import { SCHEDULE_DATA } from '../data';
 import type { Category, RaceEntry } from '../types';
 
 interface MyRaceCardProps {
@@ -17,6 +18,7 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
   const ownedTracks = useStore(s => s.ownedTracks);
   const cc = catClass(entry.category);
   const trackOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(entry.track));
+  const frequency = entry.frequency ?? SCHEDULE_DATA.find(s => s.name === entry.rawName)?.frequency ?? '';
 
   function handleTrackClick(e: React.MouseEvent) {
     e.stopPropagation();
@@ -41,6 +43,7 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
           {entry.cars && <CarBadges cars={entry.cars} />}
         </div>
       </div>
+      <span className="series-freq" data-freq={frequency}>!</span>
       <button className="my-race-remove" onClick={() => removeRace(entry.id)} title="Remove">&#x2715;</button>
     </div>
   );

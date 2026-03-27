@@ -13,6 +13,10 @@ export default function AllSeriesPanel() {
   const searchQuery = useStore(s => s.searchQuery);
   const activeCars = useStore(s => s.activeCars);
   const activeTracks = useStore(s => s.activeTracks);
+  const filterOwnedCars = useStore(s => s.filterOwnedCars);
+  const filterOwnedTracks = useStore(s => s.filterOwnedTracks);
+  const ownedCars = useStore(s => s.ownedCars);
+  const ownedTracks = useStore(s => s.ownedTracks);
   const setFilteredCount = useStore(s => s.setFilteredCount);
 
   const filtered = useMemo(() => {
@@ -27,6 +31,13 @@ export default function AllSeriesPanel() {
       if (activeTracks.size > 0) {
         if (!s.weeks.some(w => activeTracks.has(baseTrackName(w.track)))) return false;
       }
+      if (filterOwnedCars && ownedCars.size > 0) {
+        const seriesCars = s.cars.split(',').map(c => c.trim());
+        if (!seriesCars.some(c => ownedCars.has(c))) return false;
+      }
+      if (filterOwnedTracks && ownedTracks.size > 0) {
+        if (!s.weeks.some(w => ownedTracks.has(baseTrackName(w.track)))) return false;
+      }
       if (q) {
         const haystack = (s.name + ' ' + s.cars + ' ' + s.weeks.map(w => w.track + ' ' + (w.car || '')).join(' ')).toLowerCase();
         return haystack.includes(q);
@@ -39,7 +50,7 @@ export default function AllSeriesPanel() {
       if (catDiff !== 0) return catDiff;
       return cleanName(a.name).localeCompare(cleanName(b.name));
     });
-  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks]);
+  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks]);
 
   useEffect(() => {
     setFilteredCount(filtered.length);

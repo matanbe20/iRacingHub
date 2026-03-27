@@ -47,6 +47,7 @@ export default function TwCard({ series, week }: TwCardProps) {
           {series.cars && <CarBadges cars={series.cars} />}
         </div>
       </div>
+      <span className="series-freq" data-freq={series.frequency}>!</span>
       {carOwned && <span className="car-owned-badge" title="You own this car">✓ Car</span>}
       <button
         className={'tw-fav-btn' + (isFav ? ' active' : '')}

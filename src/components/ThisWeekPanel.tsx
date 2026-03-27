@@ -15,6 +15,10 @@ export default function ThisWeekPanel() {
   const searchQuery = useStore(s => s.searchQuery);
   const activeCars = useStore(s => s.activeCars);
   const activeTracks = useStore(s => s.activeTracks);
+  const filterOwnedCars = useStore(s => s.filterOwnedCars);
+  const filterOwnedTracks = useStore(s => s.filterOwnedTracks);
+  const ownedCars = useStore(s => s.ownedCars);
+  const ownedTracks = useStore(s => s.ownedTracks);
   const favorites = useStore(s => s.favorites);
 
   const results = useMemo(() => {
@@ -29,13 +33,18 @@ export default function ThisWeekPanel() {
       const week = s.weeks.find(w => w.week === currentWeek);
       if (!week) return false;
       if (activeTracks.size > 0 && !activeTracks.has(baseTrackName(week.track))) return false;
+      if (filterOwnedCars && ownedCars.size > 0) {
+        const seriesCars = s.cars.split(',').map(c => c.trim());
+        if (!seriesCars.some(c => ownedCars.has(c))) return false;
+      }
+      if (filterOwnedTracks && ownedTracks.size > 0 && !ownedTracks.has(baseTrackName(week.track))) return false;
       if (q) {
         const haystack = (s.name + ' ' + s.cars + ' ' + week.track + ' ' + (week.car || '')).toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
     }).map(s => ({ s, week: s.weeks.find(w => w.week === currentWeek) as Week }));
-  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks]);
+  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks]);
 
   const dateRange = getWeekDateRange(currentWeek);
   const favResults = results.filter(r => favorites.has(r.s.name));

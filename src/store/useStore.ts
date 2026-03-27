@@ -21,6 +21,8 @@ export interface StoreState {
   searchQuery: string;
   activeCars: Set<string>;
   activeTracks: Set<string>;
+  filterOwnedCars: boolean;
+  filterOwnedTracks: boolean;
 
   // Navigation & UI
   activeTab: Tab;
@@ -60,6 +62,8 @@ export interface StoreState {
   removeTrackFilter: (track: string) => void;
   clearTrackFilter: () => void;
   clearAllFilters: () => void;
+  toggleFilterOwnedCars: () => void;
+  toggleFilterOwnedTracks: () => void;
 
   // Ownership actions
   addOwnedCar(car: string): void;
@@ -111,7 +115,7 @@ function loadInitialState(): Partial<StoreState> {
   const params = new URLSearchParams(window.location.search);
   const hasUrlParams = params.has('cat') || params.has('cls') || params.has('q') || params.has('cars') || params.has('tracks');
 
-  let filters: Pick<StoreState, 'activeCategories' | 'activeClasses' | 'searchQuery' | 'activeCars' | 'activeTracks'> | undefined;
+  let filters: Pick<StoreState, 'activeCategories' | 'activeClasses' | 'searchQuery' | 'activeCars' | 'activeTracks' | 'filterOwnedCars' | 'filterOwnedTracks'> | undefined;
   if (hasUrlParams) {
     const cats = params.get('cat');
     const cls = params.get('cls');
@@ -123,6 +127,8 @@ function loadInitialState(): Partial<StoreState> {
       searchQuery: params.get('q') || '',
       activeCars: new Set(cars ? cars.split(',').filter(Boolean) : []),
       activeTracks: new Set(tracks ? tracks.split(',').filter(Boolean) : []),
+      filterOwnedCars: false,
+      filterOwnedTracks: false,
     };
   } else {
     try {
@@ -135,6 +141,8 @@ function loadInitialState(): Partial<StoreState> {
           searchQuery: saved.search || '',
           activeCars: new Set(saved.cars || []),
           activeTracks: new Set(saved.tracks || []),
+          filterOwnedCars: saved.filterOwnedCars ?? false,
+          filterOwnedTracks: saved.filterOwnedTracks ?? false,
         };
       }
     } catch { /* ignore */ }
@@ -145,6 +153,8 @@ function loadInitialState(): Partial<StoreState> {
         searchQuery: '',
         activeCars: new Set(),
         activeTracks: new Set(),
+        filterOwnedCars: false,
+        filterOwnedTracks: false,
       };
     }
   }
@@ -274,6 +284,8 @@ function saveFilters(state: StoreState): void {
     search: state.searchQuery,
     cars: [...state.activeCars],
     tracks: [...state.activeTracks],
+    filterOwnedCars: state.filterOwnedCars,
+    filterOwnedTracks: state.filterOwnedTracks,
   }));
 }
 
@@ -293,6 +305,8 @@ const useStore = create<StoreState>((set, get) => ({
   searchQuery: initialState.searchQuery ?? '',
   activeCars: initialState.activeCars ?? new Set(),
   activeTracks: initialState.activeTracks ?? new Set(),
+  filterOwnedCars: initialState.filterOwnedCars ?? false,
+  filterOwnedTracks: initialState.filterOwnedTracks ?? false,
 
   // Navigation & UI
   activeTab: initialState.activeTab ?? 'all',
@@ -397,6 +411,16 @@ const useStore = create<StoreState>((set, get) => ({
     syncUrlParams(s); saveFilters(s);
   },
 
+  toggleFilterOwnedCars() {
+    set(state => ({ filterOwnedCars: !state.filterOwnedCars }));
+    saveFilters(get());
+  },
+
+  toggleFilterOwnedTracks() {
+    set(state => ({ filterOwnedTracks: !state.filterOwnedTracks }));
+    saveFilters(get());
+  },
+
   clearAllFilters() {
     set({
       activeCategories: new Set(ALL_CATEGORIES),
@@ -404,6 +428,8 @@ const useStore = create<StoreState>((set, get) => ({
       activeCars: new Set(),
       activeTracks: new Set(),
       searchQuery: '',
+      filterOwnedCars: false,
+      filterOwnedTracks: false,
     });
     const s = get();
     syncUrlParams(s); saveFilters(s);
@@ -514,7 +540,8 @@ const useStore = create<StoreState>((set, get) => ({
           track: week.track,
           date: week.date,
           laps: week.laps || '',
-          rain: week.rain
+          rain: week.rain,
+          frequency: series.frequency
         }
       }
     }));

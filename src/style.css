@@ -583,6 +583,31 @@ body {
   flex-shrink: 0;
   position: relative;
 }
+.series-freq:hover {
+  color: var(--text);
+  border-color: var(--text);
+}
+.series-freq::after {
+  content: attr(data-freq);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+.series-freq:hover::after {
+  opacity: 1;
+}
 
 .expand-icon {
   color: var(--text-dim);
@@ -1059,6 +1084,28 @@ body {
   color: var(--text-dim);
   font-weight: 400;
 }
+
+/* Garage ownership filters */
+.garage-filter-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.garage-filter-btn {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.garage-filter-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--text); }
+.garage-filter-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+.garage-filter-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* Garage Modal */
 .garage-modal-overlay {
