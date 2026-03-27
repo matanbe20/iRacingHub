@@ -14103,7 +14103,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 11,
         date: '2026-05-26',
-        track: 'Lucas Oil Indianapolis Raceway Park -',
+        track: 'Lucas Oil Indianapolis Raceway Park - Rallycross',
         laps: '8 laps',
         rain: 0,
       },
@@ -14364,7 +14364,7 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 8,
         date: '2026-05-05',
-        track: 'Lucas Oil Indianapolis Raceway Park -',
+        track: 'Lucas Oil Indianapolis Raceway Park - Rallycross',
         laps: '8 laps',
         rain: 0,
       },
