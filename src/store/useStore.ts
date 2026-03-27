@@ -14,6 +14,19 @@ const OWNED_KEY = 'iracing-2026s2-owned';
 
 export { ALL_CATEGORIES, ALL_CLASSES };
 
+// Track name migrations: old name → new name
+const TRACK_RENAMES: Record<string, string> = {
+  'Autodromo Internazionale Enzo e Dino Ferrari -': 'Autodromo Internazionale Enzo e Dino Ferrari',
+};
+
+function migrateTrackName(name: string): string {
+  return TRACK_RENAMES[name] ?? name;
+}
+
+function migrateTrackSet(set: Set<string>): Set<string> {
+  return new Set([...set].map(migrateTrackName));
+}
+
 export interface StoreState {
   // Filters
   activeCategories: Set<string>;
@@ -140,7 +153,7 @@ function loadInitialState(): Partial<StoreState> {
           activeClasses: new Set((saved.classes || ALL_CLASSES).filter((c: string) => ALL_CLASSES.includes(c))),
           searchQuery: saved.search || '',
           activeCars: new Set(saved.cars || []),
-          activeTracks: new Set(saved.tracks || []),
+          activeTracks: migrateTrackSet(new Set(saved.tracks || [])),
           filterOwnedCars: saved.filterOwnedCars ?? false,
           filterOwnedTracks: saved.filterOwnedTracks ?? false,
         };
@@ -163,7 +176,11 @@ function loadInitialState(): Partial<StoreState> {
   try {
     const raw = localStorage.getItem(MY_SCHEDULE_KEY);
     const saved = raw ? JSON.parse(raw) : null;
-    if (saved && typeof saved === 'object') mySchedule = saved;
+    if (saved && typeof saved === 'object') {
+      mySchedule = Object.fromEntries(
+        Object.entries(saved as MySchedule).map(([k, v]) => [k, { ...v, track: migrateTrackName(v.track) }])
+      );
+    }
   } catch { /* ignore */ }
 
   let favorites: Set<string> = new Set();
@@ -185,7 +202,7 @@ function loadInitialState(): Partial<StoreState> {
       const saved = JSON.parse(raw);
       if (saved) {
         if (Array.isArray(saved.cars)) ownedCars = new Set(saved.cars);
-        if (Array.isArray(saved.tracks)) ownedTracks = new Set(saved.tracks);
+        if (Array.isArray(saved.tracks)) ownedTracks = migrateTrackSet(new Set(saved.tracks));
       }
     }
   } catch { /* ignore */ }
