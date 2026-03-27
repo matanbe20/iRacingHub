@@ -1,4 +1,4 @@
-import type { MySchedule } from '../types';
+import type { Category, MySchedule } from '../types';
 
 export function cleanName(name: string): string {
   return name
@@ -82,6 +82,20 @@ export function groupCarsByClass(cars: string): CarGroup[] | null {
     label: cls === 'Other' ? 'Other' : cls + ' Class',
     cars: carList,
   }));
+}
+
+const LOGO_FOLDER: Partial<Record<Category, string>> = {
+  'OVAL':        'Oval',
+  'SPORTS CAR':  'Sports Car',
+  'FORMULA CAR': 'Formula',
+  'DIRT OVAL':   'Dirt Oval',
+  'DIRT ROAD':   'Dirt Road',
+};
+
+export function getSeriesLogoUrl(category: Category, name: string): string | null {
+  const folder = LOGO_FOLDER[category];
+  if (!folder) return null;
+  return `/logos/${folder}/${encodeURIComponent(cleanName(name))}.png`;
 }
 
 export function baseTrackName(name: string): string {

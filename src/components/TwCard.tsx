@@ -2,6 +2,7 @@ import React from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, cleanName, baseTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
+import SeriesLogo from './SeriesLogo';
 import type { Series, Week } from '../types';
 
 interface TwCardProps {
@@ -35,7 +36,10 @@ export default function TwCard({ series, week }: TwCardProps) {
       <span className={'cat-badge ' + cc} data-short={catLabelShort(series.category)}>{catLabel(series.category)}</span>
       <span className={'class-badge ' + series.class}>{series.class}</span>
       <div className="tw-card-info">
-        <div className="tw-card-title">{cleanName(series.name)}</div>
+        <div className="tw-card-title">
+          <SeriesLogo category={series.category} name={series.name} className="series-logo" />
+          {cleanName(series.name)}
+        </div>
         <div className="tw-card-meta">
           <span className="tw-card-track">{week.track}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
           {week.laps && <span className="tw-card-laps">{week.laps}</span>}

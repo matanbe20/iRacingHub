@@ -2,7 +2,8 @@ import React from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, baseTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
-import type { RaceEntry } from '../types';
+import SeriesLogo from './SeriesLogo';
+import type { Category, RaceEntry } from '../types';
 
 interface MyRaceCardProps {
   entry: RaceEntry;
@@ -29,7 +30,10 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
       <span className={'cat-badge ' + cc} data-short={catLabelShort(entry.category)}>{catLabel(entry.category)}</span>
       <span className={'class-badge ' + entry.cls}>{entry.cls}</span>
       <div className="my-race-info">
-        <div className="my-race-title">{entry.displayName}</div>
+        <div className="my-race-title">
+          <SeriesLogo category={entry.category as Category} name={entry.rawName} className="series-logo" />
+          {entry.displayName}
+        </div>
         <div className="my-race-meta">
           <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{entry.track}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
           {entry.laps && <span className="tw-card-laps">{entry.laps}</span>}

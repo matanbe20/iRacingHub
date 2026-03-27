@@ -552,6 +552,14 @@ body {
   flex: 1;
 }
 
+.series-logo {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
 .series-cars {
   display: flex;
   align-items: center;
