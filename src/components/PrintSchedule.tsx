@@ -176,14 +176,26 @@ export function SchedulePDFDocument({ entries, groups, groupOrder, today }: Prop
               const color = CAT_COLORS[cc] || '#6b7280';
               return (
                 <View key={e.id} style={[s.row, i % 2 === 1 ? s.rowEven : {}]}>
-                  <Text style={[s.catCell, { width: COL.cat, borderLeftColor: color, color }]}>
-                    {catLabel(e.category)}
-                  </Text>
-                  <Text style={[s.cell, { width: COL.series }]}>{e.displayName}</Text>
-                  <Text style={[s.cellCenter, { width: COL.cls }]}>{e.cls}</Text>
-                  <Text style={[s.cell, { width: COL.car }]}>{e.cars}</Text>
-                  <Text style={[s.cell, { width: COL.track }]}>{e.track}</Text>
-                  <Text style={[s.cellCenter, { width: COL.laps }]}>{e.laps || '—'}</Text>
+                  <View style={{ width: COL.cat }}>
+                    <Text style={[s.catCell, { borderLeftColor: color, color }]}>
+                      {catLabel(e.category)}
+                    </Text>
+                  </View>
+                  <View style={{ width: COL.series }}>
+                    <Text style={s.cell}>{e.displayName}</Text>
+                  </View>
+                  <View style={{ width: COL.cls }}>
+                    <Text style={s.cellCenter}>{e.cls}</Text>
+                  </View>
+                  <View style={{ width: COL.car }}>
+                    <Text style={s.cell}>{e.cars}</Text>
+                  </View>
+                  <View style={{ width: COL.track }}>
+                    <Text style={s.cell}>{e.track}</Text>
+                  </View>
+                  <View style={{ width: COL.laps }}>
+                    <Text style={s.cellCenter}>{e.laps || '—'}</Text>
+                  </View>
                 </View>
               );
             })}
