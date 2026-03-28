@@ -162,22 +162,11 @@ function useLiveVideoId() {
   const [videoId, setVideoId] = useState<string | null>(null);
 
   useEffect(() => {
-    const proxy = `https://corsproxy.io/?${encodeURIComponent(IRACING_YT_LIVE_URL)}`;
-    fetch(proxy)
+    fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(IRACING_YT_LIVE_URL)}`)
       .then(r => r.text())
       .then(html => {
-        const patterns = [
-          /rel="canonical"[^>]*href="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"/,
-          /href="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"[^>]*rel="canonical"/,
-          /"og:url"[^>]*content="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"/,
-          /property="og:url"\s+content="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"/,
-          /"canonicalBaseUrl":"\/watch\?v=([a-zA-Z0-9_-]{11})"/,
-        ];
-        for (const pattern of patterns) {
-          const match = html.match(pattern);
-          if (match) { setVideoId(match[1]); return; }
-        }
-        setVideoId(null);
+        const match = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+        setVideoId(match ? match[1] : null);
       })
       .catch(() => {});
   }, []);
