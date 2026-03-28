@@ -1972,8 +1972,8 @@ body.share-modal-open { overflow: hidden; }
 
 .se-live-hero-event-banner {
   flex-shrink: 0;
-  width: 200px;
-  height: 113px;
+  width: 220px;
+  height: 180px;
   object-fit: cover;
   object-position: center;
   border-radius: 6px;
