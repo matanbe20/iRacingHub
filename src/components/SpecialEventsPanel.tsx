@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SPECIAL_EVENTS } from '../data/special-events';
 import type { SpecialEvent, SpecialEventType } from '../data/special-events';
 
@@ -156,22 +156,41 @@ function SpecialEventCard({ event, now, view }: CardProps) {
   );
 }
 
-const TWITCH_CHANNEL = 'iracing';
+const IRACING_YT_LIVE_URL = 'https://www.youtube.com/@iRacingOfficial/live';
+
+function useLiveVideoId() {
+  const [videoId, setVideoId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const proxy = `https://corsproxy.io/?${encodeURIComponent(IRACING_YT_LIVE_URL)}`;
+    fetch(proxy)
+      .then(r => r.text())
+      .then(html => {
+        const match = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+        setVideoId(match ? match[1] : null);
+      })
+      .catch(() => {});
+  }, []);
+
+  return videoId;
+}
 
 function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
-  const parent = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  const twitchSrc = `https://player.twitch.tv/?channel=${TWITCH_CHANNEL}&parent=${parent}&autoplay=true&muted=true`;
+  const videoId = useLiveVideoId();
 
   return (
     <div className="se-live-hero">
-      <div className="se-live-hero-stream">
-        <iframe
-          className="se-live-hero-iframe"
-          src={twitchSrc}
-          title={`${event.name} — Live Stream`}
-          allowFullScreen
-        />
-      </div>
+      {videoId && (
+        <div className="se-live-hero-stream">
+          <iframe
+            className="se-live-hero-iframe"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&rel=0&hl=en&modestbranding=1`}
+            title={`${event.name} — Live Stream`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+      )}
       <div className="se-live-hero-body">
         <img
           className="se-live-hero-event-banner"
@@ -194,7 +213,9 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
             <span>🚗 {event.cars}</span>
           </div>
           <div className="se-card-links">
-            <a className="se-card-link se-card-link--yt" href={`https://www.twitch.tv/${TWITCH_CHANNEL}`} target="_blank" rel="noopener noreferrer">▶ Watch on Twitch ↗</a>
+            {!videoId && (
+              <a className="se-card-link se-card-link--yt" href={IRACING_YT_LIVE_URL} target="_blank" rel="noopener noreferrer">▶ Watch on YouTube ↗</a>
+            )}
             {event.posterUrl && (
               <a className="se-card-link" href={event.posterUrl} target="_blank" rel="noopener noreferrer">Poster ↗</a>
             )}
