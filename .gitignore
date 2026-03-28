@@ -1,4 +1,7 @@
 .playwright-mcp
+.env
+.env.local
+.env*.local
 2026s2.pdf
 .screenshots/
 /node_modules/

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SPECIAL_EVENTS } from '../data/special-events';
 import type { SpecialEvent, SpecialEventType } from '../data/special-events';
 
@@ -157,19 +157,43 @@ function SpecialEventCard({ event, now, view }: CardProps) {
 }
 
 const IRACING_YT_CHANNEL_ID = 'UCPEcqkRG-kf2Vk6Rn_2WZSQ';
+const YT_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY as string | undefined;
+
+function useLiveVideoId() {
+  const [videoId, setVideoId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!YT_API_KEY) return;
+    fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${IRACING_YT_CHANNEL_ID}&eventType=live&type=video&key=${YT_API_KEY}`
+    )
+      .then(r => r.json())
+      .then(data => {
+        const id = data?.items?.[0]?.id?.videoId ?? null;
+        setVideoId(id);
+      })
+      .catch(() => {});
+  }, []);
+
+  return videoId;
+}
 
 function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
+  const videoId = useLiveVideoId();
+
   return (
     <div className="se-live-hero">
-      <div className="se-live-hero-stream">
-        <iframe
-          className="se-live-hero-iframe"
-          src={`https://www.youtube.com/embed/live_stream?channel=${IRACING_YT_CHANNEL_ID}&autoplay=1&mute=1`}
-          title={`${event.name} — Live Stream`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+      {videoId && (
+        <div className="se-live-hero-stream">
+          <iframe
+            className="se-live-hero-iframe"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`}
+            title={`${event.name} — Live Stream`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
       <div className="se-live-hero-body">
         <div className="se-live-hero-top">
           <span className="se-live-hero-badge">
