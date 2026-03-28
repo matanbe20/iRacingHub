@@ -195,6 +195,12 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
         </div>
       )}
       <div className="se-live-hero-body">
+        <img
+          className="se-live-hero-event-banner"
+          src={event.bannerUrl}
+          alt={event.name}
+          onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+        />
         <div className="se-live-hero-top">
           <span className="se-live-hero-badge">
             <span className="se-live-hero-dot" />
