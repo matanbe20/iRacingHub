@@ -201,29 +201,31 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
           alt={event.name}
           onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
         />
-        <div className="se-live-hero-top">
-          <span className="se-live-hero-badge">
-            <span className="se-live-hero-dot" />
-            Live Now
-          </span>
-          <span className={`se-type-badge ${typeBadgeClass(event.type)}`}>{typeLabel(event.type)}</span>
-        </div>
-        <div className="se-live-hero-title">{event.name}</div>
-        <div className="se-live-hero-meta">
-          <span>📅 {formatDateRange(event.startDate, event.endDate)}</span>
-          <span>🏁 {event.track}</span>
-          <span>🚗 {event.cars}</span>
-        </div>
-        {(event.posterUrl || event.forumUrl) && (
-          <div className="se-card-links">
-            {event.posterUrl && (
-              <a className="se-card-link" href={event.posterUrl} target="_blank" rel="noopener noreferrer">Poster ↗</a>
-            )}
-            {event.forumUrl && (
-              <a className="se-card-link" href={event.forumUrl} target="_blank" rel="noopener noreferrer">Forum ↗</a>
-            )}
+        <div className="se-live-hero-details">
+          <div className="se-live-hero-top">
+            <span className="se-live-hero-badge">
+              <span className="se-live-hero-dot" />
+              Live Now
+            </span>
+            <span className={`se-type-badge ${typeBadgeClass(event.type)}`}>{typeLabel(event.type)}</span>
           </div>
-        )}
+          <div className="se-live-hero-title">{event.name}</div>
+          <div className="se-live-hero-meta">
+            <span>📅 {formatDateRange(event.startDate, event.endDate)}</span>
+            <span>🏁 {event.track}</span>
+            <span>🚗 {event.cars}</span>
+          </div>
+          {(event.posterUrl || event.forumUrl) && (
+            <div className="se-card-links">
+              {event.posterUrl && (
+                <a className="se-card-link" href={event.posterUrl} target="_blank" rel="noopener noreferrer">Poster ↗</a>
+              )}
+              {event.forumUrl && (
+                <a className="se-card-link" href={event.forumUrl} target="_blank" rel="noopener noreferrer">Forum ↗</a>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
