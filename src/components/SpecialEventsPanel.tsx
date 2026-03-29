@@ -9,7 +9,7 @@ function getStatus(event: SpecialEvent, now: Date): EventStatus {
   if (!event.startDate) return 'tbd';
   const start = new Date(event.startDate);
   const end = new Date(event.endDate);
-  end.setHours(23, 59, 59, 999);
+  end.setHours(4, 0, 0, 0);
   if (now >= start && now <= end) return 'active';
   if (now > end) return 'completed';
   return 'upcoming';

@@ -14,7 +14,7 @@ export default function TabNav() {
     if (!e.startDate) return false;
     const start = new Date(e.startDate);
     const end = new Date(e.endDate);
-    end.setHours(23, 59, 59, 999);
+    end.setHours(4, 0, 0, 0);
     return now >= start && now <= end;
   });
 
