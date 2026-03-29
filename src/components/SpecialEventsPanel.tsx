@@ -262,13 +262,16 @@ export default function SpecialEventsPanel() {
 
   const liveEvents = SPECIAL_EVENTS.filter(e => getStatus(e, now) === 'active');
 
-  const upcoming = [...SPECIAL_EVENTS.filter(e => !e.past && getStatus(e, now) !== 'active')].sort((a, b) => {
+  const upcoming = [...SPECIAL_EVENTS.filter(e => {
+    const s = getStatus(e, now);
+    return s === 'upcoming' || s === 'tbd';
+  })].sort((a, b) => {
     if (!a.startDate) return 1;
     if (!b.startDate) return -1;
     return a.startDate.localeCompare(b.startDate);
   });
 
-  const past = [...SPECIAL_EVENTS.filter(e => e.past)].sort((a, b) =>
+  const past = [...SPECIAL_EVENTS.filter(e => e.past || getStatus(e, now) === 'completed')].sort((a, b) =>
     b.startDate.localeCompare(a.startDate)
   );
 
