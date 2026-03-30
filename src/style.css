@@ -71,6 +71,7 @@ body {
   gap: 2rem;
 }
 .header-left { flex-shrink: 0; }
+.site-title { cursor: pointer; }
 .header-right {
   flex: 1;
   display: flex;

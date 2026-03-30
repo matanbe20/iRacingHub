@@ -24,6 +24,7 @@ export default function Header() {
   const theme = useStore(s => s.theme);
   const toggleTheme = useStore(s => s.toggleTheme);
   const openDrawer = useStore(s => s.openDrawer);
+  const setActiveTab = useStore(s => s.setActiveTab);
   const activeCategories = useStore(s => s.activeCategories);
   const activeClasses = useStore(s => s.activeClasses);
   const activeCars = useStore(s => s.activeCars);
@@ -50,7 +51,7 @@ export default function Header() {
           <img src="https://storage.ko-fi.com/cdn/logomarkLogo.png" alt="Ko-fi" />
         </a>
         <div className="header-left">
-          <h1><span>iRacing</span> Hub</h1>
+          <h1 className="site-title" onClick={() => setActiveTab('all')}><span>iRacing</span> Hub</h1>
           <p className="season-label" id="season-label">{SEASON_LABEL}</p>
           <p className="subtitle" id="season-dates">{SEASON_DATES}</p>
         </div>
