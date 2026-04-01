@@ -1140,7 +1140,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'OVAL',
     class: 'C',
     name: 'NASCAR Class C Series - Fixed - 2026 Season 2',
-    cars: 'NASCAR Truck Chevrolet Silverado, NASCAR Truck Ford F150, NASCAR',
+    cars: 'NASCAR Truck Chevrolet Silverado, NASCAR Truck Ford F150, NASCAR Truck Toyota Tundra TRD Pro, NASCAR Truck RAM',
     license: 'Class D (4.0) --> Pro/WC (4.0)',
     frequency: 'Races every hour at :15 past',
     weeks: [
@@ -1322,7 +1322,7 @@ export const SCHEDULE_DATA: Series[] = [
     category: 'OVAL',
     class: 'C',
     name: 'NASCAR iRacing Class C Series Series - 2026 Season',
-    cars: 'NASCAR Truck Chevrolet Silverado, NASCAR Truck Ford F150, NASCAR',
+    cars: 'NASCAR Truck Chevrolet Silverado, NASCAR Truck Ford F150, NASCAR Truck Toyota Tundra TRD Pro, NASCAR Truck RAM',
     license: 'Class D (4.0) --> Pro/WC (4.0)',
     frequency: '',
     weeks: [
