@@ -115,7 +115,7 @@ export function getSeriesLogoUrl(category: Category, name: string): string | nul
 
 export function baseTrackName(name: string): string {
   const idx = name.indexOf(' - ');
-  return (idx !== -1 ? name.slice(0, idx) : name).trim();
+  return (idx !== -1 ? name.slice(0, idx) : name).replace(/ -$/, '').trim();
 }
 
 export function isFixed(name: string): boolean {

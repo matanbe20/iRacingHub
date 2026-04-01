@@ -52,6 +52,13 @@ export default function TabNav() {
         >
           Special Events{hasLiveEvent && <span className="tab-live-dot" />}
         </button>
+        <button
+          className={'tab-btn' + (activeTab === 'buy' ? ' active' : '')}
+          id="tab-buy"
+          onClick={() => setActiveTab('buy' as Tab)}
+        >
+          Buy Guide
+        </button>
       </div>
     </div>
   );

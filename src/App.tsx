@@ -7,6 +7,7 @@ import AllSeriesPanel from './components/AllSeriesPanel';
 import ThisWeekPanel from './components/ThisWeekPanel';
 import MySchedulePanel from './components/MySchedulePanel';
 import SpecialEventsPanel from './components/SpecialEventsPanel';
+import BuyGuidePanel from './components/BuyGuidePanel';
 import ShareModal from './components/ShareModal';
 import GarageModal from './components/GarageModal';
 import SharedGarageModal from './components/SharedGarageModal';
@@ -56,7 +57,7 @@ export default function App() {
         <TabNav />
       </div>
 
-      <main className={'main-layout' + (activeTab === 'events' ? ' events-tab-active' : '')}>
+      <main className={'main-layout' + (activeTab === 'events' ? ' events-tab-active' : '') + (activeTab === 'buy' ? ' buy-tab-active' : '')}>
         <FilterSidebar />
         <div className="content-area">
           <div className="container">
@@ -64,6 +65,7 @@ export default function App() {
             {activeTab === 'week' && <ThisWeekPanel />}
             {activeTab === 'my' && <MySchedulePanel />}
             {activeTab === 'events' && <SpecialEventsPanel />}
+            {activeTab === 'buy' && <BuyGuidePanel />}
           </div>
         </div>
       </main>

@@ -219,6 +219,7 @@ function loadInitialState(): Partial<StoreState> {
   if (tabParam === 'my') activeTab = 'my';
   else if (tabParam === 'week') activeTab = 'week';
   else if (tabParam === 'events') activeTab = 'events';
+  else if (tabParam === 'buy') activeTab = 'buy';
 
   const weekParam = Number(params.get('week'));
   const selectedWeek = (weekParam >= 1 && weekParam <= 12) ? weekParam : getCurrentWeek();
@@ -294,7 +295,7 @@ function syncUrlParams(state: StoreState): void {
   if (state.searchQuery) params.set('q', state.searchQuery);
   if (state.activeCars.size > 0) params.set('cars', [...state.activeCars].join(','));
   if (state.activeTracks.size > 0) params.set('tracks', [...state.activeTracks].join(','));
-  if (state.activeTab === 'my' || state.activeTab === 'week' || state.activeTab === 'events') params.set('tab', state.activeTab);
+  if (state.activeTab === 'my' || state.activeTab === 'week' || state.activeTab === 'events' || state.activeTab === 'buy') params.set('tab', state.activeTab);
   if (state.activeTab === 'week') params.set('week', String(state.selectedWeek));
 
   const qs = params.toString();
