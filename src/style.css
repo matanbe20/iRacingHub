@@ -21,7 +21,7 @@
   --week-cell-shadow: none;
 }
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --bg: #f0f2f8;
   --surface: #ffffff;
   --surface2: #e6e9f5;
@@ -46,7 +46,7 @@
 
 body {
   font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
@@ -151,11 +151,15 @@ body {
   font-size: 0.875rem;
   font-weight: 500;
   opacity: 0.7;
-  transition: opacity 0.15s, color 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
   white-space: nowrap;
 }
 
-.kofi-sidebar-btn img { flex-shrink: 0; }
+.kofi-sidebar-btn img {
+  flex-shrink: 0;
+}
 
 .kofi-sidebar-btn:hover {
   opacity: 1;
@@ -336,27 +340,27 @@ body {
 #class-filters .filter-btn.active {
   opacity: 1;
 }
-#class-filters .filter-btn.active[data-cls="R"] {
+#class-filters .filter-btn.active[data-cls='R'] {
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.5);
   background: rgba(239, 68, 68, 0.1);
 }
-#class-filters .filter-btn.active[data-cls="D"] {
+#class-filters .filter-btn.active[data-cls='D'] {
   color: #f97316;
   border-color: rgba(249, 115, 22, 0.5);
   background: rgba(249, 115, 22, 0.1);
 }
-#class-filters .filter-btn.active[data-cls="C"] {
+#class-filters .filter-btn.active[data-cls='C'] {
   color: #eab308;
   border-color: rgba(234, 179, 8, 0.5);
   background: rgba(234, 179, 8, 0.1);
 }
-#class-filters .filter-btn.active[data-cls="B"] {
+#class-filters .filter-btn.active[data-cls='B'] {
   color: #22c55e;
   border-color: rgba(34, 197, 94, 0.5);
   background: rgba(34, 197, 94, 0.1);
 }
-#class-filters .filter-btn.active[data-cls="A"] {
+#class-filters .filter-btn.active[data-cls='A'] {
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.5);
   background: rgba(59, 130, 246, 0.1);
@@ -895,9 +899,9 @@ body {
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #22c55e;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.35);
   border-radius: 4px;
   padding: 0.05rem 0.3rem;
   margin-left: 0.4rem;
@@ -905,10 +909,10 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
-[data-theme="light"] .track-owned-badge {
-  color: #16a34a;
-  background: rgba(22, 163, 74, 0.08);
-  border-color: rgba(22, 163, 74, 0.3);
+[data-theme='light'] .track-owned-badge {
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(124, 58, 237, 0.3);
 }
 
 .week-num {
@@ -1326,6 +1330,19 @@ body {
   color: var(--text-dim);
 }
 
+/* Carousel: hidden on desktop, shown on mobile */
+.week-carousel-outer {
+  display: none;
+}
+.week-content-static {
+  display: block;
+}
+
+/* Mobile week nav (hidden on desktop) */
+.week-nav-mobile {
+  display: none;
+}
+
 .tw-category-group {
   margin-bottom: 1.5rem;
 }
@@ -1537,6 +1554,17 @@ body {
   background: rgba(245, 158, 11, 0.15);
   color: #f59e0b;
 }
+/* Actions wrapper: fav + add buttons grouped */
+.tw-card-actions {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+.tw-card-actions .week-add-btn {
+  margin-left: 0;
+}
+
 /* Make add button static inside tw-card so it sits inline next to the star */
 .tw-card .week-add-btn {
   position: static;
@@ -1558,10 +1586,15 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
-[data-theme="light"] .car-owned-badge {
+[data-theme='light'] .car-owned-badge {
   color: #16a34a;
   background: rgba(22, 163, 74, 0.08);
   border-color: rgba(22, 163, 74, 0.3);
+}
+
+/* Owned badges row — mobile-only grouping (hidden on desktop) */
+.tw-card-owned-row {
+  display: none;
 }
 
 /* My Garage button in sidebar */
@@ -1770,7 +1803,7 @@ body {
 .garage-item:hover {
   background: var(--surface2);
 }
-.garage-item input[type="checkbox"] {
+.garage-item input[type='checkbox'] {
   accent-color: var(--accent);
   width: 14px;
   height: 14px;
@@ -1790,7 +1823,7 @@ body {
   padding: 0.05rem 0.3rem;
   flex-shrink: 0;
 }
-[data-theme="light"] .garage-free-badge {
+[data-theme='light'] .garage-free-badge {
   color: #16a34a;
   background: rgba(22, 163, 74, 0.08);
 }
@@ -2129,8 +2162,12 @@ body.share-modal-open {
   .kofi-mobile-btn:hover {
     opacity: 1;
   }
-  .discord-mobile-btn { right: 3.5rem; }
-  .kofi-mobile-btn { right: 1rem; }
+  .discord-mobile-btn {
+    right: 3.5rem;
+  }
+  .kofi-mobile-btn {
+    right: 1rem;
+  }
   .kofi-mobile-btn img {
     height: 28px;
     width: auto;
@@ -2146,13 +2183,288 @@ body.share-modal-open {
   .container {
     padding: 1rem;
   }
+  .tab-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    border-bottom: none;
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   .tab-nav-inner {
-    padding: 0 1rem;
+    padding: 0;
+    max-width: 100%;
+    overflow-x: visible;
   }
   .tab-btn {
-    padding: 0.6rem 0.75rem;
-    font-size: 0.875rem;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.6rem;
+    border-bottom: none;
+    border-top: 2px solid transparent;
   }
+  .tab-btn.active {
+    border-bottom-color: transparent;
+  }
+  .tab-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .tab-badge {
+    position: absolute;
+    top: 3px;
+    left: calc(50% + 5px);
+    min-width: 14px;
+    padding: 0.05rem 0.25rem;
+    font-size: 0.55rem;
+  }
+  .tab-live-dot {
+    top: 2px;
+    right: 18px;
+  }
+  .main-layout {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom));
+  }
+  .week-selector {
+    display: none;
+  }
+  .week-nav-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .week-nav-arrow {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: inherit;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .week-nav-arrow:not(:disabled):hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .week-nav-arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+  .week-nav-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .week-nav-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .week-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .week-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .week-dot.active {
+    background: var(--accent);
+    width: 18px;
+    border-radius: 3px;
+  }
+  .week-dot.current {
+    box-shadow: 0 0 0 1px var(--accent);
+    background: transparent;
+  }
+  .week-content-static {
+    display: none;
+  }
+  .week-carousel-outer {
+    display: block;
+    /* clip horizontal overflow without creating a scroll container */
+    overflow-x: clip;
+    /* full-bleed: escape container padding */
+    margin: 0 -1rem;
+  }
+  .week-carousel-track {
+    display: flex;
+    width: 300%;
+    will-change: transform;
+  }
+  .week-carousel-panel {
+    width: 33.333%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* ── TwCard mobile layout ── */
+
+  /* Hide inline owned badges — replaced by tw-card-owned-row */
+  .tw-card > .car-owned-badge,
+  .tw-card-track .track-owned-badge {
+    display: none;
+  }
+
+  /* Card wraps into rows, tighter padding */
+  .tw-card {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 0.15rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  /* Cat/class badges: float absolute to top-right */
+  .tw-card .class-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.5rem;
+  }
+  .tw-card .cat-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: calc(22px + 0.3rem + 0.5rem);
+  }
+
+  /* Card info takes full row; right padding clears the top-right badges */
+  .tw-card .tw-card-info {
+    flex-basis: 100%;
+    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+  }
+
+  /* Hide frequency tooltip on mobile (hover-only) */
+  .tw-card .series-freq {
+    display: none;
+  }
+
+  /* Actions row (fav + add): full width, right-aligned */
+  .tw-card .tw-card-actions {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    position: absolute;
+    right: 9px;
+    top: 33%;
+  }
+  .tw-card .tw-card-actions .tw-fav-btn {
+    font-size: 1rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tw-card .tw-card-actions .week-add-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Owned badges row: last row, pinned to the right */
+  .tw-card-owned-row {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    align-items: center;
+    position: absolute;
+    right: 9px;
+    bottom: 7px;
+  }
+
+  /* ── SeriesCard (All Series) mobile layout ── */
+  .series-header {
+    position: relative;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 0.15rem;
+    padding: 0.45rem 0.5rem;
+  }
+  .series-header .class-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.5rem;
+  }
+  .series-header .cat-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: calc(22px + 0.3rem + 0.5rem);
+  }
+  .series-header .series-title {
+    flex-basis: 100%;
+    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  /* Push add + expand to the right side of the second row */
+  .series-header .series-add-btn {
+    margin-left: auto;
+  }
+
+  /* ── MyRaceCard (My Schedule) mobile layout ── */
+  .my-race-card {
+    position: relative;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 0.15rem;
+    padding: 0.45rem 0.5rem;
+  }
+  .my-race-card .class-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.5rem;
+  }
+  .my-race-card .cat-badge {
+    position: absolute;
+    top: 0.45rem;
+    right: calc(22px + 0.3rem + 0.5rem);
+  }
+  .my-race-card .my-race-info {
+    flex-basis: 100%;
+    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+  }
+  .my-race-card .series-freq {
+    display: none;
+  }
+  .my-race-card .my-race-remove {
+    margin-left: auto;
+    position: absolute;
+        right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .my-race-card .my-race-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
   .export-btn .btn-label {
     display: none;
   }
@@ -2160,7 +2472,7 @@ body.share-modal-open {
     padding: 0.35rem 0.5rem;
   }
   .cat-badge {
-    width: 46px;
+    width: 55px;
     padding: 0.15rem 0;
     font-size: 0;
     overflow: hidden;
@@ -2375,7 +2687,7 @@ body.share-modal-open {
   color: #fff;
 }
 .se-badge--active::before {
-  content: "";
+  content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -2831,7 +3143,9 @@ body.share-modal-open {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2889,7 +3203,10 @@ body.share-modal-open {
   padding: 0.4rem 0.75rem;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    border-color 0.15s;
 }
 .buy-toolbar-btn:hover:not(:disabled) {
   color: var(--text);
@@ -2942,7 +3259,7 @@ body.share-modal-open {
 .buy-item:hover {
   background: var(--surface2);
 }
-.buy-item input[type="checkbox"] {
+.buy-item input[type='checkbox'] {
   display: none;
 }
 .buy-checkbox {
@@ -2955,12 +3272,15 @@ body.share-modal-open {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
   position: relative;
 }
 .buy-item:not(.buy-item-owned):hover .buy-checkbox {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow, rgba(59,130,246,0.12));
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(59, 130, 246, 0.12));
 }
 .buy-checkbox.checked {
   background: var(--accent);
@@ -3062,7 +3382,7 @@ body.share-modal-open {
   color: #22c55e;
   font-weight: 600;
 }
-[data-theme="light"] .buy-price-discount {
+[data-theme='light'] .buy-price-discount {
   color: #16a34a;
 }
 .buy-price-discount-amount {
@@ -3096,13 +3416,15 @@ body.share-modal-open {
   opacity: 0.88;
 }
 
-/* Tab nav overflow for 5 tabs on mobile */
-.tab-nav-inner {
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tab-nav-inner::-webkit-scrollbar {
-  display: none;
+/* Tab nav overflow for 5 tabs on desktop (not needed on mobile — uses fixed bottom nav) */
+@media (min-width: 769px) {
+  .tab-nav-inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-nav-inner::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (max-width: 600px) {

@@ -49,22 +49,30 @@ export default function TwCard({ series, week }: TwCardProps) {
       </div>
       <span className="series-freq" data-freq={series.frequency}>!</span>
       {carOwned && <span className="car-owned-badge" title="You own this car">✓ Car</span>}
-      <button
-        className={'tw-fav-btn' + (isFav ? ' active' : '')}
-        onClick={() => toggleFavorite(series.name)}
-        title={isFav ? 'Remove from favorites' : 'Add to favorites'}
-      >
-        {isFav ? '★' : '☆'}
-      </button>
-      <button
-        className={'week-add-btn' + (isAdded ? ' added' : '')}
-        data-raw-name={series.name}
-        data-week={week.week}
-        onClick={handleToggleRace}
-        title={isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}
-      >
-        {isAdded ? '✓' : '+'}
-      </button>
+      <div className="tw-card-actions">
+        <button
+          className={'tw-fav-btn' + (isFav ? ' active' : '')}
+          onClick={() => toggleFavorite(series.name)}
+          title={isFav ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          {isFav ? '★' : '☆'}
+        </button>
+        <button
+          className={'week-add-btn' + (isAdded ? ' added' : '')}
+          data-raw-name={series.name}
+          data-week={week.week}
+          onClick={handleToggleRace}
+          title={isAdded ? 'Remove from My Schedule' : 'Add to My Schedule'}
+        >
+          {isAdded ? '✓' : '+'}
+        </button>
+      </div>
+      {(trackOwned || carOwned) && (
+        <div className="tw-card-owned-row">
+          {trackOwned && <span className="track-owned-badge">✓ Track</span>}
+          {carOwned && <span className="car-owned-badge">✓ Car</span>}
+        </div>
+      )}
     </div>
   );
 }
