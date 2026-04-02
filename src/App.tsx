@@ -25,6 +25,10 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    if (activeTab !== 'my') window.scrollTo({ top: 0 });
+  }, [activeTab]);
+
+  useEffect(() => {
     document.body.classList.toggle('drawer-active', isDrawerOpen);
     return () => document.body.classList.remove('drawer-active');
   }, [isDrawerOpen]);

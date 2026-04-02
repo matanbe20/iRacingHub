@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useStore from '../store/useStore';
 import { ALL_CATEGORIES, ALL_CLASSES } from '../store/useStore';
 import CategoryFilters from './CategoryFilters';
@@ -15,6 +15,13 @@ const GarageIcon = () => (
 );
 
 export default function FilterSidebar() {
+  const [rainbowGarage, setRainbowGarage] = useState(true);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setRainbowGarage(false), 10000);
+    return () => clearTimeout(t1);
+  }, []);
+
   const activeCategories = useStore(s => s.activeCategories);
   const activeClasses = useStore(s => s.activeClasses);
   const searchQuery = useStore(s => s.searchQuery);
@@ -114,7 +121,7 @@ export default function FilterSidebar() {
             <span className="garage-open-counts">{ownedCars.size}c / {ownedTracks.size}t</span>
           </div>
           <div className="garage-layout">
-            <button className="garage-open-btn" onClick={openGarageModal} title="Manage My Garage">
+            <button className={'garage-open-btn' + (rainbowGarage ? ' rainbow' : '')} onClick={openGarageModal} title="Manage My Garage">
               <GarageIcon />
               Manage
             </button>

@@ -1139,6 +1139,11 @@ body {
   gap: 0.75rem;
   margin-bottom: 1.25rem;
   flex-wrap: wrap;
+  position: sticky;
+  top: var(--sticky-height, 0px);
+  z-index: 10;
+  background: var(--bg);
+  padding: 0.5rem 0;
 }
 
 .my-schedule-header .count-label {
@@ -1175,9 +1180,16 @@ body {
 
 .my-week-group {
   margin-bottom: 1.5rem;
+  scroll-margin-top: calc(var(--sticky-height, 0px) + var(--my-schedule-header-height, 0px) + 12px);
+}
+.my-week-group.past {
+  opacity: 0.45;
 }
 
 .my-week-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--accent);
@@ -1186,6 +1198,16 @@ body {
   margin-bottom: 0.5rem;
   padding-bottom: 0.35rem;
   border-bottom: 1px solid var(--border);
+}
+.my-week-now {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-transform: uppercase;
 }
 
 .my-race-card {
@@ -1630,6 +1652,24 @@ body {
   gap: 0.3rem;
   align-items: stretch;
 }
+@property --rainbow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rainbow-rotate {
+  to { --rainbow-angle: 360deg; }
+}
+
+.garage-open-btn.rainbow {
+  border: 0.5px solid transparent;
+  background:
+    linear-gradient(var(--surface2), var(--surface2)) padding-box,
+    conic-gradient(from var(--rainbow-angle), #ff0040, #ff8800, #ffe600, #00e640, #0088ff, #8800ff, #ff0040) border-box;
+  animation: rainbow-rotate 3s linear infinite;
+}
+
 .garage-open-btn {
   display: flex;
   align-items: center;
