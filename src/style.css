@@ -898,10 +898,6 @@ body {
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #a78bfa;
-  background: rgba(167, 139, 250, 0.12);
-  border: 1px solid rgba(167, 139, 250, 0.35);
-  border-radius: 4px;
-  padding: 0.05rem 0.3rem;
   margin-left: 0.4rem;
   vertical-align: middle;
   white-space: nowrap;
@@ -909,8 +905,6 @@ body {
 }
 [data-theme='light'] .track-owned-badge {
   color: #7c3aed;
-  background: rgba(124, 58, 237, 0.08);
-  border-color: rgba(124, 58, 237, 0.3);
 }
 
 .week-num {
@@ -942,6 +936,11 @@ body {
   flex: 1;
   min-width: 0;
 }
+.track-config {
+  font-size: 0.75em;
+  font-weight: 400;
+  opacity: 0.6;
+}
 
 .week-meta {
   display: flex;
@@ -955,13 +954,18 @@ body {
   font-size: 0.65rem;
   font-weight: 600;
   color: #f59e0b;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 4px;
-  padding: 0.05rem 0.35rem;
   letter-spacing: 0.03em;
   white-space: nowrap;
   flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .week-laps[data-short]::before {
+    content: attr(data-short);
+    font-size: 0.65rem;
+  }
+  .week-laps[data-short] {
+    font-size: 0;
+  }
 }
 
 .week-rain {
@@ -970,12 +974,8 @@ body {
   gap: 2px;
   font-size: 0.65rem;
   color: #60a5fa;
-  background: rgba(96, 165, 250, 0.1);
-  border: 1px solid rgba(96, 165, 250, 0.25);
-  border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
-  padding: 0.05rem 0.35rem;
   letter-spacing: 0.02em;
   vertical-align: middle;
 }
@@ -1441,11 +1441,18 @@ body {
   font-size: 0.7rem;
   font-weight: 600;
   color: #f59e0b;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 4px;
-  padding: 0.05rem 0.35rem;
   letter-spacing: 0.03em;
+}
+@media (max-width: 640px) {
+  .tw-card-laps[data-short]::before {
+    content: attr(data-short);
+  }
+  .tw-card-laps[data-short] {
+    font-size: 0;
+  }
+  .tw-card-laps[data-short]::before {
+    font-size: 0.7rem;
+  }
 }
 .tw-card-cars-badge {
   font-size: 0.7rem;
@@ -1595,17 +1602,11 @@ body {
   font-weight: 700;
   letter-spacing: 0.03em;
   color: #22c55e;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  border-radius: 4px;
-  padding: 0.1rem 0.35rem;
   white-space: nowrap;
   flex-shrink: 0;
 }
 [data-theme='light'] .car-owned-badge {
   color: #16a34a;
-  background: rgba(22, 163, 74, 0.08);
-  border-color: rgba(22, 163, 74, 0.3);
 }
 
 /* Owned badges row — mobile-only grouping (hidden on desktop) */
@@ -1614,64 +1615,78 @@ body {
 }
 
 /* My Garage button in sidebar */
-.garage-open-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
-  text-align: left;
-}
-.garage-open-btn:hover {
-  border-color: var(--accent);
-  background: var(--accent-glow);
-}
 .garage-open-counts {
   margin-left: auto;
   font-size: 0.7rem;
   color: var(--text-dim);
   font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* Garage ownership filters */
-.garage-filter-row {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
+.garage-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.3rem;
+  align-items: stretch;
 }
-.garage-filter-btn {
-  flex: 1;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  background: var(--surface);
+.garage-open-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
   transition:
     border-color 0.15s,
     background 0.15s,
     color 0.15s;
 }
-.garage-filter-btn:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--text);
-}
-.garage-filter-btn.active {
+.garage-open-btn:hover {
   border-color: var(--accent);
   background: var(--accent-glow);
-  color: var(--accent);
+  color: var(--text);
+}
+
+/* Garage ownership filters */
+.garage-filter-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.garage-filter-btn {
+  flex: 1;
+  padding: 0.2rem 0.15rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.garage-filter-btn:hover:not(:disabled) {
+  color: var(--text);
+}
+.garage-filter-btn--cars.active {
+  background: rgba(34, 197, 94, 0.08);
+  color: #22c55e;
+}
+.garage-filter-btn--tracks.active {
+  background: rgba(167, 139, 250, 0.08);
+  color: #a78bfa;
 }
 .garage-filter-btn:disabled {
   opacity: 0.35;
@@ -2293,7 +2308,7 @@ body.share-modal-open {
   .week-nav-label {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--text);
+    color: var(--accent);
   }
   .week-dots {
     display: flex;

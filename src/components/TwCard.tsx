@@ -1,6 +1,6 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, cleanName, baseTrackName } from '../utils/helpers';
+import { catClass, catLabel, catLabelShort, cleanName, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
 import SeriesLogo from './SeriesLogo';
 import type { Series, Week } from '../types';
@@ -23,6 +23,7 @@ export default function TwCard({ series, week }: TwCardProps) {
   const isAdded = !!mySchedule[raceId];
   const isFav = favorites.has(series.name);
   const trackOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(week.track));
+  const [trackMain, trackConfig] = splitTrackName(week.track);
   const seriesCars = series.cars.split(',').map(c => c.trim());
   const carOwned = ownedCars.size > 0 && seriesCars.some(c => ownedCars.has(c));
 
@@ -41,10 +42,10 @@ export default function TwCard({ series, week }: TwCardProps) {
           {cleanName(series.name)}
         </div>
         <div className="tw-card-meta">
-          <span className="tw-card-track">{week.track}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
-          {week.laps && <span className="tw-card-laps">{week.laps}</span>}
+          <span className="tw-card-track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
           {week.rain != null && week.rain > 0 && <span className="week-rain">💧 {week.rain}%</span>}
           {series.cars && <CarBadges cars={series.cars} />}
+          {week.laps && <span className="tw-card-laps" data-short={lapsShort(week.laps)}>{week.laps}</span>}
         </div>
       </div>
       <span className="series-freq" data-freq={series.frequency}>!</span>

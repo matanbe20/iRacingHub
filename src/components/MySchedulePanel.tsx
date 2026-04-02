@@ -2,6 +2,7 @@ import React from 'react';
 import useStore from '../store/useStore';
 import MyRaceCard from './MyRaceCard';
 import ExportButtons from './ExportButtons';
+import { shortDate } from '../utils/helpers';
 import type { RaceEntry } from '../types';
 
 export default function MySchedulePanel() {
@@ -25,7 +26,7 @@ export default function MySchedulePanel() {
   const groups: Record<string, RaceEntry[]> = {};
   const groupOrder: string[] = [];
   entries.forEach(e => {
-    const key = 'Week ' + e.weekNum + ' \u2014 ' + e.date;
+    const key = 'Week ' + e.weekNum + ' \u2014 ' + shortDate(e.date);
     if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
     groups[key].push(e);
   });

@@ -1,7 +1,7 @@
 import React from 'react';
 import useStore from '../store/useStore';
 import { getCurrentWeek } from '../utils/schedule';
-import { baseTrackName } from '../utils/helpers';
+import { baseTrackName, lapsShort, splitTrackName, shortDate } from '../utils/helpers';
 import CarBadges from './CarBadges';
 import type { Series, Week } from '../types';
 
@@ -23,6 +23,7 @@ export default function WeekCell({ series, week }: WeekCellProps) {
   const toggleRace = useStore(s => s.toggleRace);
   const ownedTracks = useStore(s => s.ownedTracks);
 
+  const [trackMain, trackConfig] = splitTrackName(week.track);
   const isCurrent = week.week === currentWeek;
   const isOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(week.track));
   const raceId = series.name + '_' + week.week;
@@ -36,16 +37,16 @@ export default function WeekCell({ series, week }: WeekCellProps) {
   return (
     <div className={'week-cell' + (isCurrent ? ' current' : '')}>
       <span className="week-num">Wk {week.week}{isCurrent ? ' ★' : ''}</span>
-      <span className="week-date">{week.date}</span>
+      <span className="week-date">{shortDate(week.date)}</span>
       <span className="week-track">
-        {week.track}
+        {trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}
         {isOwned && <span className="track-owned-badge">Owned</span>}
       </span>
       {week.car && <CarBadges cars={week.car} />}
       {week.rain != null && week.rain > 0 && (
         <span className="week-rain"><RainDropSvg /> {week.rain}%</span>
       )}
-      {week.laps && <span className="week-laps">{week.laps}</span>}
+      {week.laps && <span className="week-laps" data-short={lapsShort(week.laps)}>{week.laps}</span>}
       <button
         className={'week-add-btn' + (isAdded ? ' added' : '')}
         data-raw-name={series.name}

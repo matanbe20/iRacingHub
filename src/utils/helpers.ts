@@ -31,6 +31,28 @@ export function catLabel(cat: string): string {
   } as Record<string, string>)[cat] || cat;
 }
 
+/** Converts "2026-03-17" → "Mar 17" */
+export function shortDate(date: string): string {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const [, m, d] = date.split('-');
+  return months[parseInt(m, 10) - 1] + ' ' + parseInt(d, 10);
+}
+
+/** Splits "Track Name - Config" into [name, config]. If no dash, config is undefined. */
+export function splitTrackName(track: string): [string, string | undefined] {
+  const idx = track.indexOf(' - ');
+  if (idx === -1) return [track, undefined];
+  return [track.slice(0, idx), track.slice(idx + 3)];
+}
+
+export function lapsShort(laps: string): string {
+  const minsMatch = laps.match(/^(\d+)\s*mins?$/i);
+  if (minsMatch) return minsMatch[1] + 'M';
+  const lapsMatch = laps.match(/^(\d+)\s*laps?$/i);
+  if (lapsMatch) return lapsMatch[1] + 'L';
+  return laps;
+}
+
 export function catLabelShort(cat: string): string {
   return ({
     'OVAL': 'Oval',
@@ -132,7 +154,7 @@ export function getWeekDateRange(weekNum: number): string {
   const end = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000);
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const fmt = (d: Date) => months[d.getMonth()] + ' ' + d.getDate();
-  return 'Week ' + weekNum + ' \u2014 ' + fmt(start) + ' \u2013 ' + fmt(end);
+  return 'Week ' + weekNum + ' \u2013 ' + fmt(start) + ' \u2013 ' + fmt(end);
 }
 
 export function downloadFile(filename: string, content: string, mimeType: string): void {

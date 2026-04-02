@@ -109,31 +109,33 @@ export default function FilterSidebar() {
         </div>
 
         <div className="filter-section">
-          <div className="filter-section-header">My Garage</div>
-          <button className="garage-open-btn" onClick={openGarageModal}>
-            <GarageIcon />
-            Manage My Garage
-            <span className="garage-open-counts">
-              {ownedCars.size}c / {ownedTracks.size}t
-            </span>
-          </button>
-          <div className="garage-filter-row">
-            <button
-              className={'garage-filter-btn' + (filterOwnedCars ? ' active' : '')}
-              onClick={toggleFilterOwnedCars}
-              disabled={ownedCars.size === 0}
-              title="Show only series where you own a car"
-            >
-              Owned Cars
+          <div className="filter-section-header">
+            My Garage
+            <span className="garage-open-counts">{ownedCars.size}c / {ownedTracks.size}t</span>
+          </div>
+          <div className="garage-layout">
+            <button className="garage-open-btn" onClick={openGarageModal} title="Manage My Garage">
+              <GarageIcon />
+              Manage
             </button>
-            <button
-              className={'garage-filter-btn' + (filterOwnedTracks ? ' active' : '')}
-              onClick={toggleFilterOwnedTracks}
-              disabled={ownedTracks.size === 0}
-              title="Show only series where you own the track"
-            >
-              Owned Tracks
-            </button>
+            <div className="garage-filter-row">
+              <button
+                className={'garage-filter-btn garage-filter-btn--cars' + (filterOwnedCars ? ' active' : '')}
+                onClick={toggleFilterOwnedCars}
+                disabled={ownedCars.size === 0}
+                title="Show only series where you own a car"
+              >
+                {filterOwnedCars ? '✓ ' : ''}Cars
+              </button>
+              <button
+                className={'garage-filter-btn garage-filter-btn--tracks' + (filterOwnedTracks ? ' active' : '')}
+                onClick={toggleFilterOwnedTracks}
+                disabled={ownedTracks.size === 0}
+                title="Show only series where you own the track"
+              >
+                {filterOwnedTracks ? '✓ ' : ''}Tracks
+              </button>
+            </div>
           </div>
         </div>
 

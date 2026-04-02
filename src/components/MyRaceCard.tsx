@@ -1,6 +1,6 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, baseTrackName } from '../utils/helpers';
+import { catClass, catLabel, catLabelShort, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
 import SeriesLogo from './SeriesLogo';
 import { SCHEDULE_DATA } from '../data';
@@ -18,6 +18,7 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
   const ownedTracks = useStore(s => s.ownedTracks);
   const cc = catClass(entry.category);
   const trackOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(entry.track));
+  const [trackMain, trackConfig] = splitTrackName(entry.track);
   const frequency = entry.frequency ?? SCHEDULE_DATA.find(s => s.name === entry.rawName)?.frequency ?? '';
 
   function handleTrackClick(e: React.MouseEvent) {
@@ -37,10 +38,10 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
           {entry.displayName}
         </div>
         <div className="my-race-meta">
-          <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{entry.track}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
-          {entry.laps && <span className="tw-card-laps">{entry.laps}</span>}
+          <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
           {entry.rain != null && entry.rain > 0 && <span className="week-rain">💧 {entry.rain}%</span>}
           {entry.cars && <CarBadges cars={entry.cars} />}
+          {entry.laps && <span className="tw-card-laps" data-short={lapsShort(entry.laps)}>{entry.laps}</span>}
         </div>
       </div>
       <span className="series-freq" data-freq={frequency}>!</span>
