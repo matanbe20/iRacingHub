@@ -21,7 +21,7 @@
   --week-cell-shadow: none;
 }
 
-:root[data-theme='light'] {
+:root[data-theme="light"] {
   --bg: #d8dce9;
   --surface: #e4e7f2;
   --surface2: #cdd1e3;
@@ -46,7 +46,7 @@
 
 body {
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
@@ -143,15 +143,15 @@ body {
   color: var(--text);
 }
 
-[data-theme='light'] .discord-sidebar-btn,
-[data-theme='light'] .kofi-sidebar-btn {
+[data-theme="light"] .discord-sidebar-btn,
+[data-theme="light"] .kofi-sidebar-btn {
   background: #c8ccde;
   border-color: #a8adc4;
   color: #1a1d2e;
 }
 
-[data-theme='light'] .discord-sidebar-btn:hover,
-[data-theme='light'] .kofi-sidebar-btn:hover {
+[data-theme="light"] .discord-sidebar-btn:hover,
+[data-theme="light"] .kofi-sidebar-btn:hover {
   color: #1a1d2e;
 }
 
@@ -329,27 +329,27 @@ body {
 #class-filters .filter-btn.active {
   opacity: 1;
 }
-#class-filters .filter-btn.active[data-cls='R'] {
+#class-filters .filter-btn.active[data-cls="R"] {
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.5);
   background: rgba(239, 68, 68, 0.1);
 }
-#class-filters .filter-btn.active[data-cls='D'] {
+#class-filters .filter-btn.active[data-cls="D"] {
   color: #f97316;
   border-color: rgba(249, 115, 22, 0.5);
   background: rgba(249, 115, 22, 0.1);
 }
-#class-filters .filter-btn.active[data-cls='C'] {
+#class-filters .filter-btn.active[data-cls="C"] {
   color: #eab308;
   border-color: rgba(234, 179, 8, 0.5);
   background: rgba(234, 179, 8, 0.1);
 }
-#class-filters .filter-btn.active[data-cls='B'] {
+#class-filters .filter-btn.active[data-cls="B"] {
   color: #22c55e;
   border-color: rgba(34, 197, 94, 0.5);
   background: rgba(34, 197, 94, 0.1);
 }
-#class-filters .filter-btn.active[data-cls='A'] {
+#class-filters .filter-btn.active[data-cls="A"] {
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.5);
   background: rgba(59, 130, 246, 0.1);
@@ -669,7 +669,7 @@ body {
   transition: border-color 0.15s;
 }
 
-[data-theme='light'] .series-card {
+[data-theme="light"] .series-card {
   background: #e2e4ec;
   border-color: #c0c4d4;
 }
@@ -678,7 +678,7 @@ body {
   border-color: #3d4260;
 }
 
-[data-theme='light'] .series-card:hover {
+[data-theme="light"] .series-card:hover {
   border-color: #a8adc4;
 }
 
@@ -903,7 +903,7 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
-[data-theme='light'] .track-owned-badge {
+[data-theme="light"] .track-owned-badge {
   color: #7c3aed;
 }
 
@@ -1180,7 +1180,9 @@ body {
 
 .my-week-group {
   margin-bottom: 1.5rem;
-  scroll-margin-top: calc(var(--sticky-height, 0px) + var(--my-schedule-header-height, 0px) + 12px);
+  scroll-margin-top: calc(
+    var(--sticky-height, 0px) + var(--my-schedule-header-height, 0px) + 12px
+  );
 }
 .my-week-group.past {
   opacity: 0.45;
@@ -1226,12 +1228,12 @@ body {
   border-color: #3d4260;
 }
 
-[data-theme='light'] .my-race-card {
+[data-theme="light"] .my-race-card {
   background: #e2e4ec;
   border-color: #c0c4d4;
 }
 
-[data-theme='light'] .my-race-card:hover {
+[data-theme="light"] .my-race-card:hover {
   border-color: #a8adc4;
 }
 
@@ -1426,12 +1428,12 @@ body {
   border-color: #3d4260;
 }
 
-[data-theme='light'] .tw-card {
+[data-theme="light"] .tw-card {
   background: #e2e4ec;
   border-color: #c0c4d4;
 }
 
-[data-theme='light'] .tw-card:hover {
+[data-theme="light"] .tw-card:hover {
   border-color: #a8adc4;
 }
 .tw-card-info {
@@ -1627,7 +1629,7 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
-[data-theme='light'] .car-owned-badge {
+[data-theme="light"] .car-owned-badge {
   color: #16a34a;
 }
 
@@ -1653,20 +1655,32 @@ body {
   align-items: stretch;
 }
 @property --rainbow-angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
 
 @keyframes rainbow-rotate {
-  to { --rainbow-angle: 360deg; }
+  to {
+    --rainbow-angle: 360deg;
+  }
 }
 
 .garage-open-btn.rainbow {
   border: 0.5px solid transparent;
   background:
     linear-gradient(var(--surface2), var(--surface2)) padding-box,
-    conic-gradient(from var(--rainbow-angle), #ff0040, #ff8800, #ffe600, #00e640, #0088ff, #8800ff, #ff0040) border-box;
+    conic-gradient(
+        from var(--rainbow-angle),
+        #ff0040,
+        #ff8800,
+        #ffe600,
+        #00e640,
+        #0088ff,
+        #8800ff,
+        #ff0040
+      )
+      border-box;
   animation: rainbow-rotate 3s linear infinite;
 }
 
@@ -1874,7 +1888,7 @@ body {
 .garage-item:hover {
   background: var(--surface2);
 }
-.garage-item input[type='checkbox'] {
+.garage-item input[type="checkbox"] {
   accent-color: var(--accent);
   width: 14px;
   height: 14px;
@@ -1894,7 +1908,7 @@ body {
   padding: 0.05rem 0.3rem;
   flex-shrink: 0;
 }
-[data-theme='light'] .garage-free-badge {
+[data-theme="light"] .garage-free-badge {
   color: #16a34a;
   background: rgba(22, 163, 74, 0.08);
 }
@@ -2268,6 +2282,9 @@ body.share-modal-open {
     padding: 0;
     max-width: 100%;
     overflow-x: visible;
+    display: flex;
+    height: 80px;
+    align-items: flex-start;
   }
   .tab-btn {
     flex: 1;
@@ -2526,7 +2543,7 @@ body.share-modal-open {
   .my-race-card .my-race-remove {
     margin-left: auto;
     position: absolute;
-        right: 8px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -2758,7 +2775,7 @@ body.share-modal-open {
   color: #fff;
 }
 .se-badge--active::before {
-  content: '';
+  content: "";
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -3332,7 +3349,7 @@ body.share-modal-open {
 .buy-item:hover {
   background: var(--surface2);
 }
-.buy-item input[type='checkbox'] {
+.buy-item input[type="checkbox"] {
   display: none;
 }
 .buy-checkbox {
@@ -3360,7 +3377,7 @@ body.share-modal-open {
   border-color: var(--accent);
 }
 .buy-checkbox.checked::after {
-  content: '';
+  content: "";
   display: block;
   width: 5px;
   height: 9px;
@@ -3455,7 +3472,7 @@ body.share-modal-open {
   color: #22c55e;
   font-weight: 600;
 }
-[data-theme='light'] .buy-price-discount {
+[data-theme="light"] .buy-price-discount {
   color: #16a34a;
 }
 .buy-price-discount-amount {
