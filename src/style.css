@@ -697,15 +697,13 @@ body {
 }
 
 .cat-badge {
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
   border-radius: 4px;
-  white-space: nowrap;
-  width: 86px;
-  text-align: center;
+  flex-shrink: 0;
 }
 
 .cat-badge.oval {
@@ -2443,7 +2441,7 @@ body.share-modal-open {
   /* Card info takes full row; right padding clears the top-right badges */
   .tw-card .tw-card-info {
     flex-basis: 100%;
-    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+    padding-right: calc(22px + 26px + 0.3rem + 1rem);
   }
 
   /* Hide frequency tooltip on mobile (hover-only) */
@@ -2505,7 +2503,7 @@ body.share-modal-open {
   }
   .series-header .series-title {
     flex-basis: 100%;
-    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+    padding-right: calc(22px + 26px + 0.3rem + 1rem);
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
@@ -2535,7 +2533,7 @@ body.share-modal-open {
   }
   .my-race-card .my-race-info {
     flex-basis: 100%;
-    padding-right: calc(22px + 46px + 0.3rem + 1rem);
+    padding-right: calc(22px + 26px + 0.3rem + 1rem);
   }
   .my-race-card .series-freq {
     display: none;
@@ -2560,15 +2558,8 @@ body.share-modal-open {
     padding: 0.35rem 0.5rem;
   }
   .cat-badge {
-    width: 55px;
-    padding: 0.15rem 0;
-    font-size: 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .cat-badge::after {
-    content: attr(data-short);
-    font-size: 0.6rem;
+    width: 22px;
+    height: 22px;
   }
   .class-badge {
     width: 18px;

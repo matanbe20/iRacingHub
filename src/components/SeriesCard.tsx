@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, cleanName, isFixed } from '../utils/helpers';
+import { catClass, catLabel, cleanName, isFixed } from '../utils/helpers';
 import CarBadges from './CarBadges';
+import CategoryIcon from './CategoryIcon';
 import SeriesLogo from './SeriesLogo';
 import WeekCell from './WeekCell';
 import type { Series } from '../types';
@@ -53,11 +54,10 @@ export default function SeriesCard({ series }: SeriesCardProps) {
       <div className="series-header" onClick={() => setExpanded(e => !e)}>
         <span
           className={'cat-badge ' + cc + ' filterable'}
-          data-short={catLabelShort(series.category)}
           onClick={handleFilterCat}
           title={'Filter by ' + catLabel(series.category)}
         >
-          {catLabel(series.category)}
+          <CategoryIcon category={series.category} />
         </span>
         <span
           className={'class-badge ' + series.class + ' filterable'}

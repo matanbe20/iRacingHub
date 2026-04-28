@@ -1,7 +1,8 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
+import { catClass, catLabel, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
 import CarBadges from './CarBadges';
+import CategoryIcon from './CategoryIcon';
 import SeriesLogo from './SeriesLogo';
 import { SCHEDULE_DATA } from '../data';
 import type { Category, RaceEntry } from '../types';
@@ -30,7 +31,7 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
 
   return (
     <div className="my-race-card">
-      <span className={'cat-badge ' + cc} data-short={catLabelShort(entry.category)}>{catLabel(entry.category)}</span>
+      <span className={'cat-badge ' + cc} title={catLabel(entry.category)}><CategoryIcon category={entry.category} /></span>
       <span className={'class-badge ' + entry.cls}>{entry.cls}</span>
       <div className="my-race-info">
         <div className="my-race-title">
