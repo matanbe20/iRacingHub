@@ -19,24 +19,17 @@ function SportsCarIcon() {
 function FormulaCarIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
-      <rect x="10" y="2" width="4" height="20" rx="2" />
-      <rect x="4" y="4" width="16" height="3" rx="1.5" />
-      <rect x="5" y="17" width="14" height="3" rx="1.5" />
-      <rect x="2.5" y="6" width="3.5" height="6" rx="1.75" />
-      <rect x="18" y="6" width="3.5" height="6" rx="1.75" />
-      <rect x="2.5" y="13" width="3.5" height="5" rx="1.75" />
-      <rect x="18" y="13" width="3.5" height="5" rx="1.75" />
+      {/* Top-down F1 car silhouette: pointed nose, wide front wings, sidepods, pointed tail */}
+      <path d="M12 2L10 5V8H2V10H10V15H5V17H10V19L12 22L14 19V17H19V15H14V10H22V8H14V5Z" />
     </svg>
   );
 }
 
 function DirtOvalIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
-      <path fillRule="evenodd" clipRule="evenodd" d="M7 5c-3.314 0-6 2.686-6 6v2c0 3.314 2.686 6 6 6h10c3.314 0 6-2.686 6-6v-2c0-3.314-2.686-6-6-6H7zm0 3c-1.657 0-3 1.343-3 3v2c0 1.657 1.343 3 3 3h10c1.657 0 3-1.343 3-3v-2c0-1.657-1.343-3-3-3H7z" />
-      <circle cx="9" cy="12" r="1.2" />
-      <circle cx="12" cy="12" r="1.2" />
-      <circle cx="15" cy="12" r="1.2" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" width="16" height="16" aria-hidden="true">
+      {/* Infinity / figure-8 shape representing a dirt figure-8 oval */}
+      <path d="M12 12C10 7 3 7 3 12C3 17 10 17 12 12C14 7 21 7 21 12C21 17 14 17 12 12Z" />
     </svg>
   );
 }
