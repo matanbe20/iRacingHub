@@ -148,7 +148,7 @@ export default function FilterSidebar() {
 
         <div className="sidebar-support-btns">
           <a
-            href="https://discord.gg/brRFWVQk"
+            href="https://discord.gg/J7QpTFt2zA"
             target="_blank"
             rel="noreferrer"
             className="discord-sidebar-btn"
