@@ -54,7 +54,7 @@ export default function MySchedulePanel() {
       {groupOrder.map(weekNum => (
         <div key={weekNum} id={'my-week-' + weekNum} className={'my-week-group' + (weekNum < currentWeek ? ' past' : '')}>
           <div className="my-week-label">
-            Week {weekNum} &mdash; {shortDate(groups[weekNum][0].date)}
+            Week {weekNum} - {shortDate(groups[weekNum][0].date)}
             {weekNum === currentWeek && <span className="my-week-now">Current</span>}
           </div>
           {groups[weekNum].map(e => (

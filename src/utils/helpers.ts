@@ -149,7 +149,7 @@ export function parseDateStr(dateStr: string): number {
 }
 
 export function getWeekDateRange(weekNum: number): string {
-  const seasonStart = new Date('2026-03-17');
+  const seasonStart = new Date('2026-06-16');
   const start = new Date(seasonStart.getTime() + (weekNum - 1) * 7 * 24 * 60 * 60 * 1000);
   const end = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000);
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -200,5 +200,5 @@ export function exportICS(mySchedule: MySchedule): void {
     );
   });
   lines.push('END:VCALENDAR');
-  downloadFile('iracing-2026s2-my-schedule.ics', lines.join('\r\n'), 'text/calendar');
+  downloadFile('iracing-2026s3-my-schedule.ics', lines.join('\r\n'), 'text/calendar');
 }

@@ -1,4 +1,4 @@
-export const SEASON_START = new Date('2026-03-17');
+export const SEASON_START = new Date('2026-06-16');
 
 export function getCurrentWeek(): number {
   const now = new Date();

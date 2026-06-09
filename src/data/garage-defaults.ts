@@ -1,6 +1,7 @@
 // Cars included with iRacing membership that appear in the 2026 S2 schedule
 export const FREE_CARS: string[] = [
   'BMW M2 CS Racing',
+  'BMW M2 Racing (G87)',
   'Toyota GR86',
   'Global Mazda MX-5 Cup',
   'Cadillac CTS-V Racecar',

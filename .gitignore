@@ -2,7 +2,7 @@
 .env
 .env.local
 .env*.local
-2026s2.pdf
+2026s3.pdf
 .screenshots/
 /node_modules/
 dist/

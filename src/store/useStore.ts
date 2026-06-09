@@ -7,8 +7,8 @@ import type { Tab, Theme, MySchedule, RaceEntry } from '../types';
 
 const ALL_CATEGORIES = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT ROAD', 'DIRT OVAL', 'UNRANKED'];
 const ALL_CLASSES = ['R', 'D', 'C', 'B', 'A'];
-const STORAGE_KEY = 'iracing-2026s2-filters';
-const MY_SCHEDULE_KEY = 'iracing-2026s2-my-schedule';
+const STORAGE_KEY = 'iracing-2026s3-filters';
+const MY_SCHEDULE_KEY = 'iracing-2026s3-my-schedule';
 const FAVORITES_KEY = 'iracing-2026s2-favorites';
 const THEME_KEY = 'iracing-theme';
 const OWNED_KEY = 'iracing-2026s2-owned';
@@ -249,7 +249,8 @@ function loadInitialState(): Partial<StoreState> {
             track: week.track,
             date: week.date,
             laps: week.laps || '',
-            rain: week.rain
+            rain: week.rain,
+            frequency: series.frequency
           });
         });
         sharedEntries.sort((a, b) => {
@@ -627,7 +628,9 @@ const useStore = create<StoreState>((set, get) => ({
               cars: series.cars,
               track: w.track,
               date: w.date,
-              laps: w.laps || ''
+              laps: w.laps || '',
+              rain: w.rain,
+              frequency: series.frequency
             };
           }
         });
