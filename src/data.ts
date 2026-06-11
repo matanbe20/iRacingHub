@@ -3966,6 +3966,29 @@ export const SCHEDULE_DATA: Series[] = [
   {
     category: 'SPORTS CAR',
     class: 'C',
+    name: 'Creventic Endurance Series - 2026 Season',
+    cars: 'Porsche 911 Cup (992.2), BMW M4 GT3 EVO, Lamborghini Huracán GT3 EVO, Mercedes-AMG GT3 2020, Porsche 911 GT3 R (992), Ferrari 296 GT3, Audi R8 LMS EVO II GT3, Chevrolet Corvette Z06 GT3.R, Ford Mustang GT3, Aston Martin Vantage GT3 EVO, Porsche 718 Cayman GT4 Clubsport MR, McLaren 570S GT4, Aston Martin Vantage GT4, Mercedes-AMG GT4, BMW M4 G82 GT4 Evo, Ford Mustang GT4',
+    license: 'Class D (4.0) --> Pro/WC (4.0), Team racing',
+    frequency: 'Races on Saturday at 1 & 13 GMT',
+    weeks: [
+      {
+        week: 1,
+        date: '2026-07-18',
+        track: 'Circuit de Spa-Francorchamps - Grand Prix Pits',
+        laps: '720 mins',
+        rain: 41,
+      },
+      {
+        week: 2,
+        date: '2026-08-15',
+        track: 'Circuit de Barcelona Catalunya - Grand Prix',
+        laps: '720 mins',
+      },
+    ],
+  },
+  {
+    category: 'SPORTS CAR',
+    class: 'C',
     name: 'Ferrari 296 Challenge 2026 Season 3',
     cars: 'Ferrari 296 Challenge',
     license: 'Class D (4.0) --> Pro/WC (4.0)',
