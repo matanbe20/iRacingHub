@@ -81,6 +81,19 @@ export default function SearchBox() {
           <span className="tw-cursor"></span>
         </div>
       )}
+      {hasValue && (
+        <button
+          className="search-clear"
+          onClick={() => setSearchQuery('')}
+          aria-label="Clear search"
+          tabIndex={-1}
+        >
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <line x1="5" y1="5" x2="15" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            <line x1="15" y1="5" x2="5" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

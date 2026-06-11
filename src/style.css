@@ -377,7 +377,7 @@ body {
   background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 0.85rem 1rem 0.85rem 2.5rem;
+  padding: 0.85rem 2.5rem 0.85rem 2.5rem;
   border-radius: 10px;
   font-size: 1rem;
   font-family: inherit;
@@ -425,6 +425,36 @@ body {
 
 .search-typewriter.hidden {
   display: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  padding: 0;
+  border-radius: 50%;
+  transition: color 0.15s, background 0.15s;
+  z-index: 2;
+}
+
+.search-clear:hover {
+  color: var(--text);
+  background: var(--surface3);
+}
+
+.search-clear svg {
+  width: 14px;
+  height: 14px;
 }
 
 .tw-cursor {
