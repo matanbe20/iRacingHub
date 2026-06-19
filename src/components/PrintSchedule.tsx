@@ -1,7 +1,19 @@
 import React from 'react';
 import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import type { RaceEntry } from '../types';
-import { catClass, catLabel } from '../utils/helpers';
+import { catClass, catLabel, groupCarsByClass } from '../utils/helpers';
+
+function formatCarsForPDF(cars: string): string {
+  const groups = groupCarsByClass(cars);
+  if (!groups) {
+    // < 3 cars, show as-is
+    return cars;
+  }
+  if (groups.length === 1) {
+    return groups[0].label;
+  }
+  return 'Multi-Class';
+}
 
 const CAT_COLORS: Record<string, string> = {
   oval: '#ef4444',
@@ -150,7 +162,7 @@ export function SchedulePDFDocument({ entries, groups, groupOrder, today }: Prop
         <View style={s.header} fixed>
           <View style={s.headerLeft}>
             <Text style={s.title}>iRacing Hub</Text>
-            <Text style={s.subtitle}>2026 Season 2 — My Schedule</Text>
+            <Text style={s.subtitle}>2026 Season 3 — My Schedule</Text>
           </View>
           <Text style={s.meta}>Generated {today}{'\n'}{entries.length} race{entries.length !== 1 ? 's' : ''} saved</Text>
         </View>
@@ -188,7 +200,7 @@ export function SchedulePDFDocument({ entries, groups, groupOrder, today }: Prop
                     <Text style={s.cellCenter}>{e.cls}</Text>
                   </View>
                   <View style={{ width: COL.car }}>
-                    <Text style={s.cell}>{e.cars}</Text>
+                    <Text style={s.cell}>{formatCarsForPDF(e.cars)}</Text>
                   </View>
                   <View style={{ width: COL.track }}>
                     <Text style={s.cell}>{e.track}</Text>

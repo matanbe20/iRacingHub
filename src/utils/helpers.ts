@@ -176,27 +176,49 @@ export function exportCSV(mySchedule: MySchedule): void {
   downloadFile('iracing-2026s2-my-schedule.csv', rows.join('\n'), 'text/csv');
 }
 
+function icsDateStr(d: Date): string {
+  return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+}
+
+function icsFold(line: string): string {
+  // RFC 5545: fold lines longer than 75 octets with CRLF + space
+  const out: string[] = [];
+  while (line.length > 75) {
+    out.push(line.slice(0, 75));
+    line = ' ' + line.slice(75);
+  }
+  out.push(line);
+  return out.join('\r\n');
+}
+
 export function exportICS(mySchedule: MySchedule): void {
   const entries = Object.values(mySchedule);
   if (!entries.length) return;
   entries.sort((a, b) => parseDateStr(a.date) - parseDateStr(b.date));
+  const dtstamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '') + 'Z';
   const lines = [
-    'BEGIN:VCALENDAR', 'VERSION:2.0',
-    'PRODID:-//iRacing Schedule//2026 Season 2//EN',
-    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//iRacing Schedule//2026 Season 3//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
   ];
   entries.forEach(e => {
     const d = new Date(e.date + ', 2026');
-    const ds = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
-    const uid = 'iracing-2026s2-' + e.id.replace(/[^a-zA-Z0-9]/g, '-') + '@iracing-schedule';
+    const ds = icsDateStr(d);
+    const dNext = new Date(d.getTime() + 24 * 60 * 60 * 1000);
+    const dsNext = icsDateStr(dNext);
+    const uid = 'iracing-2026s3-' + e.id.replace(/[^a-zA-Z0-9]/g, '-') + '@iracing-schedule';
+    const desc = 'Series: ' + e.displayName + '\\nTrack: ' + e.track + '\\nClass: ' + e.cls + '\\nCars: ' + e.cars + (e.laps ? '\\nLaps: ' + e.laps : '');
     lines.push(
       'BEGIN:VEVENT',
-      'DTSTART;VALUE=DATE:' + ds,
-      'DTEND;VALUE=DATE:' + ds,
-      'SUMMARY:iRacing: ' + e.displayName + ' @ ' + e.track,
-      'DESCRIPTION:Series: ' + e.displayName + '\\nTrack: ' + e.track + '\\nClass: ' + e.cls + '\\nCars: ' + e.cars + (e.laps ? '\\nLaps: ' + e.laps : ''),
-      'UID:' + uid,
-      'END:VEVENT'
+      icsFold('DTSTART;VALUE=DATE:' + ds),
+      icsFold('DTEND;VALUE=DATE:' + dsNext),
+      icsFold('DTSTAMP:' + dtstamp),
+      icsFold('UID:' + uid),
+      icsFold('SUMMARY:iRacing: ' + e.displayName + ' @ ' + e.track),
+      icsFold('DESCRIPTION:' + desc),
+      'END:VEVENT',
     );
   });
   lines.push('END:VCALENDAR');

@@ -86,7 +86,7 @@ export default function ExportButtons() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'iracing-2026s2-my-schedule.pdf';
+      a.download = 'iracing-2026s3-my-schedule.pdf';
       a.click();
       URL.revokeObjectURL(url);
     } finally {
