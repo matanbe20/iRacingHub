@@ -18,12 +18,19 @@ export default function AllSeriesPanel() {
   const ownedCars = useStore(s => s.ownedCars);
   const ownedTracks = useStore(s => s.ownedTracks);
   const setFilteredCount = useStore(s => s.setFilteredCount);
+  const classFilterAdvanced = useStore(s => s.classFilterAdvanced);
+  const advancedClassMap = useStore(s => s.advancedClassMap);
 
   const filtered = useMemo(() => {
     const q = searchQuery.toLowerCase();
     return SCHEDULE_DATA.filter(s => {
       if (!activeCategories.has(s.category)) return false;
-      if (!activeClasses.has(s.class)) return false;
+      if (classFilterAdvanced) {
+        const catClasses = advancedClassMap[s.category];
+        if (!catClasses || !catClasses.has(s.class)) return false;
+      } else {
+        if (!activeClasses.has(s.class)) return false;
+      }
       if (activeCars.size > 0) {
         const seriesCars = s.cars.split(',').map(c => c.trim());
         if (!seriesCars.some(c => activeCars.has(c))) return false;
@@ -50,7 +57,7 @@ export default function AllSeriesPanel() {
       if (catDiff !== 0) return catDiff;
       return cleanName(a.name).localeCompare(cleanName(b.name));
     });
-  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks]);
+  }, [activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks, classFilterAdvanced, advancedClassMap]);
 
   useEffect(() => {
     setFilteredCount(filtered.length);

@@ -30,10 +30,18 @@ export default function Header() {
   const activeCars = useStore(s => s.activeCars);
   const activeTracks = useStore(s => s.activeTracks);
   const searchQuery = useStore(s => s.searchQuery);
+  const classFilterAdvanced = useStore(s => s.classFilterAdvanced);
+  const advancedClassMap = useStore(s => s.advancedClassMap);
+
+  const classFilterCount = classFilterAdvanced
+    ? (ALL_CATEGORIES.some(cat =>
+        !ALL_CLASSES.every(cls => (advancedClassMap[cat] ?? new Set(ALL_CLASSES)).has(cls))
+      ) ? 1 : 0)
+    : (ALL_CLASSES.every(c => activeClasses.has(c)) ? 0 : 1);
 
   const filterCount =
     (ALL_CATEGORIES.every(c => activeCategories.has(c)) ? 0 : 1) +
-    (ALL_CLASSES.every(c => activeClasses.has(c)) ? 0 : 1) +
+    classFilterCount +
     (activeCars.size > 0 ? activeCars.size : 0) +
     (activeTracks.size > 0 ? activeTracks.size : 0) +
     (searchQuery ? 1 : 0);

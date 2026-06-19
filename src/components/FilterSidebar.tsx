@@ -3,6 +3,7 @@ import useStore from '../store/useStore';
 import { ALL_CATEGORIES, ALL_CLASSES } from '../store/useStore';
 import CategoryFilters from './CategoryFilters';
 import ClassFilters from './ClassFilters';
+import AdvancedClassMatrix from './AdvancedClassMatrix';
 import AutocompleteFilter from './AutocompleteFilter';
 
 const GarageIcon = () => (
@@ -43,10 +44,17 @@ export default function FilterSidebar() {
   const toggleFilterOwnedCars = useStore(s => s.toggleFilterOwnedCars);
   const toggleFilterOwnedTracks = useStore(s => s.toggleFilterOwnedTracks);
   const openGarageModal = useStore(s => s.openGarageModal);
+  const classFilterAdvanced = useStore(s => s.classFilterAdvanced);
+  const advancedClassMap = useStore(s => s.advancedClassMap);
+  const toggleClassFilterAdvanced = useStore(s => s.toggleClassFilterAdvanced);
+
+  const classesDefault = classFilterAdvanced
+    ? ALL_CATEGORIES.every(cat => ALL_CLASSES.every(cls => (advancedClassMap[cat] ?? new Set(ALL_CLASSES)).has(cls)))
+    : ALL_CLASSES.every(c => activeClasses.has(c));
 
   const allDefault =
     ALL_CATEGORIES.every(c => activeCategories.has(c)) &&
-    ALL_CLASSES.every(c => activeClasses.has(c)) &&
+    classesDefault &&
     activeCars.size === 0 &&
     activeTracks.size === 0 &&
     !searchQuery &&
@@ -56,24 +64,41 @@ export default function FilterSidebar() {
   return (
     <>
       <aside className={'filter-sidebar' + (isDrawerOpen ? ' drawer-open' : '')} id="filter-sidebar">
-        <div className="filter-section">
-          <div className="filter-section-header">
-            Type
-            <button
-              className={'filter-clear-btn' + (!allDefault ? ' visible' : '')}
-              id="all-clear-btn"
-              onClick={clearAllFilters}
-            >
-              Clear all
-            </button>
-          </div>
-          <CategoryFilters />
+
+        <div className="adv-toggle-row">
+          <button
+            className={'adv-toggle-btn' + (classFilterAdvanced ? ' active' : '')}
+            onClick={toggleClassFilterAdvanced}
+          >
+            <span className="adv-toggle-label">Advanced Filters</span>
+            <span className="adv-toggle-chevron">{classFilterAdvanced ? '▲' : '▼'}</span>
+          </button>
+          <button
+            className={'filter-clear-btn' + (!allDefault ? ' visible' : '')}
+            id="all-clear-btn"
+            onClick={clearAllFilters}
+          >
+            Clear all
+          </button>
         </div>
 
-        <div className="filter-section">
-          <div className="filter-section-header">Class</div>
-          <ClassFilters />
-        </div>
+        {classFilterAdvanced ? (
+          <div className="filter-section">
+            <AdvancedClassMatrix />
+          </div>
+        ) : (
+          <>
+            <div className="filter-section">
+              <div className="filter-section-header">Type</div>
+              <CategoryFilters />
+            </div>
+
+            <div className="filter-section">
+              <div className="filter-section-header">Class</div>
+              <ClassFilters />
+            </div>
+          </>
+        )}
 
         <div className="filter-section">
           <div className="filter-section-header">

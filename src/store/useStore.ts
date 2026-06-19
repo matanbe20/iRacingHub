@@ -37,6 +37,8 @@ export interface StoreState {
   activeTracks: Set<string>;
   filterOwnedCars: boolean;
   filterOwnedTracks: boolean;
+  classFilterAdvanced: boolean;
+  advancedClassMap: Record<string, Set<string>>;
 
   // Navigation & UI
   activeTab: Tab;
@@ -78,6 +80,8 @@ export interface StoreState {
   clearAllFilters: () => void;
   toggleFilterOwnedCars: () => void;
   toggleFilterOwnedTracks: () => void;
+  toggleClassFilterAdvanced: () => void;
+  toggleAdvancedClass: (cat: string, cls: string) => void;
 
   // Ownership actions
   addOwnedCar(car: string): void;
@@ -127,11 +131,15 @@ export interface StoreState {
   clearToast: () => void;
 }
 
+function defaultAdvancedClassMap(): Record<string, Set<string>> {
+  return Object.fromEntries(ALL_CATEGORIES.map(cat => [cat, new Set(ALL_CLASSES)]));
+}
+
 function loadInitialState(): Partial<StoreState> {
   const params = new URLSearchParams(window.location.search);
   const hasUrlParams = params.has('cat') || params.has('cls') || params.has('q') || params.has('cars') || params.has('tracks');
 
-  let filters: Pick<StoreState, 'activeCategories' | 'activeClasses' | 'searchQuery' | 'activeCars' | 'activeTracks' | 'filterOwnedCars' | 'filterOwnedTracks'> | undefined;
+  let filters: Pick<StoreState, 'activeCategories' | 'activeClasses' | 'searchQuery' | 'activeCars' | 'activeTracks' | 'filterOwnedCars' | 'filterOwnedTracks' | 'classFilterAdvanced' | 'advancedClassMap'> | undefined;
   if (hasUrlParams) {
     const cats = params.get('cat');
     const cls = params.get('cls');
@@ -145,12 +153,23 @@ function loadInitialState(): Partial<StoreState> {
       activeTracks: new Set(tracks ? tracks.split(',').filter(Boolean) : []),
       filterOwnedCars: false,
       filterOwnedTracks: false,
+      classFilterAdvanced: false,
+      advancedClassMap: defaultAdvancedClassMap(),
     };
   } else {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const saved = raw ? JSON.parse(raw) : null;
       if (saved) {
+        const advancedClassMap = defaultAdvancedClassMap();
+        if (saved.advancedClassMap && typeof saved.advancedClassMap === 'object') {
+          for (const cat of ALL_CATEGORIES) {
+            const arr = saved.advancedClassMap[cat];
+            if (Array.isArray(arr)) {
+              advancedClassMap[cat] = new Set(arr.filter((c: string) => ALL_CLASSES.includes(c)));
+            }
+          }
+        }
         filters = {
           activeCategories: new Set((saved.categories || ALL_CATEGORIES).filter((c: string) => ALL_CATEGORIES.includes(c))),
           activeClasses: new Set((saved.classes || ALL_CLASSES).filter((c: string) => ALL_CLASSES.includes(c))),
@@ -159,6 +178,8 @@ function loadInitialState(): Partial<StoreState> {
           activeTracks: migrateTrackSet(new Set(saved.tracks || [])),
           filterOwnedCars: saved.filterOwnedCars ?? false,
           filterOwnedTracks: saved.filterOwnedTracks ?? false,
+          classFilterAdvanced: saved.classFilterAdvanced ?? false,
+          advancedClassMap,
         };
       }
     } catch { /* ignore */ }
@@ -171,6 +192,8 @@ function loadInitialState(): Partial<StoreState> {
         activeTracks: new Set(),
         filterOwnedCars: false,
         filterOwnedTracks: false,
+        classFilterAdvanced: false,
+        advancedClassMap: defaultAdvancedClassMap(),
       };
     }
   }
@@ -313,6 +336,10 @@ function saveFilters(state: StoreState): void {
     tracks: [...state.activeTracks],
     filterOwnedCars: state.filterOwnedCars,
     filterOwnedTracks: state.filterOwnedTracks,
+    classFilterAdvanced: state.classFilterAdvanced,
+    advancedClassMap: Object.fromEntries(
+      ALL_CATEGORIES.map(cat => [cat, [...(state.advancedClassMap[cat] ?? new Set(ALL_CLASSES))]])
+    ),
   }));
 }
 
@@ -334,6 +361,8 @@ const useStore = create<StoreState>((set, get) => ({
   activeTracks: initialState.activeTracks ?? new Set(),
   filterOwnedCars: initialState.filterOwnedCars ?? false,
   filterOwnedTracks: initialState.filterOwnedTracks ?? false,
+  classFilterAdvanced: initialState.classFilterAdvanced ?? false,
+  advancedClassMap: initialState.advancedClassMap ?? defaultAdvancedClassMap(),
 
   // Navigation & UI
   activeTab: initialState.activeTab ?? 'all',
@@ -458,9 +487,42 @@ const useStore = create<StoreState>((set, get) => ({
       searchQuery: '',
       filterOwnedCars: false,
       filterOwnedTracks: false,
+      classFilterAdvanced: false,
+      advancedClassMap: defaultAdvancedClassMap(),
     });
     const s = get();
     syncUrlParams(s); saveFilters(s);
+  },
+
+  toggleClassFilterAdvanced() {
+    set(state => {
+      if (!state.classFilterAdvanced) {
+        // First time: initialize from global activeClasses if map is still at defaults
+        const isDefault = ALL_CATEGORIES.every(cat =>
+          ALL_CLASSES.every(cls => (state.advancedClassMap[cat] ?? new Set()).has(cls))
+        );
+        if (isDefault) {
+          const map = Object.fromEntries(
+            ALL_CATEGORIES.map(cat => [cat, new Set(state.activeClasses)])
+          );
+          return { classFilterAdvanced: true, advancedClassMap: map };
+        }
+        // Returning to previously customized state — just re-enable
+        return { classFilterAdvanced: true };
+      }
+      return { classFilterAdvanced: false };
+    });
+    saveFilters(get());
+  },
+
+  toggleAdvancedClass(cat, cls) {
+    set(state => {
+      const current = state.advancedClassMap[cat] ?? new Set(ALL_CLASSES);
+      const next = new Set(current);
+      if (next.has(cls)) next.delete(cls); else next.add(cls);
+      return { advancedClassMap: { ...state.advancedClassMap, [cat]: next } };
+    });
+    saveFilters(get());
   },
 
   // Ownership actions

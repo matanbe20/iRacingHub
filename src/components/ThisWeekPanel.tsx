@@ -21,13 +21,15 @@ interface WeekContentProps {
   ownedCars: Set<string>;
   ownedTracks: Set<string>;
   favorites: Set<string>;
+  classFilterAdvanced: boolean;
+  advancedClassMap: Record<string, Set<string>>;
 }
 
 const WeekContent = React.memo(function WeekContent(props: WeekContentProps) {
   const {
     weekNum, activeCategories, activeClasses, searchQuery,
     activeCars, activeTracks, filterOwnedCars, filterOwnedTracks,
-    ownedCars, ownedTracks, favorites,
+    ownedCars, ownedTracks, favorites, classFilterAdvanced, advancedClassMap,
   } = props;
 
   const results = useMemo(() => {
@@ -35,7 +37,12 @@ const WeekContent = React.memo(function WeekContent(props: WeekContentProps) {
     const q = searchQuery.toLowerCase();
     return SCHEDULE_DATA.filter(s => {
       if (!activeCategories.has(s.category)) return false;
-      if (!activeClasses.has(s.class)) return false;
+      if (classFilterAdvanced) {
+        const catClasses = advancedClassMap[s.category];
+        if (!catClasses || !catClasses.has(s.class)) return false;
+      } else {
+        if (!activeClasses.has(s.class)) return false;
+      }
       if (activeCars.size > 0) {
         const seriesCars = s.cars.split(',').map(c => c.trim());
         if (!seriesCars.some(c => activeCars.has(c))) return false;
@@ -54,7 +61,7 @@ const WeekContent = React.memo(function WeekContent(props: WeekContentProps) {
       }
       return true;
     }).map(s => ({ s, week: s.weeks.find(w => w.week === weekNum) as Week }));
-  }, [weekNum, activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks]);
+  }, [weekNum, activeCategories, activeClasses, searchQuery, activeCars, activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars, ownedTracks, classFilterAdvanced, advancedClassMap]);
 
   if (weekNum < 1 || weekNum > 12) return null;
 
@@ -110,6 +117,8 @@ export default function ThisWeekPanel() {
   const ownedCars = useStore(s => s.ownedCars);
   const ownedTracks = useStore(s => s.ownedTracks);
   const favorites = useStore(s => s.favorites);
+  const classFilterAdvanced = useStore(s => s.classFilterAdvanced);
+  const advancedClassMap = useStore(s => s.advancedClassMap);
   const selectedWeek = useStore(s => s.selectedWeek);
   const setSelectedWeek = useStore(s => s.setSelectedWeek);
 
@@ -203,6 +212,7 @@ export default function ThisWeekPanel() {
     activeCategories, activeClasses, searchQuery, activeCars,
     activeTracks, filterOwnedCars, filterOwnedTracks, ownedCars,
     ownedTracks, favorites, weekNum: selectedWeek,
+    classFilterAdvanced, advancedClassMap,
   };
 
   const trackStyle: React.CSSProperties = {

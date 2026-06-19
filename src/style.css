@@ -355,6 +355,112 @@ body {
   background: rgba(59, 130, 246, 0.1);
 }
 
+/* ── Advanced Filters Toggle ───────────────────────────────────────────── */
+.adv-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.adv-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-family: inherit;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.adv-toggle-btn:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.adv-toggle-btn.active {
+  color: var(--accent, #6366f1);
+  border-color: var(--accent, #6366f1);
+  background: color-mix(in srgb, var(--accent, #6366f1) 8%, var(--surface2));
+}
+
+.adv-toggle-label {
+  text-transform: uppercase;
+}
+
+.adv-toggle-chevron {
+  font-size: 0.5rem;
+  opacity: 0.7;
+}
+
+/* ── Advanced Class Matrix ─────────────────────────────────────────────── */
+.adv-class-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.adv-matrix-header,
+.adv-matrix-row {
+  display: grid;
+  grid-template-columns: 20px repeat(5, 1fr);
+  align-items: center;
+  gap: 2px;
+}
+
+.adv-matrix-corner {
+  /* spacer */
+}
+
+.adv-matrix-cls-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1;
+}
+
+.adv-matrix-cat-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-align: left;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.adv-row-dimmed {
+  opacity: 0.35;
+}
+
+.adv-matrix-dot {
+  display: block;
+  width: 100%;
+  max-width: 16px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.1s, border-color 0.1s, opacity 0.1s;
+}
+
+.adv-matrix-dot:hover {
+  opacity: 0.7;
+}
+
+.adv-matrix-dot.adv-dot-on {
+  background: currentColor;
+  border-color: currentColor;
+  opacity: 1;
+}
+
 .search-wrap {
   position: relative;
   width: 100%;
