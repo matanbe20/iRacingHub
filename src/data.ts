@@ -5316,13 +5316,13 @@ export const SCHEDULE_DATA: Series[] = [
       {
         week: 3,
         date: '2026-06-30',
-        track: 'Circuit de Spa-Francorchamps - Grand Prix Pits',
+        track: 'Mount Panorama Circuit',
         laps: '20 mins',
       },
       {
         week: 4,
         date: '2026-07-07',
-        track: 'Mount Panorama Circuit',
+        track: 'Circuit de Spa-Francorchamps - Grand Prix Pits',
         laps: '20 mins',
       },
       {
