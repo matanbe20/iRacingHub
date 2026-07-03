@@ -1027,22 +1027,6 @@ body {
   border-left-width: 3px;
 }
 
-.track-owned-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #a78bfa;
-  margin-left: 0.4rem;
-  vertical-align: middle;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-[data-theme="light"] .track-owned-badge {
-  color: #7c3aed;
-}
-
 .week-num {
   font-size: 0.68rem;
   font-weight: 600;
@@ -1769,9 +1753,111 @@ body {
   color: #16a34a;
 }
 
-/* Owned badges row — mobile-only grouping (hidden on desktop) */
-.tw-card-owned-row {
-  display: none;
+.race-ready-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #22c55e;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+[data-theme="light"] .race-ready-badge {
+  color: #16a34a;
+}
+
+.race-cost-wrap {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.race-cost-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #f59e0b;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+[data-theme="light"] .race-cost-badge {
+  color: #d97706;
+}
+.week-track .race-ready-badge,
+.week-track .race-cost-wrap {
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.race-cost-popover {
+  z-index: 700;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  padding: 0.4rem;
+  white-space: normal;
+}
+
+.race-cost-popover-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3rem 0.3rem;
+}
+.race-cost-popover-row + .race-cost-popover-row {
+  border-top: 1px solid var(--border);
+}
+
+.race-cost-popover-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.race-cost-popover-price {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #f59e0b;
+}
+[data-theme="light"] .race-cost-popover-price {
+  color: #d97706;
+}
+
+.race-cost-popover-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.race-cost-popover-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.race-cost-popover-actions button:hover {
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 /* My Garage button in sidebar */
@@ -2283,6 +2369,118 @@ body.share-modal-open {
   flex-shrink: 0;
 }
 
+/* Keyboard Shortcuts overlay */
+.shortcuts-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 600;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.shortcuts-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.shortcuts-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.shortcuts-modal-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.shortcuts-modal-close {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.shortcuts-modal-close:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.shortcuts-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 1.25rem 1rem;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.shortcut-row:last-child {
+  border-bottom: none;
+}
+
+.shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.shortcut-or {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+.shortcut-label {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .share-modal-add-all {
   width: 100%;
   background: var(--accent);
@@ -2550,12 +2748,6 @@ body.share-modal-open {
 
   /* ── TwCard mobile layout ── */
 
-  /* Hide inline owned badges — replaced by tw-card-owned-row */
-  .tw-card > .car-owned-badge,
-  .tw-card-track .track-owned-badge {
-    display: none;
-  }
-
   /* Card wraps into rows, tighter padding */
   .tw-card {
     flex-wrap: wrap;
@@ -2607,18 +2799,6 @@ body.share-modal-open {
   .tw-card .tw-card-actions .week-add-btn {
     width: 24px;
     height: 24px;
-  }
-
-  /* Owned badges row: last row, pinned to the right */
-  .tw-card-owned-row {
-    display: flex;
-    flex-basis: 100%;
-    justify-content: flex-end;
-    gap: 0.3rem;
-    align-items: center;
-    position: absolute;
-    right: 9px;
-    bottom: 7px;
   }
 
   /* ── SeriesCard (All Series) mobile layout ── */

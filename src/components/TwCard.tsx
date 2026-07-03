@@ -1,7 +1,9 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, cleanName, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
+import { catClass, catLabel, catLabelShort, cleanName, lapsShort, splitTrackName } from '../utils/helpers';
+import { getRaceReadiness } from '../utils/pricing';
 import CarBadges from './CarBadges';
+import RaceCostBadge from './RaceCostBadge';
 import SeriesLogo from './SeriesLogo';
 import type { Series, Week } from '../types';
 
@@ -22,10 +24,8 @@ export default function TwCard({ series, week }: TwCardProps) {
   const raceId = series.name + '_' + week.week;
   const isAdded = !!mySchedule[raceId];
   const isFav = favorites.has(series.name);
-  const trackOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(week.track));
   const [trackMain, trackConfig] = splitTrackName(week.track);
-  const seriesCars = series.cars.split(',').map(c => c.trim());
-  const carOwned = ownedCars.size > 0 && seriesCars.some(c => ownedCars.has(c));
+  const readiness = getRaceReadiness(series.cars, week.track, ownedCars, ownedTracks);
 
   function handleToggleRace(e: React.MouseEvent) {
     e.stopPropagation();
@@ -42,14 +42,14 @@ export default function TwCard({ series, week }: TwCardProps) {
           {cleanName(series.name)}
         </div>
         <div className="tw-card-meta">
-          <span className="tw-card-track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
+          <span className="tw-card-track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}</span>
           {week.rain != null && week.rain > 0 && <span className="week-rain">💧 {week.rain}%</span>}
           {series.cars && <CarBadges cars={series.cars} />}
           {week.laps && <span className="tw-card-laps" data-short={lapsShort(week.laps)}>{week.laps}</span>}
+          <RaceCostBadge readiness={readiness} />
         </div>
       </div>
       <span className="series-freq" data-freq={series.frequency}>!</span>
-      {carOwned && <span className="car-owned-badge" title="You own this car">✓ Car</span>}
       <div className="tw-card-actions">
         <button
           className={'tw-fav-btn' + (isFav ? ' active' : '')}
@@ -68,12 +68,6 @@ export default function TwCard({ series, week }: TwCardProps) {
           {isAdded ? '✓' : '+'}
         </button>
       </div>
-      {(trackOwned || carOwned) && (
-        <div className="tw-card-owned-row">
-          {trackOwned && <span className="track-owned-badge">✓ Track</span>}
-          {carOwned && <span className="car-owned-badge">✓ Car</span>}
-        </div>
-      )}
     </div>
   );
 }

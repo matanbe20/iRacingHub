@@ -1,8 +1,10 @@
 import React from 'react';
 import useStore from '../store/useStore';
 import { getCurrentWeek } from '../utils/schedule';
-import { baseTrackName, lapsShort, splitTrackName, shortDate } from '../utils/helpers';
+import { lapsShort, splitTrackName, shortDate } from '../utils/helpers';
+import { getRaceReadiness } from '../utils/pricing';
 import CarBadges from './CarBadges';
+import RaceCostBadge from './RaceCostBadge';
 import type { Series, Week } from '../types';
 
 const currentWeek = getCurrentWeek();
@@ -22,10 +24,11 @@ export default function WeekCell({ series, week }: WeekCellProps) {
   const mySchedule = useStore(s => s.mySchedule);
   const toggleRace = useStore(s => s.toggleRace);
   const ownedTracks = useStore(s => s.ownedTracks);
+  const ownedCars = useStore(s => s.ownedCars);
 
   const [trackMain, trackConfig] = splitTrackName(week.track);
   const isCurrent = week.week === currentWeek;
-  const isOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(week.track));
+  const readiness = getRaceReadiness(series.cars, week.track, ownedCars, ownedTracks);
   const raceId = series.name + '_' + week.week;
   const isAdded = !!mySchedule[raceId];
 
@@ -40,7 +43,7 @@ export default function WeekCell({ series, week }: WeekCellProps) {
       <span className="week-date">{shortDate(week.date)}</span>
       <span className="week-track">
         {trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}
-        {isOwned && <span className="track-owned-badge">Owned</span>}
+        <RaceCostBadge readiness={readiness} />
       </span>
       {week.car && <CarBadges cars={week.car} />}
       {week.rain != null && week.rain > 0 && (

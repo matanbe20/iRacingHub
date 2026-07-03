@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import useStore from '../store/useStore';
 import { SCHEDULE_DATA } from '../data';
 import { baseTrackName } from '../utils/helpers';
-import { TRACK_SKUS, CAR_SKUS } from '../data/iracing-skus';
 import { calcTotal, DISCOUNT_TIERS } from '../data/iracing-prices';
+import { getTrackPrice, getCarPrice, getTrackSku, getCarSku } from '../utils/pricing';
 
 type BuyTab = 'tracks' | 'cars';
 
@@ -41,31 +41,29 @@ const IconTrack = () => (
     <ellipse cx="9" cy="7" rx="4" ry="2.2" />
   </svg>
 );
-const FALLBACK_PRICE = 11.95;
-
-function getTrackPrice(name: string): number {
-  return TRACK_SKUS[name]?.price ?? FALLBACK_PRICE;
-}
-function getCarPrice(name: string): number {
-  return CAR_SKUS[name]?.price ?? FALLBACK_PRICE;
-}
-function getTrackSku(name: string): number | null {
-  return TRACK_SKUS[name]?.sku ?? null;
-}
-function getCarSku(name: string): number | null {
-  return CAR_SKUS[name]?.sku ?? null;
-}
-
 export default function BuyGuidePanel() {
   const ownedTracks = useStore(s => s.ownedTracks);
   const ownedCars = useStore(s => s.ownedCars);
   const mySchedule = useStore(s => s.mySchedule);
+  const buyGuideQueuedTracks = useStore(s => s.buyGuideQueuedTracks);
+  const buyGuideQueuedCars = useStore(s => s.buyGuideQueuedCars);
+  const clearBuyGuideQueue = useStore(s => s.clearBuyGuideQueue);
 
-  const [buyTab, setBuyTab] = useState<BuyTab>('tracks');
+  const [buyTab, setBuyTab] = useState<BuyTab>(
+    buyGuideQueuedTracks.size === 0 && buyGuideQueuedCars.size > 0 ? 'cars' : 'tracks'
+  );
   const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set());
   const [selectedCars, setSelectedCars] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [showOwned, setShowOwned] = useState(false);
+
+  useEffect(() => {
+    if (buyGuideQueuedTracks.size === 0 && buyGuideQueuedCars.size === 0) return;
+    setSelectedTracks(prev => new Set([...prev, ...buyGuideQueuedTracks]));
+    setSelectedCars(prev => new Set([...prev, ...buyGuideQueuedCars]));
+    clearBuyGuideQueue();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const myScheduleTracks = useMemo(() => {
     const s = new Set<string>();

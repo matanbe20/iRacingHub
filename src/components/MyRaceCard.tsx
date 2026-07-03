@@ -1,7 +1,9 @@
 import React from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
+import { getRaceReadiness } from '../utils/pricing';
 import CarBadges from './CarBadges';
+import RaceCostBadge from './RaceCostBadge';
 import SeriesLogo from './SeriesLogo';
 import { SCHEDULE_DATA } from '../data';
 import type { Category, RaceEntry } from '../types';
@@ -16,10 +18,13 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
   const addTrackFilter = useStore(s => s.addTrackFilter);
   const setActiveTab = useStore(s => s.setActiveTab);
   const ownedTracks = useStore(s => s.ownedTracks);
+  const ownedCars = useStore(s => s.ownedCars);
   const cc = catClass(entry.category);
-  const trackOwned = ownedTracks.size > 0 && ownedTracks.has(baseTrackName(entry.track));
   const [trackMain, trackConfig] = splitTrackName(entry.track);
-  const frequency = entry.frequency ?? SCHEDULE_DATA.find(s => s.name === entry.rawName)?.frequency ?? '';
+  const series = SCHEDULE_DATA.find(s => s.name === entry.rawName);
+  const carsString = series?.cars ?? entry.cars;
+  const readiness = getRaceReadiness(carsString, entry.track, ownedCars, ownedTracks);
+  const frequency = entry.frequency ?? series?.frequency ?? '';
 
   function handleTrackClick(e: React.MouseEvent) {
     e.stopPropagation();
@@ -38,10 +43,11 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
           {entry.displayName}
         </div>
         <div className="my-race-meta">
-          <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}{trackOwned && <span className="track-owned-badge">Owned</span>}</span>
+          <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}</span>
           {entry.rain != null && entry.rain > 0 && <span className="week-rain">💧 {entry.rain}%</span>}
           {entry.cars && <CarBadges cars={entry.cars} />}
           {entry.laps && <span className="tw-card-laps" data-short={lapsShort(entry.laps)}>{entry.laps}</span>}
+          <RaceCostBadge readiness={readiness} />
         </div>
       </div>
       <span className="series-freq" data-freq={frequency}>!</span>

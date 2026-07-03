@@ -12,6 +12,7 @@ import ShareModal from './components/ShareModal';
 import GarageModal from './components/GarageModal';
 import SharedGarageModal from './components/SharedGarageModal';
 import Toast from './components/Toast';
+import KeyboardShortcuts from './components/KeyboardShortcuts';
 
 export default function App() {
   const theme = useStore(s => s.theme);
@@ -75,6 +76,7 @@ export default function App() {
       </main>
 
       <Toast />
+      <KeyboardShortcuts />
       <ShareModal />
       <GarageModal />
       <SharedGarageModal />

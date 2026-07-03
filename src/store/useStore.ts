@@ -98,6 +98,13 @@ export interface StoreState {
   closeGarageShareModal(): void;
   mergeSharedGarage(): void;
 
+  // Buy Guide queue (silently queued from elsewhere, drained when Buy Guide mounts)
+  buyGuideQueuedTracks: Set<string>;
+  buyGuideQueuedCars: Set<string>;
+  queueTrackForBuyGuide(track: string): void;
+  queueCarForBuyGuide(car: string): void;
+  clearBuyGuideQueue(): void;
+
   // Navigation
   setActiveTab: (tab: Tab) => void;
   selectedWeek: number;
@@ -382,6 +389,8 @@ const useStore = create<StoreState>((set, get) => ({
   ownedTracks: initialState.ownedTracks ?? new Set(FREE_TRACKS),
   isGarageModalOpen: false,
   isGarageShareModalOpen: initialState.isGarageShareModalOpen ?? false,
+  buyGuideQueuedTracks: new Set(),
+  buyGuideQueuedCars: new Set(),
   sharedGarageCars: initialState.sharedGarageCars ?? [],
   sharedGarageTracks: initialState.sharedGarageTracks ?? [],
 
@@ -592,6 +601,18 @@ const useStore = create<StoreState>((set, get) => ({
     if (addedCars > 0) parts.push(addedCars + ' car' + (addedCars !== 1 ? 's' : ''));
     if (addedTracks > 0) parts.push(addedTracks + ' track' + (addedTracks !== 1 ? 's' : ''));
     if (parts.length > 0) get().showToast(parts.join(' and ') + ' added to your garage');
+  },
+
+  queueTrackForBuyGuide(track) {
+    set(state => ({ buyGuideQueuedTracks: new Set([...state.buyGuideQueuedTracks, track]) }));
+    get().showToast(track + ' queued for Buy Guide');
+  },
+  queueCarForBuyGuide(car) {
+    set(state => ({ buyGuideQueuedCars: new Set([...state.buyGuideQueuedCars, car]) }));
+    get().showToast(car + ' queued for Buy Guide');
+  },
+  clearBuyGuideQueue() {
+    set({ buyGuideQueuedTracks: new Set(), buyGuideQueuedCars: new Set() });
   },
 
   // Navigation
