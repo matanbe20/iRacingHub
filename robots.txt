@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+# Internal component gallery — not content for search results.
+Disallow: /storybook/
 Sitemap: https://iracinghub.com/sitemap.xml
