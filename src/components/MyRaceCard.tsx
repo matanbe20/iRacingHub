@@ -2,8 +2,10 @@ import React from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
 import { getRaceReadiness } from '../utils/pricing';
+import { localizedFrequencyLabel } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
 import RaceCostBadge from './RaceCostBadge';
+import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import { SCHEDULE_DATA } from '../data';
 import type { Category, RaceEntry } from '../types';
@@ -19,6 +21,8 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
   const setActiveTab = useStore(s => s.setActiveTab);
   const ownedTracks = useStore(s => s.ownedTracks);
   const ownedCars = useStore(s => s.ownedCars);
+  const timeZone = useStore(s => s.timeZone);
+  const timeFormat = useStore(s => s.timeFormat);
   const cc = catClass(entry.category);
   const [trackMain, trackConfig] = splitTrackName(entry.track);
   const series = SCHEDULE_DATA.find(s => s.name === entry.rawName);
@@ -48,9 +52,10 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
           {entry.cars && <CarBadges cars={entry.cars} />}
           {entry.laps && <span className="tw-card-laps" data-short={lapsShort(entry.laps)}>{entry.laps}</span>}
           <RaceCostBadge readiness={readiness} />
+          <RaceTime frequency={frequency} weekDates={[entry.date]} />
         </div>
       </div>
-      <span className="series-freq" data-freq={frequency}>!</span>
+      <span className="series-freq" data-freq={localizedFrequencyLabel(frequency, entry.date, timeZone, timeFormat)}>!</span>
       <button className="my-race-remove" onClick={() => removeRace(entry.id)} title="Remove">&#x2715;</button>
     </div>
   );

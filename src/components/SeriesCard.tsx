@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, cleanName, isFixed } from '../utils/helpers';
+import { localizedFrequencyLabel, upcomingWeek } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
+import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import WeekCell from './WeekCell';
 import type { Series } from '../types';
@@ -23,6 +25,8 @@ export default function SeriesCard({ series }: SeriesCardProps) {
   const filterByCategory = useStore(s => s.filterByCategory);
   const filterByClass = useStore(s => s.filterByClass);
   const ownedCars = useStore(s => s.ownedCars);
+  const timeZone = useStore(s => s.timeZone);
+  const timeFormat = useStore(s => s.timeFormat);
 
   const cc = catClass(series.category);
   const displayName = cleanName(series.name);
@@ -32,6 +36,14 @@ export default function SeriesCard({ series }: SeriesCardProps) {
 
   const seriesCars = series.cars.split(',').map(c => c.trim());
   const carOwned = ownedCars.size > 0 && seriesCars.some(c => ownedCars.has(c));
+
+  // Timing is series-level here, so count down to whichever of this series' races
+  // comes next, and anchor the DST-sensitive frequency restatement to that week.
+  const weekDates = useMemo(() => series.weeks.map(w => w.date), [series]);
+  const anchorWeek = upcomingWeek(series.weeks, Date.now()) ?? series.weeks[0];
+  const freqLabel = anchorWeek
+    ? localizedFrequencyLabel(series.frequency, anchorWeek.date, timeZone, timeFormat)
+    : series.frequency;
 
   function handleToggleSeries(e: React.MouseEvent) {
     e.stopPropagation();
@@ -72,7 +84,8 @@ export default function SeriesCard({ series }: SeriesCardProps) {
           {fixed && <span style={{ opacity: 0.5, fontSize: '0.75rem' }}> [Fixed]</span>}
         </span>
         <span className="series-cars"><CarBadges cars={series.cars} /></span>
-        <span className="series-freq" data-freq={series.frequency}>!</span>
+        <RaceTime frequency={series.frequency} weekDates={weekDates} />
+        <span className="series-freq" data-freq={freqLabel}>!</span>
         {hasRain && (
           <span className="series-rain-icon" title="Rain forecast in some weeks">
             <RainDropSvg />

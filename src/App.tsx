@@ -11,6 +11,7 @@ import BuyGuidePanel from './components/BuyGuidePanel';
 import ShareModal from './components/ShareModal';
 import GarageModal from './components/GarageModal';
 import SharedGarageModal from './components/SharedGarageModal';
+import SettingsModal from './components/SettingsModal';
 import Toast from './components/Toast';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
 
@@ -80,6 +81,7 @@ export default function App() {
       <ShareModal />
       <GarageModal />
       <SharedGarageModal />
+      <SettingsModal />
     </>
   );
 }

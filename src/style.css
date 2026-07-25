@@ -591,7 +591,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.theme-toggle {
+.header-icon-btn {
   background: none;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -607,14 +607,14 @@ body {
     border-color 0.15s,
     background 0.15s;
 }
-.theme-toggle:hover {
+.header-icon-btn:hover {
   color: var(--text);
   border-color: var(--accent);
   background: var(--surface2);
 }
 
 @media (min-width: 769px) {
-  .theme-toggle {
+  .header-icon-btn {
     position: absolute;
     top: 0.6rem;
     right: 2rem;
@@ -961,7 +961,11 @@ body {
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 0.7rem;
-  white-space: nowrap;
+  /* pre-line so the localized restatement lands on its own line. */
+  white-space: pre-line;
+  text-align: center;
+  width: max-content;
+  max-width: min(280px, 70vw);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   pointer-events: none;
@@ -970,6 +974,47 @@ body {
   z-index: 100;
 }
 .series-freq:hover::after {
+  opacity: 1;
+}
+/* These badges sit at the far right of their card, where a centred tooltip runs
+   off the viewport — anchor its right edge to the badge instead. */
+.tw-card .series-freq::after,
+.my-race-card .series-freq::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+/* Race times & countdowns ------------------------------------------------- */
+
+.race-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+  /* Keeps the ticking seconds from nudging the row width. */
+  font-variant-numeric: tabular-nums;
+}
+.race-time svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+.race-time-count {
+  font-weight: 500;
+  opacity: 0.85;
+}
+.race-time.compact {
+  font-size: 0.65rem;
+}
+.race-time-soon {
+  color: #22c55e;
+}
+.race-time-soon svg {
   opacity: 1;
 }
 
@@ -2206,6 +2251,166 @@ body {
 }
 .garage-save-btn:hover {
   opacity: 0.85;
+}
+
+/* Settings modal (reuses .garage-modal chrome) ---------------------------- */
+
+.settings-modal {
+  width: min(460px, 100%);
+}
+.settings-modal .garage-modal-footer {
+  justify-content: flex-end;
+}
+.settings-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.settings-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.settings-hint {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.settings-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: inherit;
+  padding: 0.5rem 0.6rem;
+  width: 100%;
+  cursor: pointer;
+}
+.settings-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.settings-themes {
+  display: flex;
+  gap: 0.6rem;
+}
+.settings-theme {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: inherit;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.settings-theme:hover {
+  border-color: var(--text-dim);
+}
+.settings-theme.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+.theme-mockup {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.settings-theme-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+.settings-theme.active .settings-theme-name {
+  color: var(--text);
+}
+.settings-theme-check {
+  color: var(--accent);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.settings-seg {
+  display: flex;
+  gap: 0.4rem;
+}
+.settings-seg-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-family: inherit;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+.settings-seg-btn:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.settings-seg-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.settings-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+.settings-check input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.settings-preview {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.settings-preview strong {
+  color: var(--text);
+}
+.settings-note {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-dim);
 }
 
 /* Share button */

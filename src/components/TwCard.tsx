@@ -2,8 +2,10 @@ import React from 'react';
 import useStore from '../store/useStore';
 import { catClass, catLabel, catLabelShort, cleanName, lapsShort, splitTrackName } from '../utils/helpers';
 import { getRaceReadiness } from '../utils/pricing';
+import { localizedFrequencyLabel } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
 import RaceCostBadge from './RaceCostBadge';
+import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import type { Series, Week } from '../types';
 
@@ -19,6 +21,8 @@ export default function TwCard({ series, week }: TwCardProps) {
   const toggleFavorite = useStore(s => s.toggleFavorite);
   const ownedCars = useStore(s => s.ownedCars);
   const ownedTracks = useStore(s => s.ownedTracks);
+  const timeZone = useStore(s => s.timeZone);
+  const timeFormat = useStore(s => s.timeFormat);
 
   const cc = catClass(series.category);
   const raceId = series.name + '_' + week.week;
@@ -47,9 +51,10 @@ export default function TwCard({ series, week }: TwCardProps) {
           {series.cars && <CarBadges cars={series.cars} />}
           {week.laps && <span className="tw-card-laps" data-short={lapsShort(week.laps)}>{week.laps}</span>}
           <RaceCostBadge readiness={readiness} />
+          <RaceTime frequency={series.frequency} weekDates={[week.date]} />
         </div>
       </div>
-      <span className="series-freq" data-freq={series.frequency}>!</span>
+      <span className="series-freq" data-freq={localizedFrequencyLabel(series.frequency, week.date, timeZone, timeFormat)}>!</span>
       <div className="tw-card-actions">
         <button
           className={'tw-fav-btn' + (isFav ? ' active' : '')}

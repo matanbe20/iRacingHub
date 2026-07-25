@@ -2,6 +2,7 @@ export type Category = 'OVAL' | 'SPORTS CAR' | 'FORMULA CAR' | 'DIRT OVAL' | 'DI
 export type SeriesClass = 'R' | 'D' | 'C' | 'B' | 'A';
 export type Tab = 'all' | 'week' | 'my' | 'events' | 'buy';
 export type Theme = 'dark' | 'light';
+export type TimeFormat = '12h' | '24h';
 
 export interface Week {
   week: number;

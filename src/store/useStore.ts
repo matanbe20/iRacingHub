@@ -3,7 +3,8 @@ import { SCHEDULE_DATA } from '../data';
 import { cleanName } from '../utils/helpers';
 import { FREE_CARS, FREE_TRACKS } from '../data/garage-defaults';
 import { getCurrentWeek } from '../utils/schedule';
-import type { Tab, Theme, MySchedule, RaceEntry } from '../types';
+import { resolveTimeZone } from '../utils/raceTimes';
+import type { Tab, Theme, TimeFormat, MySchedule, RaceEntry } from '../types';
 
 const ALL_CATEGORIES = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT ROAD', 'DIRT OVAL', 'UNRANKED'];
 const ALL_CLASSES = ['R', 'D', 'C', 'B', 'A'];
@@ -12,6 +13,7 @@ const MY_SCHEDULE_KEY = 'iracing-2026s3-my-schedule';
 const FAVORITES_KEY = 'iracing-2026s2-favorites';
 const THEME_KEY = 'iracing-theme';
 const OWNED_KEY = 'iracing-2026s2-owned';
+const SETTINGS_KEY = 'iracing-settings';
 
 export { ALL_CATEGORIES, ALL_CLASSES };
 
@@ -62,6 +64,15 @@ export interface StoreState {
   sharedGarageCars: string[];
   sharedGarageTracks: string[];
 
+  // Settings
+  /** Resolved IANA zone actually used for display — never empty. */
+  timeZone: string;
+  /** True while following the browser zone, so a travelling user keeps up to date. */
+  timeZoneAuto: boolean;
+  timeFormat: TimeFormat;
+  showRaceTimes: boolean;
+  isSettingsModalOpen: boolean;
+
   // Filtered count
   filteredCount: number;
 
@@ -111,7 +122,16 @@ export interface StoreState {
   setSelectedWeek: (week: number) => void;
 
   // Theme
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+
+  // Settings actions
+  /** Pass null to follow the browser zone. */
+  setTimeZone: (tz: string | null) => void;
+  setTimeFormat: (fmt: TimeFormat) => void;
+  toggleRaceTimes: () => void;
+  openSettingsModal: () => void;
+  closeSettingsModal: () => void;
 
   // Schedule actions
   addRace: (rawName: string, weekNum: number) => void;
@@ -244,6 +264,28 @@ function loadInitialState(): Partial<StoreState> {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme: Theme = (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : (prefersDark ? 'dark' : 'light');
 
+  // Settings — default the timezone to the browser's and the clock to its locale.
+  let timeZoneAuto = true;
+  let savedZone: string | null = null;
+  let timeFormat: TimeFormat = Intl.DateTimeFormat().resolvedOptions().hour12 ? '12h' : '24h';
+  let showRaceTimes = true;
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    const saved = raw ? JSON.parse(raw) : null;
+    if (saved) {
+      // resolveTimeZone() falls back to the browser zone if the stored IANA id is
+      // unknown to this engine, so a stale name can never throw at render time.
+      if (typeof saved.timeZone === 'string' && saved.timeZoneAuto === false
+          && resolveTimeZone(saved.timeZone) === saved.timeZone) {
+        savedZone = saved.timeZone;
+        timeZoneAuto = false;
+      }
+      if (saved.timeFormat === '12h' || saved.timeFormat === '24h') timeFormat = saved.timeFormat;
+      if (typeof saved.showRaceTimes === 'boolean') showRaceTimes = saved.showRaceTimes;
+    }
+  } catch { /* ignore */ }
+  const timeZone = resolveTimeZone(timeZoneAuto ? null : savedZone);
+
   const tabParam = params.get('tab');
   let activeTab: Tab = 'all';
   if (tabParam === 'my') activeTab = 'my';
@@ -313,7 +355,7 @@ function loadInitialState(): Partial<StoreState> {
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
   }
 
-  return { ...filters, mySchedule, favorites, ownedCars, ownedTracks, theme, activeTab, selectedWeek, sharedEntries, isShareModalOpen, sharedGarageCars, sharedGarageTracks, isGarageShareModalOpen };
+  return { ...filters, mySchedule, favorites, ownedCars, ownedTracks, theme, activeTab, selectedWeek, sharedEntries, isShareModalOpen, sharedGarageCars, sharedGarageTracks, isGarageShareModalOpen, timeZone, timeZoneAuto, timeFormat, showRaceTimes };
 }
 
 function syncUrlParams(state: StoreState): void {
@@ -357,6 +399,15 @@ function saveOwned(state: StoreState): void {
   }));
 }
 
+function saveSettings(state: StoreState): void {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+    timeZone: state.timeZone,
+    timeZoneAuto: state.timeZoneAuto,
+    timeFormat: state.timeFormat,
+    showRaceTimes: state.showRaceTimes,
+  }));
+}
+
 const initialState = loadInitialState();
 
 const useStore = create<StoreState>((set, get) => ({
@@ -393,6 +444,13 @@ const useStore = create<StoreState>((set, get) => ({
   buyGuideQueuedCars: new Set(),
   sharedGarageCars: initialState.sharedGarageCars ?? [],
   sharedGarageTracks: initialState.sharedGarageTracks ?? [],
+
+  // Settings
+  timeZone: initialState.timeZone ?? resolveTimeZone(null),
+  timeZoneAuto: initialState.timeZoneAuto ?? true,
+  timeFormat: initialState.timeFormat ?? '24h',
+  showRaceTimes: initialState.showRaceTimes ?? true,
+  isSettingsModalOpen: false,
 
   // Filter actions
   toggleCategory(cat) {
@@ -629,13 +687,38 @@ const useStore = create<StoreState>((set, get) => ({
   },
 
   // Theme
+  setTheme(next) {
+    localStorage.setItem(THEME_KEY, next);
+    document.documentElement.dataset.theme = next;
+    set({ theme: next });
+  },
+
   toggleTheme() {
-    set(state => {
-      const next: Theme = state.theme === 'light' ? 'dark' : 'light';
-      localStorage.setItem(THEME_KEY, next);
-      document.documentElement.dataset.theme = next;
-      return { theme: next };
-    });
+    get().setTheme(get().theme === 'light' ? 'dark' : 'light');
+  },
+
+  // Settings actions
+  setTimeZone(tz) {
+    set({ timeZone: resolveTimeZone(tz), timeZoneAuto: tz === null });
+    saveSettings(get());
+  },
+
+  setTimeFormat(fmt) {
+    set({ timeFormat: fmt });
+    saveSettings(get());
+  },
+
+  toggleRaceTimes() {
+    set(state => ({ showRaceTimes: !state.showRaceTimes }));
+    saveSettings(get());
+  },
+
+  openSettingsModal() {
+    set({ isSettingsModalOpen: true });
+  },
+
+  closeSettingsModal() {
+    set({ isSettingsModalOpen: false });
   },
 
   // Schedule actions

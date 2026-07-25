@@ -9,6 +9,7 @@ const SHORTCUTS: Array<{ keys: string[]; label: string }> = [
   { keys: ['1', '2', '3', '4', '5'], label: 'Switch tab' },
   { keys: ['←', '→'], label: 'Change week (By Week tab)' },
   { keys: ['t'], label: 'Toggle theme' },
+  { keys: ['s'], label: 'Open settings' },
   { keys: ['?'], label: 'Toggle this help' },
   { keys: ['Esc'], label: 'Close overlay / drawer' },
 ];
@@ -20,6 +21,8 @@ export default function KeyboardShortcuts() {
   const setSelectedWeek = useStore(s => s.setSelectedWeek);
   const toggleTheme = useStore(s => s.toggleTheme);
   const closeDrawer = useStore(s => s.closeDrawer);
+  const openSettingsModal = useStore(s => s.openSettingsModal);
+  const closeSettingsModal = useStore(s => s.closeSettingsModal);
   const [helpOpen, setHelpOpen] = useState(false);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function KeyboardShortcuts() {
       const typing = !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
         || el.tagName === 'SELECT' || el.isContentEditable);
 
-      if (e.key === 'Escape') { setHelpOpen(false); closeDrawer(); return; }
+      if (e.key === 'Escape') { setHelpOpen(false); closeDrawer(); closeSettingsModal(); return; }
       if (typing) return;
 
       switch (e.key) {
@@ -42,6 +45,9 @@ export default function KeyboardShortcuts() {
           break;
         case 't':
           toggleTheme();
+          break;
+        case 's':
+          openSettingsModal();
           break;
         case '?':
           setHelpOpen(o => !o);
@@ -56,7 +62,7 @@ export default function KeyboardShortcuts() {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [activeTab, selectedWeek, setActiveTab, setSelectedWeek, toggleTheme, closeDrawer]);
+  }, [activeTab, selectedWeek, setActiveTab, setSelectedWeek, toggleTheme, closeDrawer, openSettingsModal, closeSettingsModal]);
 
   if (!helpOpen) return null;
 
