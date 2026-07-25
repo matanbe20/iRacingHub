@@ -18,7 +18,6 @@ import KeyboardShortcuts from './components/KeyboardShortcuts';
 export default function App() {
   const theme = useStore(s => s.theme);
   const isDrawerOpen = useStore(s => s.isDrawerOpen);
-  const isShareModalOpen = useStore(s => s.isShareModalOpen);
   const activeTab = useStore(s => s.activeTab);
   const stickyRef = useRef<HTMLDivElement>(null);
 
@@ -34,11 +33,6 @@ export default function App() {
     document.body.classList.toggle('drawer-active', isDrawerOpen);
     return () => document.body.classList.remove('drawer-active');
   }, [isDrawerOpen]);
-
-  useEffect(() => {
-    document.body.classList.toggle('share-modal-open', isShareModalOpen);
-    return () => document.body.classList.remove('share-modal-open');
-  }, [isShareModalOpen]);
 
   useEffect(() => {
     if (!stickyRef.current) return;

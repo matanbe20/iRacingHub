@@ -9,26 +9,49 @@ export function cleanName(name: string): string {
     .trim();
 }
 
+interface CategoryMeta {
+  /** CSS modifier shared by `.cat-badge`, `.tw-category-header` and `.filter-btn`. */
+  cls: string;
+  label: string;
+  /** Narrow label swapped in on small screens via `data-short`. */
+  short: string;
+  /** Two-letter form for the advanced filter matrix, where a row is 22px wide. */
+  abbrev: string;
+}
+
+const CATEGORY_META: Record<string, CategoryMeta> = {
+  'OVAL':        { cls: 'oval',      label: 'Oval',       short: 'Oval',    abbrev: 'OV' },
+  'SPORTS CAR':  { cls: 'sports',    label: 'Sports Car', short: 'S.Car',   abbrev: 'SC' },
+  'FORMULA CAR': { cls: 'formula',   label: 'Formula',    short: 'Formula', abbrev: 'FC' },
+  'DIRT OVAL':   { cls: 'dirt-oval', label: 'Dirt Oval',  short: 'D.Oval',  abbrev: 'DO' },
+  'DIRT ROAD':   { cls: 'dirt-road', label: 'Dirt Road',  short: 'D.Road',  abbrev: 'DR' },
+  'UNRANKED':    { cls: 'unranked',  label: 'Unranked',   short: 'Unrnk',   abbrev: 'UN' },
+};
+
 export function catClass(cat: string): string {
-  return ({
-    'OVAL': 'oval',
-    'SPORTS CAR': 'sports',
-    'FORMULA CAR': 'formula',
-    'DIRT OVAL': 'dirt-oval',
-    'DIRT ROAD': 'dirt-road',
-    'UNRANKED': 'unranked'
-  } as Record<string, string>)[cat] || 'unranked';
+  return CATEGORY_META[cat]?.cls ?? 'unranked';
 }
 
 export function catLabel(cat: string): string {
-  return ({
-    'OVAL': 'Oval',
-    'SPORTS CAR': 'Sports Car',
-    'FORMULA CAR': 'Formula',
-    'DIRT OVAL': 'Dirt Oval',
-    'DIRT ROAD': 'Dirt Road',
-    'UNRANKED': 'Unranked'
-  } as Record<string, string>)[cat] || cat;
+  return CATEGORY_META[cat]?.label ?? cat;
+}
+
+export function catLabelShort(cat: string): string {
+  return CATEGORY_META[cat]?.short ?? cat;
+}
+
+export function catAbbrev(cat: string): string {
+  return CATEGORY_META[cat]?.abbrev ?? cat.slice(0, 2);
+}
+
+/** The category's accent, as a CSS variable reference — same hue the badge uses. */
+export function catColorVar(cat: string): string {
+  return `var(--${catClass(cat)})`;
+}
+
+/** The licence class' accent, as a CSS variable reference — see `--class-*` in style.css. */
+export function classColorVar(cls: string): string {
+  return `var(--class-${cls.toLowerCase()})`;
 }
 
 /** Converts "2026-03-17" → "Mar 17" */
@@ -51,17 +74,6 @@ export function lapsShort(laps: string): string {
   const lapsMatch = laps.match(/^(\d+)\s*laps?$/i);
   if (lapsMatch) return lapsMatch[1] + 'L';
   return laps;
-}
-
-export function catLabelShort(cat: string): string {
-  return ({
-    'OVAL': 'Oval',
-    'SPORTS CAR': 'S.Car',
-    'FORMULA CAR': 'Formula',
-    'DIRT OVAL': 'D.Oval',
-    'DIRT ROAD': 'D.Road',
-    'UNRANKED': 'Unrnk'
-  } as Record<string, string>)[cat] || cat;
 }
 
 const CLASS_PATTERNS: [RegExp, string][] = [

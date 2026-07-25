@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    // Nothing on this page may touch a visitor's saved schedule, garage or theme.
+    window.__IRACING_EPHEMERAL__ = true;
+    (function(){var t=localStorage.getItem('iracing-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else{document.documentElement.dataset.theme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}})();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iRacingHub Storybook — component gallery</title>
+  <meta name="description" content="Every UI component iRacingHub is built from, in one page: tokens, badges, buttons, inputs, cards, filters, navigation and overlays." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/storybook/main.tsx"></script>
+</body>
+</html>

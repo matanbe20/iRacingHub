@@ -1,10 +1,12 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, cleanName, lapsShort, splitTrackName } from '../utils/helpers';
+import { cleanName } from '../utils/helpers';
 import { getRaceReadiness } from '../utils/pricing';
 import { localizedFrequencyLabel } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
+import { CatBadge, ClassBadge } from './CatBadge';
 import RaceCostBadge from './RaceCostBadge';
+import { LapsBadge, RainBadge, TrackName } from './RaceMeta';
 import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import type { Series, Week } from '../types';
@@ -24,11 +26,9 @@ export default function TwCard({ series, week }: TwCardProps) {
   const timeZone = useStore(s => s.timeZone);
   const timeFormat = useStore(s => s.timeFormat);
 
-  const cc = catClass(series.category);
   const raceId = series.name + '_' + week.week;
   const isAdded = !!mySchedule[raceId];
   const isFav = favorites.has(series.name);
-  const [trackMain, trackConfig] = splitTrackName(week.track);
   const readiness = getRaceReadiness(series.cars, week.track, ownedCars, ownedTracks);
 
   function handleToggleRace(e: React.MouseEvent) {
@@ -38,18 +38,18 @@ export default function TwCard({ series, week }: TwCardProps) {
 
   return (
     <div className="tw-card">
-      <span className={'cat-badge ' + cc} data-short={catLabelShort(series.category)}>{catLabel(series.category)}</span>
-      <span className={'class-badge ' + series.class}>{series.class}</span>
+      <CatBadge category={series.category} />
+      <ClassBadge cls={series.class} />
       <div className="tw-card-info">
         <div className="tw-card-title">
           <SeriesLogo category={series.category} name={series.name} className="series-logo" />
           {cleanName(series.name)}
         </div>
         <div className="tw-card-meta">
-          <span className="tw-card-track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}</span>
-          {week.rain != null && week.rain > 0 && <span className="week-rain">💧 {week.rain}%</span>}
+          <TrackName track={week.track} className="tw-card-track" />
+          <RainBadge rain={week.rain} />
           {series.cars && <CarBadges cars={series.cars} />}
-          {week.laps && <span className="tw-card-laps" data-short={lapsShort(week.laps)}>{week.laps}</span>}
+          <LapsBadge laps={week.laps} />
           <RaceCostBadge readiness={readiness} />
           <RaceTime frequency={series.frequency} weekDates={[week.date]} />
         </div>

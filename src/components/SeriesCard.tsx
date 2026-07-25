@@ -1,18 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, cleanName, isFixed } from '../utils/helpers';
+import { cleanName, isFixed } from '../utils/helpers';
+import { parseCars } from '../utils/pricing';
 import { localizedFrequencyLabel, upcomingWeek } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
+import { CatBadge, ClassBadge } from './CatBadge';
 import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import WeekCell from './WeekCell';
+import { IconRainDrop } from './icons';
 import type { Series } from '../types';
-
-const RainDropSvg = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.5 9.5 4 13.5 4 17a8 8 0 0 0 16 0c0-3.5-2.5-7.5-8-15z"/>
-  </svg>
-);
 
 interface SeriesCardProps {
   series: Series;
@@ -28,14 +25,12 @@ export default function SeriesCard({ series }: SeriesCardProps) {
   const timeZone = useStore(s => s.timeZone);
   const timeFormat = useStore(s => s.timeFormat);
 
-  const cc = catClass(series.category);
   const displayName = cleanName(series.name);
   const fixed = isFixed(series.name);
   const hasRain = series.weeks.some(w => w.rain != null && w.rain > 0);
   const allAdded = series.weeks.every(w => !!mySchedule[series.name + '_' + w.week]);
 
-  const seriesCars = series.cars.split(',').map(c => c.trim());
-  const carOwned = ownedCars.size > 0 && seriesCars.some(c => ownedCars.has(c));
+  const carOwned = ownedCars.size > 0 && parseCars(series.cars).some(c => ownedCars.has(c));
 
   // Timing is series-level here, so count down to whichever of this series' races
   // comes next, and anchor the DST-sensitive frequency restatement to that week.
@@ -63,32 +58,19 @@ export default function SeriesCard({ series }: SeriesCardProps) {
   return (
     <div className={'series-card' + (expanded ? ' expanded' : '')}>
       <div className="series-header" onClick={() => setExpanded(e => !e)}>
-        <span
-          className={'cat-badge ' + cc + ' filterable'}
-          data-short={catLabelShort(series.category)}
-          onClick={handleFilterCat}
-          title={'Filter by ' + catLabel(series.category)}
-        >
-          {catLabel(series.category)}
-        </span>
-        <span
-          className={'class-badge ' + series.class + ' filterable'}
-          onClick={handleFilterClass}
-          title={'Filter by class ' + series.class}
-        >
-          {series.class}
-        </span>
+        <CatBadge category={series.category} onFilter={handleFilterCat} />
+        <ClassBadge cls={series.class} onFilter={handleFilterClass} />
         <span className="series-title">
           <SeriesLogo category={series.category} name={series.name} className="series-logo" />
           {displayName}
-          {fixed && <span style={{ opacity: 0.5, fontSize: '0.75rem' }}> [Fixed]</span>}
+          {fixed && <span className="series-fixed-tag"> [Fixed]</span>}
         </span>
         <span className="series-cars"><CarBadges cars={series.cars} /></span>
         <RaceTime frequency={series.frequency} weekDates={weekDates} />
         <span className="series-freq" data-freq={freqLabel}>!</span>
         {hasRain && (
           <span className="series-rain-icon" title="Rain forecast in some weeks">
-            <RainDropSvg />
+            <IconRainDrop size={12} />
           </span>
         )}
         {carOwned && (

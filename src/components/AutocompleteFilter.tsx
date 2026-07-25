@@ -1,31 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { SCHEDULE_DATA } from '../data';
-import { baseTrackName } from '../utils/helpers';
-
-function buildCarList(): string[] {
-  const carSet = new Set<string>();
-  SCHEDULE_DATA.forEach(s => s.cars.split(',').forEach(c => { const n = c.trim(); if (n) carSet.add(n); }));
-  return [...carSet].sort((a, b) => a.localeCompare(b));
-}
-
-function buildTrackList(): string[] {
-  const trackSet = new Set<string>();
-  SCHEDULE_DATA.forEach(s => s.weeks.forEach(w => { if (w.track) trackSet.add(baseTrackName(w.track)); }));
-  return [...trackSet].sort((a, b) => a.localeCompare(b));
-}
-
-const ALL_CARS = buildCarList();
-const ALL_TRACKS = buildTrackList();
+import { ALL_CARS, ALL_TRACKS } from '../utils/catalog';
 
 interface AutocompleteFilterProps {
   type: 'car' | 'track';
   activeItems: Set<string>;
   onAdd: (v: string) => void;
   onRemove: (v: string) => void;
-  onClear: () => void;
 }
 
-export default function AutocompleteFilter({ type, activeItems, onAdd, onRemove, onClear: _onClear }: AutocompleteFilterProps) {
+export default function AutocompleteFilter({ type, activeItems, onAdd, onRemove }: AutocompleteFilterProps) {
   const [query, setQuery] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +50,7 @@ export default function AutocompleteFilter({ type, activeItems, onAdd, onRemove,
         <input
           ref={inputRef}
           type="text"
-          className="car-search-input"
+          className="list-search list-search--block"
           placeholder={placeholder}
           autoComplete="off"
           value={query}

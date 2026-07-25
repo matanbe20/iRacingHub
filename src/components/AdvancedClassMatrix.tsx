@@ -1,32 +1,7 @@
 import React from 'react';
 import useStore from '../store/useStore';
 import { ALL_CATEGORIES, ALL_CLASSES } from '../store/useStore';
-
-const CAT_ABBREV: Record<string, string> = {
-  'OVAL':        'OV',
-  'SPORTS CAR':  'SC',
-  'FORMULA CAR': 'FC',
-  'DIRT OVAL':   'DO',
-  'DIRT ROAD':   'DR',
-  'UNRANKED':    'UN',
-};
-
-const CAT_COLOR: Record<string, string> = {
-  'OVAL':        'var(--oval)',
-  'SPORTS CAR':  'var(--sports)',
-  'FORMULA CAR': 'var(--formula)',
-  'DIRT OVAL':   'var(--dirt-oval)',
-  'DIRT ROAD':   'var(--dirt-road)',
-  'UNRANKED':    'var(--unranked)',
-};
-
-const CLS_COLOR: Record<string, string> = {
-  'R': '#ef4444',
-  'D': '#f97316',
-  'C': '#eab308',
-  'B': '#22c55e',
-  'A': '#3b82f6',
-};
+import { catAbbrev, catColorVar, classColorVar } from '../utils/helpers';
 
 export default function AdvancedClassMatrix() {
   const activeCategories = useStore(s => s.activeCategories);
@@ -38,7 +13,7 @@ export default function AdvancedClassMatrix() {
       <div className="adv-matrix-header">
         <span className="adv-matrix-corner" />
         {ALL_CLASSES.map(cls => (
-          <span key={cls} className="adv-matrix-cls-label" style={{ color: CLS_COLOR[cls] }}>
+          <span key={cls} className="adv-matrix-cls-label" style={{ color: classColorVar(cls) }}>
             {cls}
           </span>
         ))}
@@ -48,8 +23,8 @@ export default function AdvancedClassMatrix() {
         const catClasses = advancedClassMap[cat] ?? new Set(ALL_CLASSES);
         return (
           <div key={cat} className={'adv-matrix-row' + (isActive ? '' : ' adv-row-dimmed')}>
-            <span className="adv-matrix-cat-label" style={{ color: CAT_COLOR[cat] }}>
-              {CAT_ABBREV[cat]}
+            <span className="adv-matrix-cat-label" style={{ color: catColorVar(cat) }}>
+              {catAbbrev(cat)}
             </span>
             {ALL_CLASSES.map(cls => {
               const on = catClasses.has(cls);
@@ -57,7 +32,7 @@ export default function AdvancedClassMatrix() {
                 <button
                   key={cls}
                   className={'adv-matrix-dot' + (on ? ' adv-dot-on' : '')}
-                  style={on ? { color: CLS_COLOR[cls] } : undefined}
+                  style={on ? { color: classColorVar(cls) } : undefined}
                   onClick={() => toggleAdvancedClass(cat, cls)}
                   title={`${cat} · Class ${cls}`}
                   aria-pressed={on}

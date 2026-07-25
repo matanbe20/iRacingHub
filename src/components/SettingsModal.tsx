@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import useStore from '../store/useStore';
 import { formatSessionTime, resolveTimeZone } from '../utils/raceTimes';
+import Modal from './Modal';
 import ThemeMockup from './ThemeMockup';
 import type { Theme } from '../types';
 
@@ -81,10 +82,6 @@ export default function SettingsModal() {
   const zones = useMemo(() => (isOpen ? buildZoneList(Date.now()) : []), [isOpen]);
   const browserZone = useMemo(() => resolveTimeZone(null), []);
 
-  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) closeSettingsModal();
-  }
-
   if (!isOpen) return null;
 
   // Preview against a fixed, recognisable slot (Saturday 18:00 GMT) so the effect
@@ -93,14 +90,15 @@ export default function SettingsModal() {
   const preview = formatSessionTime(previewUtc, timeZone, timeFormat, previewUtc - 86_400_000);
 
   return (
-    <div className="garage-modal-overlay" onClick={handleOverlayClick}>
-      <div className="garage-modal settings-modal">
-        <div className="garage-modal-header">
-          <span className="garage-modal-title">Settings</span>
-          <button className="share-modal-close" onClick={closeSettingsModal} title="Close">&#x2715;</button>
-        </div>
-
-        <div className="settings-body">
+    <Modal
+      title="Settings"
+      onClose={closeSettingsModal}
+      size="lg"
+      className="settings-modal"
+      flushBody
+      footer={<button className="modal-confirm-btn" onClick={closeSettingsModal}>Done</button>}
+    >
+      <div className="settings-body">
           <div className="settings-row">
             <span className="settings-label">Theme</span>
             <div className="settings-themes">
@@ -162,16 +160,11 @@ export default function SettingsModal() {
             A race at <strong>18:00 GMT</strong> on a Saturday shows as <strong>{preview}</strong>
           </div>
 
-          <p className="settings-note">
-            Start times come from each series&rsquo; published race frequency. A few series
-            only list &ldquo;4 timeslots per week&rdquo; with no times, so they show no chip.
-          </p>
-        </div>
-
-        <div className="garage-modal-footer">
-          <button className="garage-save-btn" onClick={closeSettingsModal}>Done</button>
-        </div>
+        <p className="settings-note">
+          Start times come from each series&rsquo; published race frequency. A few series
+          only list &ldquo;4 timeslots per week&rdquo; with no times, so they show no chip.
+        </p>
       </div>
-    </div>
+    </Modal>
   );
 }

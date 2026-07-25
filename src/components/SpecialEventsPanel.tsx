@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SPECIAL_EVENTS } from '../data/special-events';
+import { IconGrid, IconList, IconTwitch, IconYouTube } from './icons';
 import type { SpecialEvent, SpecialEventType } from '../data/special-events';
 
 type EventStatus = 'active' | 'upcoming' | 'completed' | 'tbd';
@@ -71,7 +72,7 @@ function StatusBadge({ event, now, inline }: { event: SpecialEvent; now: Date; i
   return <span className={`${cls} se-badge--upcoming`}>In {days}d</span>;
 }
 
-function SpecialEventCard({ event, now, view }: CardProps) {
+export function SpecialEventCard({ event, now, view }: CardProps) {
   const status = getStatus(event, now);
   const isPast = status === 'completed';
 
@@ -213,11 +214,11 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
           </div>
           <div className="se-card-links">
             <a className="se-card-link se-card-link--yt" href={IRACING_YT_LIVE_URL} target="_blank" rel="noopener noreferrer">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2s-.2-1.6-1-2.3c-.9-1-1.9-1-2.4-1C17.2 2.7 12 2.7 12 2.7s-5.2 0-8.1.2c-.5.1-1.5.1-2.4 1-.7.7-1 2.3-1 2.3S.3 8 .3 9.8v1.7c0 1.8.2 3.6.2 3.6s.2 1.6 1 2.3c.9 1 2.1.9 2.6 1C5.8 18.6 12 18.6 12 18.6s5.2 0 8.1-.2c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.3 1-2.3s.2-1.8.2-3.6V9.8c0-1.8-.2-3.6-.2-3.6zM9.7 14.5V7.9l6.6 3.3-6.6 3.3z"/></svg>
+              <IconYouTube />
               YouTube ↗
             </a>
             <a className="se-card-link se-card-link--twitch" href="https://www.twitch.tv/iracing" target="_blank" rel="noopener noreferrer">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+              <IconTwitch />
               Twitch ↗
             </a>
             {event.posterUrl && (
@@ -230,29 +231,6 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
         </div>
       </div>
     </div>
-  );
-}
-
-// Grid icon SVG
-function GridIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor">
-      <rect x="1" y="1" width="5.5" height="5.5" rx="1"/>
-      <rect x="8.5" y="1" width="5.5" height="5.5" rx="1"/>
-      <rect x="1" y="8.5" width="5.5" height="5.5" rx="1"/>
-      <rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1"/>
-    </svg>
-  );
-}
-
-// List icon SVG
-function ListIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor">
-      <rect x="1" y="2" width="13" height="2" rx="1"/>
-      <rect x="1" y="6.5" width="13" height="2" rx="1"/>
-      <rect x="1" y="11" width="13" height="2" rx="1"/>
-    </svg>
   );
 }
 
@@ -304,14 +282,14 @@ export default function SpecialEventsPanel() {
             onClick={() => setView('grid')}
             title="Grid view"
           >
-            <GridIcon />
+            <IconGrid />
           </button>
           <button
             className={'se-view-btn' + (view === 'list' ? ' active' : '')}
             onClick={() => setView('list')}
             title="List view"
           >
-            <ListIcon />
+            <IconList />
           </button>
         </div>
       </div>

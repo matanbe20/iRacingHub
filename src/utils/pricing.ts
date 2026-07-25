@@ -3,6 +3,20 @@ import { baseTrackName } from './helpers';
 
 export const FALLBACK_PRICE = 11.95;
 
+/**
+ * A price for display. Content iRacing does not sell on its own — combined
+ * layouts, bundled cars — is listed at 0 in the SKU tables, which is not a
+ * price; those show as an em dash rather than a misleading "$0.00".
+ */
+export function priceTag(price: number): string {
+  return price > 0 ? '$' + price.toFixed(2) : '—';
+}
+
+/** True when the SKU tables carry no sellable price for this content. */
+export function isUnpriced(price: number): boolean {
+  return price <= 0;
+}
+
 export function getTrackPrice(name: string): number {
   return TRACK_SKUS[name]?.price ?? FALLBACK_PRICE;
 }

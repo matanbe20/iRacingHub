@@ -6,3 +6,5 @@
 .screenshots/
 /node_modules/
 dist/
+.DS_Store
+2026s3_updated1.pdf

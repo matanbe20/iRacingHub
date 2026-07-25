@@ -4,6 +4,7 @@ import { cleanName } from '../utils/helpers';
 import { FREE_CARS, FREE_TRACKS } from '../data/garage-defaults';
 import { getCurrentWeek } from '../utils/schedule';
 import { resolveTimeZone } from '../utils/raceTimes';
+import { readJSON, readRaw, writeJSON, writeRaw } from '../utils/storage';
 import type { Tab, Theme, TimeFormat, MySchedule, RaceEntry } from '../types';
 
 const ALL_CATEGORIES = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT ROAD', 'DIRT OVAL', 'UNRANKED'];
@@ -184,32 +185,29 @@ function loadInitialState(): Partial<StoreState> {
       advancedClassMap: defaultAdvancedClassMap(),
     };
   } else {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const saved = raw ? JSON.parse(raw) : null;
-      if (saved) {
-        const advancedClassMap = defaultAdvancedClassMap();
-        if (saved.advancedClassMap && typeof saved.advancedClassMap === 'object') {
-          for (const cat of ALL_CATEGORIES) {
-            const arr = saved.advancedClassMap[cat];
-            if (Array.isArray(arr)) {
-              advancedClassMap[cat] = new Set(arr.filter((c: string) => ALL_CLASSES.includes(c)));
-            }
+    const saved = readJSON<any>(STORAGE_KEY);
+    if (saved) {
+      const advancedClassMap = defaultAdvancedClassMap();
+      if (saved.advancedClassMap && typeof saved.advancedClassMap === 'object') {
+        for (const cat of ALL_CATEGORIES) {
+          const arr = saved.advancedClassMap[cat];
+          if (Array.isArray(arr)) {
+            advancedClassMap[cat] = new Set(arr.filter((c: string) => ALL_CLASSES.includes(c)));
           }
         }
-        filters = {
-          activeCategories: new Set((saved.categories || ALL_CATEGORIES).filter((c: string) => ALL_CATEGORIES.includes(c))),
-          activeClasses: new Set((saved.classes || ALL_CLASSES).filter((c: string) => ALL_CLASSES.includes(c))),
-          searchQuery: saved.search || '',
-          activeCars: new Set(saved.cars || []),
-          activeTracks: migrateTrackSet(new Set(saved.tracks || [])),
-          filterOwnedCars: saved.filterOwnedCars ?? false,
-          filterOwnedTracks: saved.filterOwnedTracks ?? false,
-          classFilterAdvanced: saved.classFilterAdvanced ?? false,
-          advancedClassMap,
-        };
       }
-    } catch { /* ignore */ }
+      filters = {
+        activeCategories: new Set((saved.categories || ALL_CATEGORIES).filter((c: string) => ALL_CATEGORIES.includes(c))),
+        activeClasses: new Set((saved.classes || ALL_CLASSES).filter((c: string) => ALL_CLASSES.includes(c))),
+        searchQuery: saved.search || '',
+        activeCars: new Set<string>(saved.cars || []),
+        activeTracks: migrateTrackSet(new Set<string>(saved.tracks || [])),
+        filterOwnedCars: saved.filterOwnedCars ?? false,
+        filterOwnedTracks: saved.filterOwnedTracks ?? false,
+        classFilterAdvanced: saved.classFilterAdvanced ?? false,
+        advancedClassMap,
+      };
+    }
     if (!filters) {
       filters = {
         activeCategories: new Set(ALL_CATEGORIES),
@@ -226,41 +224,30 @@ function loadInitialState(): Partial<StoreState> {
   }
 
   let mySchedule: MySchedule = {};
-  try {
-    const raw = localStorage.getItem(MY_SCHEDULE_KEY);
-    const saved = raw ? JSON.parse(raw) : null;
-    if (saved && typeof saved === 'object') {
-      mySchedule = Object.fromEntries(
-        Object.entries(saved as MySchedule).map(([k, v]) => [k, { ...v, track: migrateTrackName(v.track) }])
-      );
-    }
-  } catch { /* ignore */ }
+  const savedSchedule = readJSON<MySchedule>(MY_SCHEDULE_KEY);
+  if (savedSchedule && typeof savedSchedule === 'object') {
+    mySchedule = Object.fromEntries(
+      Object.entries(savedSchedule).map(([k, v]) => [k, { ...v, track: migrateTrackName(v.track) }])
+    );
+  }
 
   let favorites: Set<string> = new Set();
-  try {
-    const raw = localStorage.getItem(FAVORITES_KEY);
-    const saved = raw ? JSON.parse(raw) : null;
-    if (Array.isArray(saved)) favorites = new Set(saved);
-  } catch { /* ignore */ }
+  const savedFavorites = readJSON<string[]>(FAVORITES_KEY);
+  if (Array.isArray(savedFavorites)) favorites = new Set(savedFavorites);
 
   let ownedCars = new Set<string>();
   let ownedTracks = new Set<string>();
-  try {
-    const raw = localStorage.getItem(OWNED_KEY);
-    if (raw === null) {
-      // First visit — pre-populate with items included with iRacing membership
-      ownedCars = new Set(FREE_CARS);
-      ownedTracks = new Set(FREE_TRACKS);
-    } else {
-      const saved = JSON.parse(raw);
-      if (saved) {
-        if (Array.isArray(saved.cars)) ownedCars = new Set(saved.cars);
-        if (Array.isArray(saved.tracks)) ownedTracks = migrateTrackSet(new Set(saved.tracks));
-      }
-    }
-  } catch { /* ignore */ }
+  const savedOwned = readJSON<{ cars?: string[]; tracks?: string[] }>(OWNED_KEY);
+  if (savedOwned) {
+    if (Array.isArray(savedOwned.cars)) ownedCars = new Set(savedOwned.cars);
+    if (Array.isArray(savedOwned.tracks)) ownedTracks = migrateTrackSet(new Set(savedOwned.tracks));
+  } else {
+    // First visit — pre-populate with items included with iRacing membership
+    ownedCars = new Set(FREE_CARS);
+    ownedTracks = new Set(FREE_TRACKS);
+  }
 
-  const savedTheme = localStorage.getItem(THEME_KEY);
+  const savedTheme = readRaw(THEME_KEY);
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme: Theme = (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : (prefersDark ? 'dark' : 'light');
 
@@ -269,21 +256,18 @@ function loadInitialState(): Partial<StoreState> {
   let savedZone: string | null = null;
   let timeFormat: TimeFormat = Intl.DateTimeFormat().resolvedOptions().hour12 ? '12h' : '24h';
   let showRaceTimes = true;
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    const saved = raw ? JSON.parse(raw) : null;
-    if (saved) {
-      // resolveTimeZone() falls back to the browser zone if the stored IANA id is
-      // unknown to this engine, so a stale name can never throw at render time.
-      if (typeof saved.timeZone === 'string' && saved.timeZoneAuto === false
-          && resolveTimeZone(saved.timeZone) === saved.timeZone) {
-        savedZone = saved.timeZone;
-        timeZoneAuto = false;
-      }
-      if (saved.timeFormat === '12h' || saved.timeFormat === '24h') timeFormat = saved.timeFormat;
-      if (typeof saved.showRaceTimes === 'boolean') showRaceTimes = saved.showRaceTimes;
+  const savedSettings = readJSON<{ timeZone?: unknown; timeZoneAuto?: unknown; timeFormat?: unknown; showRaceTimes?: unknown }>(SETTINGS_KEY);
+  if (savedSettings) {
+    // resolveTimeZone() falls back to the browser zone if the stored IANA id is
+    // unknown to this engine, so a stale name can never throw at render time.
+    if (typeof savedSettings.timeZone === 'string' && savedSettings.timeZoneAuto === false
+        && resolveTimeZone(savedSettings.timeZone) === savedSettings.timeZone) {
+      savedZone = savedSettings.timeZone;
+      timeZoneAuto = false;
     }
-  } catch { /* ignore */ }
+    if (savedSettings.timeFormat === '12h' || savedSettings.timeFormat === '24h') timeFormat = savedSettings.timeFormat;
+    if (typeof savedSettings.showRaceTimes === 'boolean') showRaceTimes = savedSettings.showRaceTimes;
+  }
   const timeZone = resolveTimeZone(timeZoneAuto ? null : savedZone);
 
   const tabParam = params.get('tab');
@@ -377,7 +361,7 @@ function syncUrlParams(state: StoreState): void {
 }
 
 function saveFilters(state: StoreState): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+  writeJSON(STORAGE_KEY, {
     categories: [...state.activeCategories],
     classes: [...state.activeClasses],
     search: state.searchQuery,
@@ -389,23 +373,27 @@ function saveFilters(state: StoreState): void {
     advancedClassMap: Object.fromEntries(
       ALL_CATEGORIES.map(cat => [cat, [...(state.advancedClassMap[cat] ?? new Set(ALL_CLASSES))]])
     ),
-  }));
+  });
 }
 
 function saveOwned(state: StoreState): void {
-  localStorage.setItem(OWNED_KEY, JSON.stringify({
+  writeJSON(OWNED_KEY, {
     cars: [...state.ownedCars],
     tracks: [...state.ownedTracks],
-  }));
+  });
 }
 
 function saveSettings(state: StoreState): void {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+  writeJSON(SETTINGS_KEY, {
     timeZone: state.timeZone,
     timeZoneAuto: state.timeZoneAuto,
     timeFormat: state.timeFormat,
     showRaceTimes: state.showRaceTimes,
-  }));
+  });
+}
+
+function saveSchedule(state: StoreState): void {
+  writeJSON(MY_SCHEDULE_KEY, state.mySchedule);
 }
 
 const initialState = loadInitialState();
@@ -688,7 +676,7 @@ const useStore = create<StoreState>((set, get) => ({
 
   // Theme
   setTheme(next) {
-    localStorage.setItem(THEME_KEY, next);
+    writeRaw(THEME_KEY, next);
     document.documentElement.dataset.theme = next;
     set({ theme: next });
   },
@@ -745,8 +733,7 @@ const useStore = create<StoreState>((set, get) => ({
         }
       }
     }));
-    const s = get();
-    localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(s.mySchedule));
+    saveSchedule(get());
   },
 
   removeRace(id) {
@@ -755,8 +742,7 @@ const useStore = create<StoreState>((set, get) => ({
       delete next[id];
       return { mySchedule: next };
     });
-    const s = get();
-    localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(s.mySchedule));
+    saveSchedule(get());
   },
 
   toggleRace(rawName, weekNum) {
@@ -803,15 +789,14 @@ const useStore = create<StoreState>((set, get) => ({
         return { mySchedule: next };
       });
     }
-    const s = get();
-    localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(s.mySchedule));
+    saveSchedule(get());
   },
 
   toggleFavorite(rawName) {
     set(state => {
       const next = new Set(state.favorites);
       if (next.has(rawName)) next.delete(rawName); else next.add(rawName);
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify([...next]));
+      writeJSON(FAVORITES_KEY, [...next]);
       return { favorites: next };
     });
   },
@@ -832,8 +817,7 @@ const useStore = create<StoreState>((set, get) => ({
     set(state => ({
       mySchedule: { ...state.mySchedule, [id]: { ...entry } }
     }));
-    const s = get();
-    localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(s.mySchedule));
+    saveSchedule(get());
   },
 
   addAllShared() {
@@ -845,8 +829,7 @@ const useStore = create<StoreState>((set, get) => ({
       toAdd.forEach(e => { next[e.id] = { ...e }; });
       return { mySchedule: next };
     });
-    const s = get();
-    localStorage.setItem(MY_SCHEDULE_KEY, JSON.stringify(s.mySchedule));
+    saveSchedule(get());
     get().showToast(toAdd.length + ' race' + (toAdd.length !== 1 ? 's' : '') + ' added to your schedule');
   },
 

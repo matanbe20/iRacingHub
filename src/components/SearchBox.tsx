@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useStore from '../store/useStore';
+import { IconSearch, IconX } from './icons';
 
 const PHRASES = ['Spa', 'Porsche Cup', 'GT3', 'Daytona', 'Formula 4', 'Dirt Oval', 'N\xfcrburgring', 'IMSA', 'Late Model'];
 
@@ -61,10 +62,7 @@ export default function SearchBox() {
 
   return (
     <div className="search-wrap">
-      <svg className="search-icon-svg" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.6"/>
-        <line x1="12.5" y1="12.5" x2="17" y2="17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-      </svg>
+      <IconSearch className="search-icon-svg" />
       <input
         type="text"
         className="search-box"
@@ -88,10 +86,7 @@ export default function SearchBox() {
           aria-label="Clear search"
           tabIndex={-1}
         >
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <line x1="5" y1="5" x2="15" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-            <line x1="15" y1="5" x2="5" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-          </svg>
+          <IconX />
         </button>
       )}
     </div>

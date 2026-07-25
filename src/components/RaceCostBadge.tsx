@@ -1,23 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import useStore from '../store/useStore';
-import { getTrackPrice, getCarPrice } from '../utils/pricing';
+import { getTrackPrice, getCarPrice, isUnpriced, priceTag } from '../utils/pricing';
 import type { RaceReadiness } from '../utils/pricing';
-
-const IconGarage = () => (
-  <svg width="15" height="14" viewBox="0 0 16 15">
-    <polygon points="0,7.5 8,1 16,7.5" fill="#ef4444" stroke="#b91c1c" strokeWidth="0.6" strokeLinejoin="round" />
-    <rect x="2" y="7" width="12" height="7" fill="#facc15" stroke="#ca8a04" strokeWidth="0.6" />
-    <rect x="6.2" y="9.5" width="3.6" height="4.5" fill="#92400e" />
-  </svg>
-);
-
-const IconMoney = () => (
-  <svg width="14" height="14" viewBox="0 0 16 16">
-    <circle cx="8" cy="8" r="6.5" fill="#16a34a" stroke="#14532d" strokeWidth="1" />
-    <text x="8" y="11.2" textAnchor="middle" fontSize="8.5" fontWeight="700" fill="#f0fdf4" fontFamily="Arial, sans-serif">$</text>
-  </svg>
-);
+import { IconGarageSolid, IconMoney } from './icons';
 
 const POPOVER_WIDTH = 210;
 
@@ -71,6 +57,7 @@ export default function RaceCostBadge({ readiness }: RaceCostBadgeProps) {
 
   const missingTrackName = readiness.missingTrackName;
   const missingCarName = readiness.missingCarName;
+  const unpriced = isUnpriced(readiness.unlockCost);
 
   return (
     <span className="race-cost-wrap">
@@ -79,9 +66,13 @@ export default function RaceCostBadge({ readiness }: RaceCostBadgeProps) {
         type="button"
         className="race-cost-badge"
         onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
-        title={readiness.needsTrack && readiness.needsCar ? 'Need track + car — click for options' : readiness.needsTrack ? 'Need track — click for options' : 'Need car — click for options'}
+        title={
+          (readiness.needsTrack && readiness.needsCar ? 'Need track + car' : readiness.needsTrack ? 'Need track' : 'Need car')
+          + (unpriced ? ' — iRacing publishes no separate price for it' : '')
+          + ' — click for options'
+        }
       >
-        ${readiness.unlockCost.toFixed(2)}
+        {unpriced ? '$?' : priceTag(readiness.unlockCost)}
       </button>
       {open && coords && createPortal(
         <div
@@ -94,10 +85,10 @@ export default function RaceCostBadge({ readiness }: RaceCostBadgeProps) {
             <div className="race-cost-popover-row">
               <span className="race-cost-popover-label">
                 {missingTrackName}
-                <span className="race-cost-popover-price">${getTrackPrice(missingTrackName).toFixed(2)}</span>
+                <span className="race-cost-popover-price">{priceTag(getTrackPrice(missingTrackName))}</span>
               </span>
               <span className="race-cost-popover-actions">
-                <button type="button" title="Add to garage" onClick={() => { addOwnedTrack(missingTrackName); setOpen(false); }}><IconGarage /></button>
+                <button type="button" title="Add to garage" onClick={() => { addOwnedTrack(missingTrackName); setOpen(false); }}><IconGarageSolid /></button>
                 <button type="button" title="Add to Buy Guide" onClick={() => { queueTrackForBuyGuide(missingTrackName); setOpen(false); }}><IconMoney /></button>
               </span>
             </div>
@@ -106,10 +97,10 @@ export default function RaceCostBadge({ readiness }: RaceCostBadgeProps) {
             <div className="race-cost-popover-row">
               <span className="race-cost-popover-label">
                 {missingCarName}
-                <span className="race-cost-popover-price">${getCarPrice(missingCarName).toFixed(2)}</span>
+                <span className="race-cost-popover-price">{priceTag(getCarPrice(missingCarName))}</span>
               </span>
               <span className="race-cost-popover-actions">
-                <button type="button" title="Add to garage" onClick={() => { addOwnedCar(missingCarName); setOpen(false); }}><IconGarage /></button>
+                <button type="button" title="Add to garage" onClick={() => { addOwnedCar(missingCarName); setOpen(false); }}><IconGarageSolid /></button>
                 <button type="button" title="Add to Buy Guide" onClick={() => { queueCarForBuyGuide(missingCarName); setOpen(false); }}><IconMoney /></button>
               </span>
             </div>

@@ -1,44 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import useStore from '../store/useStore';
-import { SCHEDULE_DATA } from '../data';
-import { baseTrackName } from '../utils/helpers';
+import { ALL_CARS, ALL_TRACKS } from '../utils/catalog';
 import { FREE_CARS, FREE_TRACKS } from '../data/garage-defaults';
+import CheckRow from './CheckRow';
+import Modal from './Modal';
+import { IconCar, IconTrack } from './icons';
 
 const FREE_CARS_SET = new Set(FREE_CARS);
 const FREE_TRACKS_SET = new Set(FREE_TRACKS);
-
-const IconCar = () => (
-  <svg width="16" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3.5 7L5.5 2h7l2 5" />
-    <rect x="1" y="7" width="16" height="4" rx="1.5" />
-    <circle cx="4.5" cy="12" r="1.5" />
-    <circle cx="13.5" cy="12" r="1.5" />
-  </svg>
-);
-
-const IconTrack = () => (
-  <svg width="16" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="9" cy="7" rx="7.5" ry="5" />
-    <ellipse cx="9" cy="7" rx="4" ry="2.2" />
-  </svg>
-);
-
-function buildCarList(): string[] {
-  const s = new Set<string>();
-  SCHEDULE_DATA.forEach(series =>
-    series.cars.split(',').forEach(c => { const n = c.trim(); if (n && !n.startsWith('See race')) s.add(n); })
-  );
-  return [...s].sort((a, b) => a.localeCompare(b));
-}
-
-function buildTrackList(): string[] {
-  const s = new Set<string>();
-  SCHEDULE_DATA.forEach(series => series.weeks.forEach(w => { if (w.track) s.add(baseTrackName(w.track)); }));
-  return [...s].sort((a, b) => a.localeCompare(b));
-}
-
-const ALL_CARS = buildCarList();
-const ALL_TRACKS = buildTrackList();
 
 type GarageTab = 'cars' | 'tracks';
 
@@ -79,18 +48,11 @@ export default function GarageModal() {
     return q ? ALL_TRACKS.filter(t => t.toLowerCase().includes(q)) : ALL_TRACKS;
   }, [search]);
 
-  function toggleCar(car: string) {
-    setLocalCars(prev => {
+  function toggleItem(item: string) {
+    const setLocal = tab === 'cars' ? setLocalCars : setLocalTracks;
+    setLocal(prev => {
       const next = new Set(prev);
-      if (next.has(car)) next.delete(car); else next.add(car);
-      return next;
-    });
-  }
-
-  function toggleTrack(track: string) {
-    setLocalTracks(prev => {
-      const next = new Set(prev);
-      if (next.has(track)) next.delete(track); else next.add(track);
+      if (next.has(item)) next.delete(item); else next.add(item);
       return next;
     });
   }
@@ -131,10 +93,6 @@ export default function GarageModal() {
     }
   }
 
-  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) closeGarageModal();
-  }
-
   if (!isOpen) return null;
 
   const items = tab === 'cars' ? filteredCars : filteredTracks;
@@ -143,83 +101,72 @@ export default function GarageModal() {
   const checkedCount = tab === 'cars' ? localCars.size : localTracks.size;
   const totalCount = tab === 'cars' ? ALL_CARS.length : ALL_TRACKS.length;
 
-  return (
-    <div className="garage-modal-overlay" onClick={handleOverlayClick}>
-      <div className="garage-modal">
-        <div className="garage-modal-header">
-          <span className="garage-modal-title">My Garage</span>
-          <button className="share-modal-close" onClick={closeGarageModal} title="Close">&#x2715;</button>
-        </div>
-
-        <div className="garage-modal-tabs">
-          <button
-            className={'garage-tab-btn' + (tab === 'cars' ? ' active' : '')}
-            onClick={() => { setTab('cars'); setSearch(''); }}
-          >
-            <IconCar />Cars <span className="garage-tab-count">{localCars.size}</span>
-          </button>
-          <button
-            className={'garage-tab-btn' + (tab === 'tracks' ? ' active' : '')}
-            onClick={() => { setTab('tracks'); setSearch(''); }}
-          >
-            <IconTrack />Tracks <span className="garage-tab-count">{localTracks.size}</span>
-          </button>
-        </div>
-
-        <div className="garage-modal-toolbar">
-          <input
-            className="garage-search"
-            type="text"
-            placeholder={tab === 'cars' ? 'Search cars…' : 'Search tracks…'}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            autoComplete="off"
-          />
-          <div className="garage-toolbar-actions">
-            <button className="garage-action-btn garage-free-btn" onClick={handleResetDefaults} title="Select all items included with iRacing membership">
-              Free defaults
-            </button>
-            <button className="garage-action-btn" onClick={handleSelectAll}>All</button>
-            <button className="garage-action-btn" onClick={handleClearAll}>None</button>
-          </div>
-        </div>
-
-        <div className="garage-modal-summary">
-          {checkedCount} / {totalCount} {tab === 'cars' ? 'cars' : 'tracks'} selected
-        </div>
-
-        <div className="garage-modal-list">
-          {items.map(item => {
-            const checked = localSet.has(item);
-            const isFree = freeSet.has(item);
-            return (
-              <label key={item} className={'garage-item' + (checked ? ' checked' : '')}>
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={() => tab === 'cars' ? toggleCar(item) : toggleTrack(item)}
-                />
-                <span className={'garage-checkbox' + (checked ? ' checked' : '')} />
-                <span className="garage-item-name">{item}</span>
-                {isFree && <span className="garage-free-badge">Free</span>}
-              </label>
-            );
-          })}
-          {items.length === 0 && (
-            <div className="garage-empty">No results for "{search}"</div>
-          )}
-        </div>
-
-        <div className="garage-modal-footer">
-          <button className={'garage-share-btn' + (garageCopied ? ' copied' : '')} onClick={handleShareGarage}>
-            {garageCopied ? '✓ Copied!' : 'Share Garage'}
-          </button>
-          <div className="garage-footer-right">
-            <button className="garage-cancel-btn" onClick={closeGarageModal}>Cancel</button>
-            <button className="garage-save-btn" onClick={handleSave}>Save</button>
-          </div>
-        </div>
+  const chrome = (
+    <>
+      <div className="sub-tabs">
+        <button
+          className={'sub-tab-btn' + (tab === 'cars' ? ' active' : '')}
+          onClick={() => { setTab('cars'); setSearch(''); }}
+        >
+          <IconCar />Cars <span className="sub-tab-count">{localCars.size}</span>
+        </button>
+        <button
+          className={'sub-tab-btn' + (tab === 'tracks' ? ' active' : '')}
+          onClick={() => { setTab('tracks'); setSearch(''); }}
+        >
+          <IconTrack />Tracks <span className="sub-tab-count">{localTracks.size}</span>
+        </button>
       </div>
-    </div>
+
+      <div className="list-toolbar">
+        <input
+          className="list-search"
+          type="text"
+          placeholder={tab === 'cars' ? 'Search cars…' : 'Search tracks…'}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          autoComplete="off"
+        />
+        <button className="toolbar-btn toolbar-btn--accent" onClick={handleResetDefaults} title="Select all items included with iRacing membership">
+          Free defaults
+        </button>
+        <button className="toolbar-btn" onClick={handleSelectAll}>All</button>
+        <button className="toolbar-btn" onClick={handleClearAll}>None</button>
+      </div>
+
+      <div className="garage-modal-summary">
+        {checkedCount} / {totalCount} {tab === 'cars' ? 'cars' : 'tracks'} selected
+      </div>
+    </>
+  );
+
+  const footer = (
+    <>
+      <button className={'garage-share-btn' + (garageCopied ? ' copied' : '')} onClick={handleShareGarage}>
+        {garageCopied ? '✓ Copied!' : 'Share Garage'}
+      </button>
+      <div className="modal-footer-right">
+        <button className="modal-cancel-btn" onClick={closeGarageModal}>Cancel</button>
+        <button className="modal-confirm-btn" onClick={handleSave}>Save</button>
+      </div>
+    </>
+  );
+
+  return (
+    <Modal title="My Garage" onClose={closeGarageModal} size="lg" chrome={chrome} footer={footer} flushBody>
+      {items.map(item => (
+        <CheckRow
+          key={item}
+          name={item}
+          checked={localSet.has(item)}
+          onToggle={() => toggleItem(item)}
+        >
+          {freeSet.has(item) && <span className="list-badge list-badge--free">Free</span>}
+        </CheckRow>
+      ))}
+      {items.length === 0 && (
+        <div className="list-empty">No results for "{search}"</div>
+      )}
+    </Modal>
   );
 }

@@ -1,10 +1,12 @@
 import React from 'react';
 import useStore from '../store/useStore';
-import { catClass, catLabel, catLabelShort, baseTrackName, lapsShort, splitTrackName } from '../utils/helpers';
+import { baseTrackName } from '../utils/helpers';
 import { getRaceReadiness } from '../utils/pricing';
 import { localizedFrequencyLabel } from '../utils/raceTimes';
 import CarBadges from './CarBadges';
+import { CatBadge, ClassBadge } from './CatBadge';
 import RaceCostBadge from './RaceCostBadge';
+import { LapsBadge, RainBadge, TrackName } from './RaceMeta';
 import RaceTime from './RaceTime';
 import SeriesLogo from './SeriesLogo';
 import { SCHEDULE_DATA } from '../data';
@@ -23,8 +25,6 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
   const ownedCars = useStore(s => s.ownedCars);
   const timeZone = useStore(s => s.timeZone);
   const timeFormat = useStore(s => s.timeFormat);
-  const cc = catClass(entry.category);
-  const [trackMain, trackConfig] = splitTrackName(entry.track);
   const series = SCHEDULE_DATA.find(s => s.name === entry.rawName);
   const carsString = series?.cars ?? entry.cars;
   const readiness = getRaceReadiness(carsString, entry.track, ownedCars, ownedTracks);
@@ -39,18 +39,23 @@ export default function MyRaceCard({ entry }: MyRaceCardProps) {
 
   return (
     <div className="my-race-card">
-      <span className={'cat-badge ' + cc} data-short={catLabelShort(entry.category)}>{catLabel(entry.category)}</span>
-      <span className={'class-badge ' + entry.cls}>{entry.cls}</span>
+      <CatBadge category={entry.category} />
+      <ClassBadge cls={entry.cls} />
       <div className="my-race-info">
         <div className="my-race-title">
           <SeriesLogo category={entry.category as Category} name={entry.rawName} className="series-logo" />
           {entry.displayName}
         </div>
         <div className="my-race-meta">
-          <span className="my-race-track-badge" onClick={handleTrackClick} title="Filter by this track">{trackMain}{trackConfig && <span className="track-config"> - {trackConfig}</span>}</span>
-          {entry.rain != null && entry.rain > 0 && <span className="week-rain">💧 {entry.rain}%</span>}
+          <TrackName
+            track={entry.track}
+            className="my-race-track-badge"
+            onClick={handleTrackClick}
+            title="Filter by this track"
+          />
+          <RainBadge rain={entry.rain} />
           {entry.cars && <CarBadges cars={entry.cars} />}
-          {entry.laps && <span className="tw-card-laps" data-short={lapsShort(entry.laps)}>{entry.laps}</span>}
+          <LapsBadge laps={entry.laps} />
           <RaceCostBadge readiness={readiness} />
           <RaceTime frequency={frequency} weekDates={[entry.date]} />
         </div>

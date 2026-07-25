@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useStore from '../store/useStore';
+import Modal from './Modal';
 import type { Tab } from '../types';
 
 const TABS: Tab[] = ['all', 'week', 'my', 'buy', 'events'];
@@ -66,33 +67,21 @@ export default function KeyboardShortcuts() {
 
   if (!helpOpen) return null;
 
-  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) setHelpOpen(false);
-  }
-
   return (
-    <div className="shortcuts-modal-overlay" onClick={handleOverlayClick} style={{ display: 'flex' }}>
-      <div className="shortcuts-modal">
-        <div className="shortcuts-modal-header">
-          <span className="shortcuts-modal-title">Keyboard Shortcuts</span>
-          <button className="shortcuts-modal-close" onClick={() => setHelpOpen(false)} title="Close">&#x2715;</button>
+    <Modal title="Keyboard Shortcuts" onClose={() => setHelpOpen(false)} size="sm">
+      {SHORTCUTS.map(s => (
+        <div className="shortcut-row" key={s.label}>
+          <span className="shortcut-keys">
+            {s.keys.map((k, i) => (
+              <React.Fragment key={k}>
+                {i > 0 && <span className="shortcut-or">/</span>}
+                <kbd className="kbd">{k}</kbd>
+              </React.Fragment>
+            ))}
+          </span>
+          <span className="shortcut-label">{s.label}</span>
         </div>
-        <div className="shortcuts-modal-body">
-          {SHORTCUTS.map(s => (
-            <div className="shortcut-row" key={s.label}>
-              <span className="shortcut-keys">
-                {s.keys.map((k, i) => (
-                  <React.Fragment key={k}>
-                    {i > 0 && <span className="shortcut-or">/</span>}
-                    <kbd className="kbd">{k}</kbd>
-                  </React.Fragment>
-                ))}
-              </span>
-              <span className="shortcut-label">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+      ))}
+    </Modal>
   );
 }

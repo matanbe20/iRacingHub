@@ -1,46 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import useStore from '../store/useStore';
-import { SCHEDULE_DATA } from '../data';
 import { baseTrackName } from '../utils/helpers';
+import { ALL_CARS, ALL_TRACKS } from '../utils/catalog';
 import { calcTotal, DISCOUNT_TIERS } from '../data/iracing-prices';
-import { getTrackPrice, getCarPrice, getTrackSku, getCarSku } from '../utils/pricing';
+import { getTrackPrice, getCarPrice, getTrackSku, getCarSku, parseCars, priceTag } from '../utils/pricing';
+import CheckRow from './CheckRow';
+import { IconCar, IconTrack } from './icons';
 
 type BuyTab = 'tracks' | 'cars';
 
-function buildTrackList(): string[] {
-  const s = new Set<string>();
-  SCHEDULE_DATA.forEach(series => series.weeks.forEach(w => { if (w.track) s.add(baseTrackName(w.track)); }));
-  return [...s].sort((a, b) => a.localeCompare(b));
-}
-
-function buildCarList(): string[] {
-  const s = new Set<string>();
-  SCHEDULE_DATA.forEach(series =>
-    series.cars.split(',').forEach(c => { const n = c.trim(); if (n && !n.startsWith('See race')) s.add(n); })
-  );
-  return [...s].sort((a, b) => a.localeCompare(b));
-}
-
-const ALL_TRACKS = buildTrackList();
-const ALL_CARS = buildCarList();
-
 const IRACING_STORE_URL = 'https://members.iracing.com/membersite/member/store_r.jsp';
 
-const IconCar = () => (
-  <svg width="16" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3.5 7L5.5 2h7l2 5" />
-    <rect x="1" y="7" width="16" height="4" rx="1.5" />
-    <circle cx="4.5" cy="12" r="1.5" />
-    <circle cx="13.5" cy="12" r="1.5" />
-  </svg>
-);
-
-const IconTrack = () => (
-  <svg width="16" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="9" cy="7" rx="7.5" ry="5" />
-    <ellipse cx="9" cy="7" rx="4" ry="2.2" />
-  </svg>
-);
 export default function BuyGuidePanel() {
   const ownedTracks = useStore(s => s.ownedTracks);
   const ownedCars = useStore(s => s.ownedCars);
@@ -73,9 +43,7 @@ export default function BuyGuidePanel() {
 
   const myScheduleCars = useMemo(() => {
     const s = new Set<string>();
-    Object.values(mySchedule).forEach(e =>
-      e.cars.split(',').forEach(c => { const n = c.trim(); if (n && !n.startsWith('See race')) s.add(n); })
-    );
+    Object.values(mySchedule).forEach(e => parseCars(e.cars).forEach(c => s.add(c)));
     return s;
   }, [mySchedule]);
 
@@ -99,16 +67,9 @@ export default function BuyGuidePanel() {
     });
   }, [search, showOwned, ownedCars]);
 
-  function toggleTrack(name: string) {
-    setSelectedTracks(prev => {
-      const next = new Set(prev);
-      if (next.has(name)) next.delete(name); else next.add(name);
-      return next;
-    });
-  }
-
-  function toggleCar(name: string) {
-    setSelectedCars(prev => {
+  function toggleItem(name: string) {
+    const setSelected = buyTab === 'tracks' ? setSelectedTracks : setSelectedCars;
+    setSelected(prev => {
       const next = new Set(prev);
       if (next.has(name)) next.delete(name); else next.add(name);
       return next;
@@ -162,47 +123,56 @@ export default function BuyGuidePanel() {
 
   const totalSelected = selectedTracks.size + selectedCars.size;
 
+  // Tracks and cars behave identically in the list, so bind the active tab once.
+  const onTracks = buyTab === 'tracks';
+  const displayItems = onTracks ? displayTracks : displayCars;
+  const ownedSet = onTracks ? ownedTracks : ownedCars;
+  const selectedSet = onTracks ? selectedTracks : selectedCars;
+  const scheduledSet = onTracks ? myScheduleTracks : myScheduleCars;
+  const getPrice = onTracks ? getTrackPrice : getCarPrice;
+  const getSku = onTracks ? getTrackSku : getCarSku;
+
   // Find next discount tier
   const nextTier = DISCOUNT_TIERS.find(t => t.minItems > priceCalc.count && t.minItems !== Infinity);
 
   return (
     <div className="buy-guide-panel">
       <div className="buy-guide-header">
-        <div className="buy-guide-sub-tabs">
+        <div className="sub-tabs">
           <button
-            className={'buy-sub-tab-btn' + (buyTab === 'tracks' ? ' active' : '')}
+            className={'sub-tab-btn' + (buyTab === 'tracks' ? ' active' : '')}
             onClick={() => setBuyTab('tracks')}
           >
             <IconTrack />Tracks
-            <span className="buy-tab-count">{selectedTracks.size > 0 ? selectedTracks.size : ''}</span>
+            <span className="sub-tab-count">{selectedTracks.size > 0 ? selectedTracks.size : ''}</span>
           </button>
           <button
-            className={'buy-sub-tab-btn' + (buyTab === 'cars' ? ' active' : '')}
+            className={'sub-tab-btn' + (buyTab === 'cars' ? ' active' : '')}
             onClick={() => setBuyTab('cars')}
           >
             <IconCar />Cars
-            <span className="buy-tab-count">{selectedCars.size > 0 ? selectedCars.size : ''}</span>
+            <span className="sub-tab-count">{selectedCars.size > 0 ? selectedCars.size : ''}</span>
           </button>
         </div>
-        <div className="buy-guide-toolbar">
+        <div className="list-toolbar">
           <input
-            className="buy-guide-search"
+            className="list-search"
             type="text"
             placeholder={buyTab === 'tracks' ? 'Search tracks…' : 'Search cars…'}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
           <button
-            className="buy-toolbar-btn buy-smart-btn"
+            className="toolbar-btn toolbar-btn--accent"
             onClick={buyTab === 'tracks' ? handleSmartSelectTracks : handleSmartSelectCars}
             disabled={!hasMySchedule}
             title={hasMySchedule ? 'Select items needed for My Schedule' : 'Add races to My Schedule first'}
           >
             ⚡ My Schedule
           </button>
-          <button className="buy-toolbar-btn" onClick={handleSelectAll}>Select all</button>
-          <button className="buy-toolbar-btn" onClick={handleClear}>Clear</button>
-          <label className="buy-show-owned-toggle">
+          <button className="toolbar-btn" onClick={handleSelectAll}>Select all</button>
+          <button className="toolbar-btn" onClick={handleClear}>Clear</button>
+          <label className="toolbar-check">
             <input
               type="checkbox"
               checked={showOwned}
@@ -214,62 +184,29 @@ export default function BuyGuidePanel() {
       </div>
 
       <div className="buy-guide-list">
-        {buyTab === 'tracks' && (
-          displayTracks.length === 0
-            ? <div className="buy-empty">No tracks found</div>
-            : displayTracks.map(name => {
-              const owned = ownedTracks.has(name);
-              const selected = selectedTracks.has(name);
-              const inMySchedule = myScheduleTracks.has(name) && !owned;
-              const hasSku = getTrackSku(name) !== null;
-              return (
-                <label key={name} className={'buy-item' + (owned ? ' buy-item-owned' : '')}>
-                  <input
-                    type="checkbox"
-                    checked={selected || owned}
-                    disabled={owned}
-                    onChange={() => !owned && toggleTrack(name)}
-                  />
-                  <span className={'buy-checkbox' + (selected || owned ? ' checked' : '')} />
-                  <span className="buy-item-name">{name}</span>
-                  {inMySchedule && <span className="buy-badge buy-badge-sched">My Schedule</span>}
-                  {!owned && hasSku && (
-                    <span className="buy-item-price">${getTrackPrice(name).toFixed(2)}</span>
-                  )}
-                  {owned && <span className="buy-badge buy-badge-owned">Owned</span>}
-                  {!owned && !hasSku && <span className="buy-badge buy-badge-unknown">No SKU</span>}
-                </label>
-              );
-            })
-        )}
-        {buyTab === 'cars' && (
-          displayCars.length === 0
-            ? <div className="buy-empty">No cars found</div>
-            : displayCars.map(name => {
-              const owned = ownedCars.has(name);
-              const selected = selectedCars.has(name);
-              const inMySchedule = myScheduleCars.has(name) && !owned;
-              const hasSku = getCarSku(name) !== null;
-              return (
-                <label key={name} className={'buy-item' + (owned ? ' buy-item-owned' : '')}>
-                  <input
-                    type="checkbox"
-                    checked={selected || owned}
-                    disabled={owned}
-                    onChange={() => !owned && toggleCar(name)}
-                  />
-                  <span className={'buy-checkbox' + (selected || owned ? ' checked' : '')} />
-                  <span className="buy-item-name">{name}</span>
-                  {inMySchedule && <span className="buy-badge buy-badge-sched">My Schedule</span>}
-                  {!owned && hasSku && (
-                    <span className="buy-item-price">${getCarPrice(name).toFixed(2)}</span>
-                  )}
-                  {owned && <span className="buy-badge buy-badge-owned">Owned</span>}
-                  {!owned && !hasSku && <span className="buy-badge buy-badge-unknown">No SKU</span>}
-                </label>
-              );
-            })
-        )}
+        {displayItems.length === 0
+          ? <div className="list-empty">No {buyTab} found</div>
+          : displayItems.map(name => {
+            const owned = ownedSet.has(name);
+            const selected = selectedSet.has(name);
+            const inMySchedule = scheduledSet.has(name) && !owned;
+            const price = getPrice(name);
+            const hasSku = getSku(name) !== null;
+            return (
+              <CheckRow
+                key={name}
+                name={name}
+                checked={selected || owned}
+                locked={owned}
+                onToggle={() => toggleItem(name)}
+              >
+                {inMySchedule && <span className="list-badge list-badge--sched">My Schedule</span>}
+                {!owned && hasSku && <span className="check-row-price">{priceTag(price)}</span>}
+                {owned && <span className="list-badge list-badge--owned">Owned</span>}
+                {!owned && !hasSku && <span className="list-badge list-badge--unknown">No SKU</span>}
+              </CheckRow>
+            );
+          })}
       </div>
 
       <div className={'buy-price-bar' + (totalSelected === 0 ? ' buy-price-bar-empty' : '')}>
