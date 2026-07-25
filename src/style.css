@@ -2116,19 +2116,29 @@ body {
 .garage-action-btn {
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: 6px;
   color: var(--text-dim);
-  font-size: 0.72rem;
-  padding: 0.3rem 0.55rem;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
   cursor: pointer;
   white-space: nowrap;
   transition:
     color 0.15s,
+    background 0.15s,
     border-color 0.15s;
 }
 .garage-action-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.garage-free-btn {
   color: var(--accent);
   border-color: var(--accent);
+  background: var(--accent-glow, rgba(59, 130, 246, 0.08));
+}
+.garage-free-btn:hover {
+  color: var(--accent);
+  background: var(--accent-glow, rgba(59, 130, 246, 0.15));
 }
 
 .garage-modal-summary {
@@ -2156,11 +2166,41 @@ body {
   background: var(--surface2);
 }
 .garage-item input[type="checkbox"] {
-  accent-color: var(--accent);
-  width: 14px;
-  height: 14px;
+  display: none;
+}
+.garage-checkbox {
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+  position: relative;
+}
+.garage-item:hover .garage-checkbox {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(59, 130, 246, 0.12));
+}
+.garage-checkbox.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.garage-checkbox.checked::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(43deg) translate(-1px, -1px);
 }
 .garage-item-name {
   flex: 1;

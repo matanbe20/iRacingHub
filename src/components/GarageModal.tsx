@@ -176,7 +176,7 @@ export default function GarageModal() {
             autoComplete="off"
           />
           <div className="garage-toolbar-actions">
-            <button className="garage-action-btn" onClick={handleResetDefaults} title="Select all items included with iRacing membership">
+            <button className="garage-action-btn garage-free-btn" onClick={handleResetDefaults} title="Select all items included with iRacing membership">
               Free defaults
             </button>
             <button className="garage-action-btn" onClick={handleSelectAll}>All</button>
@@ -199,6 +199,7 @@ export default function GarageModal() {
                   checked={checked}
                   onChange={() => tab === 'cars' ? toggleCar(item) : toggleTrack(item)}
                 />
+                <span className={'garage-checkbox' + (checked ? ' checked' : '')} />
                 <span className="garage-item-name">{item}</span>
                 {isFree && <span className="garage-free-badge">Free</span>}
               </label>
