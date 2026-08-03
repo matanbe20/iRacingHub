@@ -28,7 +28,7 @@ const INK = ['--text', '--text-dim', '--accent', '--accent-glow'];
 export const foundations: StorySection = {
   id: 'foundations',
   title: 'Foundations',
-  blurb: 'The variables every component reads. Both themes are driven from these — change one here and the whole app follows.',
+  blurb: 'The variables every component reads. Both themes are driven from these - change one here and the whole app follows.',
   stories: [
     {
       name: 'Surfaces & ink',

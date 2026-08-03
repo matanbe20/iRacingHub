@@ -41,7 +41,7 @@ export default function ShareModal() {
   const groups: Record<string, RaceEntry[]> = {};
   const groupOrder: string[] = [];
   sharedEntries.forEach(e => {
-    const key = 'Week ' + e.weekNum + ' \u2014 ' + e.date;
+    const key = 'Week ' + e.weekNum + ' - ' + e.date;
     if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
     groups[key].push(e);
   });

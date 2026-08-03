@@ -22,7 +22,7 @@ export const navigation: StorySection = {
     },
     {
       name: 'TabNav',
-      description: 'The five views. My Schedule carries a count of saved races; Special Events grows a green dot while an event is running. Keys 1–5 switch tabs from anywhere.',
+      description: 'The five views. My Schedule carries a count of saved races; Special Events grows a green dot while an event is running. Keys 1-5 switch tabs from anywhere.',
       keywords: 'tab-nav tab-btn active tab-badge tab-live-dot',
       render: () => (
         <Frame>
@@ -47,7 +47,7 @@ export const navigation: StorySection = {
           <Variant label="Mobile" wide>
             <Note>
               The arrows-and-dots version, and the swipeable panels behind it, are styled
-              inside a max-width media query — narrow this window below 768px and the
+              inside a max-width media query - narrow this window below 768px and the
               control above is replaced by it.
             </Note>
           </Variant>

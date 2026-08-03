@@ -3,6 +3,8 @@ export type SeriesClass = 'R' | 'D' | 'C' | 'B' | 'A';
 export type Tab = 'all' | 'week' | 'my' | 'events' | 'buy';
 export type Theme = 'dark' | 'light';
 export type TimeFormat = '12h' | '24h';
+/** The two layouts the All Series tab offers. */
+export type AllSeriesView = 'card' | 'list';
 
 export interface Week {
   week: number;

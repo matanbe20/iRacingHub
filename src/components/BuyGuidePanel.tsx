@@ -223,7 +223,7 @@ export default function BuyGuidePanel() {
               <span className="buy-price-subtotal">Subtotal: ${priceCalc.subtotal.toFixed(2)}</span>
               {priceCalc.discountPct > 0 && (
                 <span className="buy-price-discount">
-                  {priceCalc.discountPct}% off —{' '}
+                  {priceCalc.discountPct}% off -{' '}
                   <span className="buy-price-discount-amount">−${priceCalc.discountAmount.toFixed(2)}</span>
                 </span>
               )}

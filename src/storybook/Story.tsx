@@ -10,7 +10,7 @@ export interface StoryDef {
   name: string;
   /** What the component is for, and anything a reader would otherwise have to guess. */
   description?: string;
-  /** Extra search terms — class names, related components. */
+  /** Extra search terms - class names, related components. */
   keywords?: string;
   render: () => React.ReactNode;
 }
@@ -50,7 +50,7 @@ export function Variants({ layout = 'row', children }: VariantsProps) {
 
 interface VariantProps {
   label: string;
-  /** Fills the canvas width — cards, sidebars, whole panels. */
+  /** Fills the canvas width - cards, sidebars, whole panels. */
   wide?: boolean;
   children: React.ReactNode;
 }
@@ -64,7 +64,7 @@ export function Variant({ label, wide, children }: VariantProps) {
   );
 }
 
-/** A short aside inside a canvas — how to trigger a state, or what is mobile-only. */
+/** A short aside inside a canvas - how to trigger a state, or what is mobile-only. */
 export function Note({ children }: { children: React.ReactNode }) {
   return <p className="sb-note">{children}</p>;
 }

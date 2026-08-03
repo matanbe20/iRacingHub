@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 /**
  * The shell every overlay in the app shares: dimmed backdrop, centred panel, and a
  * header with a title and a round close button. Closing works the same way
- * everywhere — the close button, a click on the backdrop, or Escape — and the page
+ * everywhere - the close button, a click on the backdrop, or Escape - and the page
  * behind stays put while the modal is up.
  */
 
@@ -16,7 +16,7 @@ interface ModalProps {
   size?: ModalSize;
   /** Extra class on the panel, for per-modal layout tweaks. */
   className?: string;
-  /** Sits directly under the header, outside the scrolling body — tabs, toolbars. */
+  /** Sits directly under the header, outside the scrolling body - tabs, toolbars. */
   chrome?: React.ReactNode;
   footer?: React.ReactNode;
   /** Body padding is dropped for edge-to-edge lists. */

@@ -28,7 +28,7 @@ export const filters: StorySection = {
     },
     {
       name: 'CategoryFilters & ClassFilters',
-      description: 'Toggle sets rather than radio choices — every discipline and licence is on by default, and you switch off what you do not race. Clicking a badge on a card instead narrows to just that one.',
+      description: 'Toggle sets rather than radio choices - every discipline and licence is on by default, and you switch off what you do not race. Clicking a badge on a card instead narrows to just that one.',
       keywords: 'cat-filters class-filters filter-group toggle',
       render: () => (
         <Variants layout="stack">
@@ -39,7 +39,7 @@ export const filters: StorySection = {
     },
     {
       name: 'AdvancedClassMatrix',
-      description: 'Licence per discipline, for drivers whose licences differ across disciplines — A in sports cars, Rookie on dirt. Rows for disciplines you have switched off are dimmed rather than hidden, so the grid stays stable.',
+      description: 'Licence per discipline, for drivers whose licences differ across disciplines - A in sports cars, Rookie on dirt. Rows for disciplines you have switched off are dimmed rather than hidden, so the grid stays stable.',
       keywords: 'adv-class-matrix adv-matrix-dot advanced filters per category',
       render: () => (
         <div style={{ maxWidth: 195 }}>

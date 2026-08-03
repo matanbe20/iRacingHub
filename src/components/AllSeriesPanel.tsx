@@ -4,6 +4,15 @@ import { SCHEDULE_DATA } from '../data';
 import { ALL_CLASSES } from '../store/useStore';
 import { cleanName, baseTrackName } from '../utils/helpers';
 import SeriesCard from './SeriesCard';
+import SeriesTile from './SeriesTile';
+import ViewToggle from './ViewToggle';
+import { IconGrid, IconList } from './icons';
+import type { AllSeriesView } from '../types';
+
+const VIEW_OPTIONS: { value: AllSeriesView; label: string; icon: React.ReactNode }[] = [
+  { value: 'card', label: 'Card view', icon: <IconGrid /> },
+  { value: 'list', label: 'List view', icon: <IconList /> },
+];
 
 const CAT_ORDER = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT OVAL', 'DIRT ROAD', 'UNRANKED'];
 
@@ -20,6 +29,8 @@ export default function AllSeriesPanel() {
   const setFilteredCount = useStore(s => s.setFilteredCount);
   const classFilterAdvanced = useStore(s => s.classFilterAdvanced);
   const advancedClassMap = useStore(s => s.advancedClassMap);
+  const allSeriesView = useStore(s => s.allSeriesView);
+  const setAllSeriesView = useStore(s => s.setAllSeriesView);
 
   const filtered = useMemo(() => {
     const q = searchQuery.toLowerCase();
@@ -63,19 +74,45 @@ export default function AllSeriesPanel() {
     setFilteredCount(filtered.length);
   }, [filtered.length]);
 
-  return (
-    <>
-      <span className="stats" id="stats">{filtered.length} series</span>
-      <div className="series-grid">
-      {filtered.length === 0 ? (
+  if (filtered.length === 0) {
+    return (
+      <>
+        <Toolbar count={0} view={allSeriesView} onChange={setAllSeriesView} />
         <div className="no-results">
           No series match your filters<br />
           <span className="no-results-hint">Check the filters applied</span>
         </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Toolbar count={filtered.length} view={allSeriesView} onChange={setAllSeriesView} />
+      {allSeriesView === 'card' ? (
+        <div className="series-tile-grid">
+          {filtered.map(s => <SeriesTile key={s.name} series={s} />)}
+        </div>
       ) : (
-        filtered.map(s => <SeriesCard key={s.name} series={s} />)
+        <div className="series-grid">
+          {filtered.map(s => <SeriesCard key={s.name} series={s} />)}
+        </div>
       )}
-      </div>
     </>
+  );
+}
+
+interface ToolbarProps {
+  count: number;
+  view: AllSeriesView;
+  onChange: (view: AllSeriesView) => void;
+}
+
+function Toolbar({ count, view, onChange }: ToolbarProps) {
+  return (
+    <div className="as-panel-toolbar">
+      <span className="stats">{count} series</span>
+      <ViewToggle value={view} onChange={onChange} options={VIEW_OPTIONS} />
+    </div>
   );
 }

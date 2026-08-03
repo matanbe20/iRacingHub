@@ -61,7 +61,7 @@ function SegmentedDemo() {
 export const inputs: StorySection = {
   id: 'inputs',
   title: 'Inputs & controls',
-  blurb: 'Text entry, selection and settings controls. All of them are live here — the page keeps its own throwaway state.',
+  blurb: 'Text entry, selection and settings controls. All of them are live here - the page keeps its own throwaway state.',
   stories: [
     {
       name: 'SearchBox',
@@ -70,7 +70,7 @@ export const inputs: StorySection = {
       render: () => (
         <>
           <SearchBox />
-          <Note>Bound to the real filter state — clearing it after typing restores the animation.</Note>
+          <Note>Bound to the real filter state - clearing it after typing restores the animation.</Note>
         </>
       ),
     },
@@ -87,7 +87,7 @@ export const inputs: StorySection = {
     },
     {
       name: 'CheckRow',
-      description: 'One row of a long content list — the shared body of My Garage and the Buy Guide. A locked row is content you already own: shown ticked and greyed, with nothing to decide. The native checkbox stays in the DOM for keyboard and screen-reader users.',
+      description: 'One row of a long content list - the shared body of My Garage and the Buy Guide. A locked row is content you already own: shown ticked and greyed, with nothing to decide. The native checkbox stays in the DOM for keyboard and screen-reader users.',
       keywords: 'check-row check-box checked locked garage buy item',
       render: () => <CheckRowDemo />,
     },
@@ -112,14 +112,14 @@ export const inputs: StorySection = {
     },
     {
       name: 'Settings controls',
-      description: 'The three kinds of control in the Settings modal: a segmented switch, a native select for the ~430 timezones, and a plain checkbox. All of them write through immediately — the modal has no Apply step.',
+      description: 'The three kinds of control in the Settings modal: a segmented switch, a native select for the ~430 timezones, and a plain checkbox. All of them write through immediately - the modal has no Apply step.',
       keywords: 'settings-seg settings-select settings-check timezone clock',
       render: () => (
         <Variants layout="stack">
           <Variant label="Segmented" wide><SegmentedDemo /></Variant>
           <Variant label="Select" wide>
             <select className="settings-select" defaultValue="Europe/Berlin">
-              <option>Auto — Europe/Berlin</option>
+              <option>Auto - Europe/Berlin</option>
               <option>Europe/Berlin (GMT+2)</option>
               <option>America/New York (GMT-4)</option>
             </select>

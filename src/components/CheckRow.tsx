@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * One selectable row in a long content list — the shared body of both My Garage and
+ * One selectable row in a long content list - the shared body of both My Garage and
  * the Buy Guide. The native checkbox stays in the DOM for keyboard and screen-reader
  * users; `.check-box` is the visible square.
  */

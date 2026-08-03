@@ -44,12 +44,12 @@ export function catAbbrev(cat: string): string {
   return CATEGORY_META[cat]?.abbrev ?? cat.slice(0, 2);
 }
 
-/** The category's accent, as a CSS variable reference — same hue the badge uses. */
+/** The category's accent, as a CSS variable reference - same hue the badge uses. */
 export function catColorVar(cat: string): string {
   return `var(--${catClass(cat)})`;
 }
 
-/** The licence class' accent, as a CSS variable reference — see `--class-*` in style.css. */
+/** The licence class' accent, as a CSS variable reference - see `--class-*` in style.css. */
 export function classColorVar(cls: string): string {
   return `var(--class-${cls.toLowerCase()})`;
 }
@@ -66,6 +66,15 @@ export function splitTrackName(track: string): [string, string | undefined] {
   const idx = track.indexOf(' - ');
   if (idx === -1) return [track, undefined];
   return [track.slice(0, idx), track.slice(idx + 3)];
+}
+
+/**
+ * True when a schedule `laps` value actually carries a figure. Some endurance
+ * weeks in `data.ts` lost theirs on import and hold a bare unit ("mins"), which
+ * must not reach a badge, a calendar entry or the printed schedule.
+ */
+export function hasRaceDistance(laps: string | undefined): laps is string {
+  return !!laps && /\d/.test(laps);
 }
 
 export function lapsShort(laps: string): string {
@@ -166,7 +175,7 @@ export function getWeekDateRange(weekNum: number): string {
   const end = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000);
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const fmt = (d: Date) => months[d.getMonth()] + ' ' + d.getDate();
-  return 'Week ' + weekNum + ' \u2013 ' + fmt(start) + ' \u2013 ' + fmt(end);
+  return 'Week ' + weekNum + ' - ' + fmt(start) + ' - ' + fmt(end);
 }
 
 export function downloadFile(filename: string, content: string, mimeType: string): void {
@@ -184,7 +193,7 @@ export function exportCSV(mySchedule: MySchedule): void {
   entries.sort((a, b) => a.weekNum !== b.weekNum ? a.weekNum - b.weekNum : a.displayName.localeCompare(b.displayName));
   const esc = (v: unknown) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
   const rows = [['Week','Date','Series','Category','Class','Cars','Track','Laps'].map(esc).join(',')];
-  entries.forEach(e => rows.push([e.weekNum, e.date, e.displayName, e.category, e.cls, e.cars, e.track, e.laps].map(esc).join(',')));
+  entries.forEach(e => rows.push([e.weekNum, e.date, e.displayName, e.category, e.cls, e.cars, e.track, hasRaceDistance(e.laps) ? e.laps : ''].map(esc).join(',')));
   downloadFile('iracing-2026s2-my-schedule.csv', rows.join('\n'), 'text/csv');
 }
 
@@ -221,7 +230,7 @@ export function exportICS(mySchedule: MySchedule): void {
     const dNext = new Date(d.getTime() + 24 * 60 * 60 * 1000);
     const dsNext = icsDateStr(dNext);
     const uid = 'iracing-2026s3-' + e.id.replace(/[^a-zA-Z0-9]/g, '-') + '@iracing-schedule';
-    const desc = 'Series: ' + e.displayName + '\\nTrack: ' + e.track + '\\nClass: ' + e.cls + '\\nCars: ' + e.cars + (e.laps ? '\\nLaps: ' + e.laps : '');
+    const desc = 'Series: ' + e.displayName + '\\nTrack: ' + e.track + '\\nClass: ' + e.cls + '\\nCars: ' + e.cars + (hasRaceDistance(e.laps) ? '\\nLaps: ' + e.laps : '');
     lines.push(
       'BEGIN:VEVENT',
       icsFold('DTSTART;VALUE=DATE:' + ds),

@@ -7,7 +7,7 @@ import type { RaceEntry, Series, Week } from '../types';
 /**
  * Demo data for the gallery, picked out of the real season schedule rather than
  * invented, so every story shows the component with the shape of content it
- * actually has to render — real series names, logos, car lists and rain figures.
+ * actually has to render - real series names, logos, car lists and rain figures.
  * Each lookup falls back to the first series of its kind, so a new season's data
  * can never leave a story blank.
  */
@@ -24,7 +24,7 @@ export const sportsCarSeries = find(
   byCategory('SPORTS CAR'),
 );
 
-/** Multi-class field — exercises the grouped car badges and their tooltip. */
+/** Multi-class field - exercises the grouped car badges and their tooltip. */
 export const multiClassSeries = find(
   s => s.cars.split(',').length >= 5,
   s => s.cars.split(',').length >= 3,

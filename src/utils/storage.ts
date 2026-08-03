@@ -40,7 +40,7 @@ export function writeRaw(key: string, value: string): void {
   try {
     localStorage.setItem(key, value);
   } catch {
-    /* quota or private mode — the app works fine unsaved */
+    /* quota or private mode - the app works fine unsaved */
   }
 }
 

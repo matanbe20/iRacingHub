@@ -45,7 +45,7 @@ export const badges: StorySection = {
   stories: [
     {
       name: 'CatBadge',
-      description: 'Fixed-width discipline chip. Given onFilter it becomes clickable and narrows the view — series cards pass it, read-only rows do not. Below 640px the shorter data-short label is swapped in.',
+      description: 'Fixed-width discipline chip. Given onFilter it becomes clickable and narrows the view - series cards pass it, read-only rows do not. Below 640px the shorter data-short label is swapped in.',
       keywords: 'cat-badge category discipline filterable',
       render: () => (
         <Variants layout="stack">
@@ -95,7 +95,7 @@ export const badges: StorySection = {
           <Variant label="Two cars" wide>
             <CarBadges cars={multiClassSeries.cars.split(',').slice(0, 2).join(',')} />
           </Variant>
-          <Variant label="Grouped — hover for the list" wide>
+          <Variant label="Grouped - hover for the list" wide>
             <CarBadges cars={multiClassSeries.cars} />
           </Variant>
         </Variants>
@@ -107,11 +107,11 @@ export const badges: StorySection = {
       keywords: 'race-ready-badge race-cost-badge popover readiness price garage',
       render: () => (
         <Variants layout="stack">
-          <Variant label="Owned — ready to race" wide><RaceCostBadge readiness={readiness.ready} /></Variant>
+          <Variant label="Owned - ready to race" wide><RaceCostBadge readiness={readiness.ready} /></Variant>
           <Variant label="Missing track + car (click me)" wide><RaceCostBadge readiness={readiness.needsBoth} /></Variant>
           <Variant label="Missing track only" wide><RaceCostBadge readiness={readiness.needsTrack} /></Variant>
-          <Variant label="Not sold separately — no price to show" wide><RaceCostBadge readiness={readiness.unpriced} /></Variant>
-          <Variant label="Empty garage — renders nothing" wide>
+          <Variant label="Not sold separately - no price to show" wide><RaceCostBadge readiness={readiness.unpriced} /></Variant>
+          <Variant label="Empty garage - renders nothing" wide>
             <RaceCostBadge readiness={readiness.neutral} />
             <Note>Nothing above this line: that is the neutral state.</Note>
           </Variant>
@@ -125,13 +125,13 @@ export const badges: StorySection = {
       keywords: 'race-time countdown clock timezone soon',
       render: () => (
         <Variants layout="stack">
-          <Variant label="Full — time and countdown" wide>
+          <Variant label="Full - time and countdown" wide>
             <RaceTime frequency={sportsCarSeries.frequency} weekDates={sportsCarSeries.weeks.map(w => w.date)} />
           </Variant>
-          <Variant label="Compact — countdown moves to the tooltip" wide>
+          <Variant label="Compact - countdown moves to the tooltip" wide>
             <RaceTime frequency={sportsCarSeries.frequency} weekDates={sportsCarSeries.weeks.map(w => w.date)} compact />
           </Variant>
-          <Variant label="No published times — renders nothing" wide>
+          <Variant label="No published times - renders nothing" wide>
             <RaceTime frequency="4 timeslots per week" weekDates={[weekOf(sportsCarSeries).date]} />
           </Variant>
           <Note>Switch off “Show race times &amp; countdowns” in Settings and every chip above disappears.</Note>

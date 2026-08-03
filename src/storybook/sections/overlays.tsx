@@ -130,7 +130,7 @@ function SharedRowDemo() {
   const entry = entryOf(sportsCarSeries, weekOf(sportsCarSeries));
   return (
     <div className="my-week-group">
-      <div className="my-week-label">Week {entry.weekNum} — {shortDate(entry.date)}</div>
+      <div className="my-week-label">Week {entry.weekNum} - {shortDate(entry.date)}</div>
       <div className="my-race-card">
         <span className="cat-badge sports">Sports Car</span>
         <span className="class-badge A">A</span>
@@ -157,7 +157,7 @@ export const overlays: StorySection = {
     },
     {
       name: 'Content-list modal',
-      description: 'How My Garage and the Settings modal are assembled: sub-tabs and a toolbar in the chrome slot, an edge-to-edge list in a flush body, and confirm actions in the footer. This is a copy — the real My Garage writes to your saved garage.',
+      description: 'How My Garage and the Settings modal are assembled: sub-tabs and a toolbar in the chrome slot, an edge-to-edge list in a flush body, and confirm actions in the footer. This is a copy - the real My Garage writes to your saved garage.',
       keywords: 'garage modal chrome flush sub-tabs check-row summary',
       render: () => <GarageLikeDemo />,
     },
@@ -169,7 +169,7 @@ export const overlays: StorySection = {
     },
     {
       name: 'Toast',
-      description: 'Confirmation for actions with no visible result of their own — merging a shared garage, queueing content for the Buy Guide. Never used for errors, which the affected control shows in place.',
+      description: 'Confirmation for actions with no visible result of their own - merging a shared garage, queueing content for the Buy Guide. Never used for errors, which the affected control shows in place.',
       keywords: 'toast toast-visible showToast feedback',
       render: () => <ToastDemo />,
     },

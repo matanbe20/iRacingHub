@@ -13,7 +13,7 @@ export const states: StorySection = {
   stories: [
     {
       name: 'No results',
-      description: 'Filters that match nothing. The hint points at the cause — filters, not missing data — because an over-filtered view is the usual reason a list is empty here.',
+      description: 'Filters that match nothing. The hint points at the cause - filters, not missing data - because an over-filtered view is the usual reason a list is empty here.',
       keywords: 'no-results no-results-hint empty filters',
       render: () => (
         <Variants layout="stack">
@@ -72,7 +72,7 @@ export const states: StorySection = {
                 <span className="buy-price-subtotal">Subtotal: ${priced.subtotal.toFixed(2)}</span>
                 {priced.discountPct > 0 && (
                   <span className="buy-price-discount">
-                    {priced.discountPct}% off — <span className="buy-price-discount-amount">−${priced.discountAmount.toFixed(2)}</span>
+                    {priced.discountPct}% off - <span className="buy-price-discount-amount">−${priced.discountAmount.toFixed(2)}</span>
                   </span>
                 )}
                 {nextTier && (

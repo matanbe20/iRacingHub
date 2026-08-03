@@ -117,7 +117,7 @@ export default function Storybook() {
             <h1>Component gallery</h1>
             <p>
               Every piece iRacingHub is built from, rendered from the same components and stylesheet
-              as the app itself — so if it looks right here, it looks right there. Demo content is
+              as the app itself - so if it looks right here, it looks right there. Demo content is
               taken from the live season schedule.
             </p>
             <p className="sb-intro-warn">

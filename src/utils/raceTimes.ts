@@ -3,7 +3,7 @@ import type { TimeFormat } from '../types';
 /**
  * Race session timing.
  *
- * The schedule data carries no structured start times — only a free-text
+ * The schedule data carries no structured start times - only a free-text
  * `Series.frequency` sentence. This module turns those sentences into concrete
  * UTC timestamps so they can be shown in the viewer's timezone.
  *
@@ -22,7 +22,7 @@ export interface TimeSlot {
 
 export interface RaceSchedulePattern {
   kind: FreqKind;
-  /** interval: minute-of-hour offsets, ascending — e.g. [15, 45] */
+  /** interval: minute-of-hour offsets, ascending - e.g. [15, 45] */
   minutes?: number[];
   /** interval: 60 (every hour) or 120 (every 2 hours) */
   hourStep?: number;
@@ -114,7 +114,7 @@ export function parseFrequency(freq: string): RaceSchedulePattern {
   const cached = patternCache.get(freq);
   if (cached) return cached;
 
-  // Only the race cadence matters — drop trailing qualifying info after "|".
+  // Only the race cadence matters - drop trailing qualifying info after "|".
   const s = freq.toLowerCase().split('|')[0];
   let result: RaceSchedulePattern;
 
@@ -128,7 +128,7 @@ export function parseFrequency(freq: string): RaceSchedulePattern {
     let minutes = parseMinuteOffsets(s);
 
     if (!half && !twoHourly && !hourly && minutes.length === 0) {
-      // "4 Timeslots Per Week" and friends — no timing information at all.
+      // "4 Timeslots Per Week" and friends - no timing information at all.
       result = { kind: 'unknown' };
     } else {
       if (half) {
@@ -292,7 +292,7 @@ export function resolveTimeZone(tz?: string | null): string {
 }
 
 /**
- * "18:00" today, "Sat 18:00" within the coming week, "Aug 29, 18:00" beyond that —
+ * "18:00" today, "Sat 18:00" within the coming week, "Aug 29, 18:00" beyond that -
  * a bare weekday would be ambiguous for the biweekly endurance series, whose next
  * event can be over a month out.
  */

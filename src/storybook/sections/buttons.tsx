@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ExportButtons from '../../components/ExportButtons';
+import ViewToggle from '../../components/ViewToggle';
 import { IconCar, IconGarageOutline, IconGrid, IconList, IconTrack } from '../../components/icons';
 import { Note, Variant, Variants } from '../Story';
 import type { StorySection } from '../Story';
 
 const noop = (e: React.MouseEvent) => e.preventDefault();
 
+/** Live so the story shows the switch actually switching, not a frozen state. */
+function ViewToggleDemo() {
+  const [view, setView] = useState<'card' | 'list'>('card');
+  return (
+    <ViewToggle
+      value={view}
+      onChange={setView}
+      options={[
+        { value: 'card', label: 'Card view', icon: <IconGrid /> },
+        { value: 'list', label: 'List view', icon: <IconList /> },
+      ]}
+    />
+  );
+}
+
 export const buttons: StorySection = {
   id: 'buttons',
   title: 'Buttons',
-  blurb: 'Every button in the app, with its active and disabled states. Anything that adds to My Schedule is green once added — that colour means "saved" throughout.',
+  blurb: 'Every button in the app, with its active and disabled states. Anything that adds to My Schedule is green once added - that colour means "saved" throughout.',
   stories: [
     {
       name: 'Add to schedule',
@@ -43,11 +59,11 @@ export const buttons: StorySection = {
     },
     {
       name: 'Filter buttons',
-      description: 'Category and class filters are styled as their badges so the sidebar reads as the same vocabulary as the cards. Inactive means "excluded", not "unstyled" — hence the dimming rather than an outline.',
+      description: 'Category and class filters are styled as their badges so the sidebar reads as the same vocabulary as the cards. Inactive means "excluded", not "unstyled" - hence the dimming rather than an outline.',
       keywords: 'filter-btn cat-filters class-filters active',
       render: () => (
         <Variants layout="stack">
-          <Variant label="Category — active / inactive" wide>
+          <Variant label="Category - active / inactive" wide>
             <div className="filter-group" id="cat-filters">
               <button className="filter-btn cat-sports active">Sports Car</button>
               <button className="filter-btn cat-formula active">Formula</button>
@@ -55,7 +71,7 @@ export const buttons: StorySection = {
               <button className="filter-btn cat-dirt-road">Dirt Road</button>
             </div>
           </Variant>
-          <Variant label="Class — active / inactive" wide>
+          <Variant label="Class - active / inactive" wide>
             <div className="filter-group" id="class-filters">
               <button className="filter-btn active" data-cls="R">R</button>
               <button className="filter-btn active" data-cls="D">D</button>
@@ -87,7 +103,7 @@ export const buttons: StorySection = {
     },
     {
       name: 'Toolbar buttons',
-      description: 'The row above a content list. One accented button per toolbar marks the suggested action; the rest stay quiet. Disabled when the action has nothing to work on — no saved races, no smart select.',
+      description: 'The row above a content list. One accented button per toolbar marks the suggested action; the rest stay quiet. Disabled when the action has nothing to work on - no saved races, no smart select.',
       keywords: 'toolbar-btn accent disabled toolbar-check show owned',
       render: () => (
         <div className="list-toolbar">
@@ -127,7 +143,7 @@ export const buttons: StorySection = {
               <button className="garage-share-btn copied">✓ Copied!</button>
             </div>
           </Variant>
-          <Variant label="Add all — available / everything already added" wide>
+          <Variant label="Add all - available / everything already added" wide>
             <button className="modal-add-all-btn">+ Add All (4)</button>
             <div style={{ height: 8 }} />
             <button className="modal-add-all-btn" disabled>✓ All Added</button>
@@ -155,7 +171,7 @@ export const buttons: StorySection = {
     {
       name: 'Icon & link buttons',
       description: 'Header controls, the garage opener, the view switcher and the outbound links.',
-      keywords: 'header-icon-btn garage-open-btn garage-filter-btn se-view-btn discord kofi',
+      keywords: 'header-icon-btn garage-open-btn garage-filter-btn view-toggle view-btn discord kofi',
       render: () => (
         <Variants layout="stack">
           <Variant label="Garage (sidebar)" wide>
@@ -167,11 +183,8 @@ export const buttons: StorySection = {
               </div>
             </div>
           </Variant>
-          <Variant label="Grid / list view" wide>
-            <div className="se-view-toggle">
-              <button className="se-view-btn active" title="Grid view"><IconGrid /></button>
-              <button className="se-view-btn" title="List view"><IconList /></button>
-            </div>
+          <Variant label="ViewToggle - All Series and Special Events" wide>
+            <ViewToggleDemo />
           </Variant>
           <Variant label="Advanced filters toggle" wide>
             <div className="adv-toggle-row">

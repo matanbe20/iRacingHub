@@ -262,7 +262,7 @@ body {
   font-family: inherit;
 }
 
-/* Type filter buttons — styled like cat-badges */
+/* Type filter buttons - styled like cat-badges */
 #cat-filters .filter-btn {
   font-size: 0.65rem;
   font-weight: 600;
@@ -311,7 +311,7 @@ body {
   color: var(--unranked);
 }
 
-/* Class filter buttons — styled like class-badges */
+/* Class filter buttons - styled like class-badges */
 #class-filters .filter-btn {
   font-size: 0.7rem;
   font-weight: 700;
@@ -835,6 +835,301 @@ body {
   border-color: #a8adc4;
 }
 
+/* Shared segmented view switcher - All Series and Special Events ----------- */
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.view-btn:hover {
+  color: var(--text);
+}
+.view-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* All Series toolbar - count on the left, view switcher on the right ------- */
+
+.as-panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+/* .stats is a block with its own margin when it stands alone. */
+.as-panel-toolbar .stats {
+  display: inline;
+  margin-bottom: 0;
+}
+
+/* SeriesTile - the card view of All Series -------------------------------- */
+
+.series-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.75rem;
+}
+
+.series-tile {
+  display: flex;
+  flex-direction: column;
+  /* Grid items default to min-width: auto, so a nowrap track name would widen
+     the whole column past the viewport instead of ellipsing. */
+  min-width: 0;
+  padding: 0.75rem 0.8rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  /* The discipline accent, as an inset rule rather than a border so it neither
+     shifts the layout nor gets caught by the hover border transition. */
+  box-shadow: inset 0 2px 0 0 var(--tile-accent, var(--accent));
+  transition: border-color 0.15s;
+}
+.series-tile:hover {
+  border-color: #3d4260;
+}
+[data-theme="light"] .series-tile {
+  background: #e2e4ec;
+  border-color: #c0c4d4;
+}
+[data-theme="light"] .series-tile:hover {
+  border-color: #a8adc4;
+}
+.series-tile--over {
+  opacity: 0.6;
+}
+
+/* The full season opens in a modal - twelve weeks will not fit a 320px column,
+   and expanding in place reflows the whole grid around one card. */
+/* One week per row: the twelve reads as a schedule top to bottom, and every
+   track name fits without ellipsis. */
+.series-modal .week-grid {
+  grid-template-columns: 1fr;
+  gap: 6px;
+  background: transparent;
+  padding: 0.75rem;
+}
+.series-modal-chrome {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.series-modal-freq {
+  flex-basis: 100%;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* Head: logo, name, discipline + licence, favourite */
+.series-tile-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.series-tile-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.series-tile-heading {
+  flex: 1;
+  min-width: 0;
+}
+.series-tile-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+  /* Two lines, then ellipsis - series names run to 50+ characters. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.series-tile-badges {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+}
+
+/* The featured race - the series' next one, not necessarily this week's */
+.series-tile-race {
+  background: var(--bg);
+  border-radius: 7px;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.series-tile-week {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+.series-tile-week-num {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+.series-tile-week-date {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+.series-tile-pill {
+  margin-left: auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: var(--current-week);
+  border: 1px solid var(--current-week-border);
+  color: var(--current-week-border);
+  white-space: nowrap;
+}
+.series-tile-pill--over {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+.series-tile-track {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.series-tile-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+.series-tile-meta:empty {
+  display: none;
+}
+
+.series-tile-timing {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.series-tile-timing .race-time {
+  font-size: 0.72rem;
+  color: var(--text);
+}
+
+.series-tile-cars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+.series-tile-cars:empty {
+  display: none;
+}
+
+/* Season strip: one segment per scheduled week */
+.series-tile-strip {
+  display: flex;
+  gap: 2px;
+  margin-top: auto;
+  margin-bottom: 0.55rem;
+  padding: 0.25rem 0;
+  cursor: pointer;
+}
+/* Weeks still to come read as solid track; weeks already raced fade out. */
+.series-tile-seg {
+  flex: 1;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--border);
+  transition:
+    transform 0.12s,
+    background 0.12s;
+}
+.series-tile-seg.is-past {
+  background: var(--surface2);
+  opacity: 0.5;
+}
+.series-tile-seg.is-now {
+  background: var(--accent);
+}
+.series-tile-seg.is-added {
+  background: #16a34a;
+  opacity: 1;
+}
+.series-tile-seg.is-now.is-added {
+  background: linear-gradient(90deg, var(--accent) 50%, #16a34a 50%);
+}
+.series-tile-strip:hover .series-tile-seg {
+  transform: scaleY(1.6);
+}
+
+.series-tile-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.series-tile-expand {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.series-tile-expand:hover {
+  color: var(--text);
+}
+.series-tile-expand-icon {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.15s;
+}
+.series-tile-expand:hover .series-tile-expand-icon {
+  transform: translateX(2px);
+}
+
 .series-header {
   padding: 0.75rem 1rem;
   cursor: pointer;
@@ -999,7 +1294,7 @@ body {
   opacity: 1;
 }
 /* These badges sit at the far right of their card, where a centred tooltip runs
-   off the viewport — anchor its right edge to the badge instead. */
+   off the viewport - anchor its right edge to the badge instead. */
 .tw-card .series-freq::after,
 .my-race-card .series-freq::after {
   left: auto;
@@ -2021,7 +2316,7 @@ body {
 }
 
 /* Garage Modal */
-/* ── Modal shell — every overlay in the app is built from these ──────────── */
+/* ── Modal shell - every overlay in the app is built from these ──────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -2151,7 +2446,7 @@ body {
 .sub-tab-btn.active .sub-tab-count {
   background: var(--accent-glow);
 }
-/* Nothing selected yet — an empty pill would read as a rendering glitch. */
+/* Nothing selected yet - an empty pill would read as a rendering glitch. */
 .sub-tab-count:empty {
   display: none;
 }
@@ -2190,7 +2485,7 @@ body {
   opacity: 0.4;
   cursor: not-allowed;
 }
-/* The one suggested action in a toolbar — "Free defaults", "⚡ My Schedule". */
+/* The one suggested action in a toolbar - "Free defaults", "⚡ My Schedule". */
 .toolbar-btn--accent {
   color: var(--accent);
   border-color: var(--accent);
@@ -3022,6 +3317,14 @@ body {
     margin-left: auto;
   }
 
+  /* ── SeriesTile (All Series card view) mobile layout ── */
+  .series-tile-grid {
+    grid-template-columns: 1fr;
+  }
+  .series-tile-seg {
+    height: 4px;
+  }
+
   /* ── MyRaceCard (My Schedule) mobile layout ── */
   .my-race-card {
     position: relative;
@@ -3394,40 +3697,6 @@ body {
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
-}
-
-/* View toggle buttons */
-.se-view-toggle {
-  display: flex;
-  gap: 2px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 2px;
-  flex-shrink: 0;
-}
-.se-view-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--text-dim);
-  cursor: pointer;
-  transition:
-    background 0.12s,
-    color 0.12s;
-}
-.se-view-btn:hover {
-  color: var(--text);
-}
-.se-view-btn.active {
-  background: var(--surface);
-  color: var(--accent);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* List layout */
@@ -3809,7 +4078,7 @@ body {
   opacity: 0.88;
 }
 
-/* Tab nav overflow for 5 tabs on desktop (not needed on mobile — uses fixed bottom nav) */
+/* Tab nav overflow for 5 tabs on desktop (not needed on mobile - uses fixed bottom nav) */
 @media (min-width: 769px) {
   .tab-nav-inner {
     overflow-x: auto;

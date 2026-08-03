@@ -1,12 +1,12 @@
 # iRacingHub
 
 React + TypeScript + Vite SPA over a static season schedule (`src/data.ts`). Zustand store,
-one stylesheet (`src/style.css`), no router — five tabs switched from store state. Deployed to
+one stylesheet (`src/style.css`), no router - five tabs switched from store state. Deployed to
 GitHub Pages on push to `main`.
 
 `npm run dev` · `npm run typecheck` · `npm run build`
 
-## Component gallery — `/storybook`
+## Component gallery - `/storybook`
 
 Every component in the app, rendered from the real components and stylesheet, at
 `storybook/index.html` (a second Vite entry, so it is a real URL). `src/storybook/` holds the
@@ -14,14 +14,14 @@ shell, the fixtures and one file per section.
 
 **Open it instead of clicking through the app** when checking anything visual:
 
-- States that are awkward to reach for real are staged as standing variants — owned/locked rows,
+- States that are awkward to reach for real are staged as standing variants - owned/locked rows,
   the unpriced `$?` chip, the neutral empty-garage state, no-results, dimmed past weeks,
   completed vs. live events, disabled buttons.
 - The search box matches story names, descriptions and CSS class names, so it answers "which
   component owns `.list-badge`?" faster than grepping.
 - Open it after any `src/data.ts` update. Fixtures are picked out of `SCHEDULE_DATA` by
   predicate, so the gallery renders the new season's real content and data gaps show up
-  immediately — that is how `laps: 'mins'` and a `$0.00` price chip were caught.
+  immediately - that is how `laps: 'mins'` and a `$0.00` price chip were caught.
 
 Rules:
 
@@ -30,15 +30,21 @@ Rules:
 - The dependency is one-way: app code must never import from `src/storybook/`.
   `SpecialEventCard` is exported solely so the gallery can render it.
 - The page sets `window.__IRACING_EPHEMERAL__`, which makes `utils/storage.ts` drop every read
-  and write. Demo interactions must never reach a visitor's saved data — keep it that way.
+  and write. Demo interactions must never reach a visitor's saved data - keep it that way.
 - Gallery CSS lives in `src/storybook/storybook.css` and is entirely `sb-`prefixed.
 
 ## Conventions
 
 - Shared UI primitives live in `src/components/`: `Modal` (every overlay), `CheckRow` (every
   selectable content row), `CatBadge`/`ClassBadge`, `RaceMeta` (`TrackName`, `LapsBadge`,
-  `RainBadge`), `icons.tsx` (every SVG used more than once). Reach for these before writing
-  new markup — the duplicates they replaced had already drifted apart.
+  `RainBadge`), `ViewToggle` (every grid/list switcher), `icons.tsx` (every SVG used more than
+  once). Reach for these before writing new markup - the duplicates they replaced had already
+  drifted apart.
+- **Never use a long dash.** Only the regular hyphen `-`, everywhere: prose, comments, UI
+  strings, CSS. That rules out em dash (U+2014), en dash (U+2013) and their HTML entity and
+  `\u` escape forms. The one exception is `src/data/` and `src/data.ts`, where dashes inside
+  real iRacing track and car names must match the catalogue exactly.
+  Check with `grep -rnP '[\x{2013}\x{2014}]' src CLAUDE.md --exclude-dir=data`.
 - Category and licence-class metadata (label, short label, abbreviation, colour) come from
   `utils/helpers.ts`; class hues are the `--class-*` variables. Do not re-declare either.
 - The car and track catalogues come from `utils/catalog.ts`. Anything offered as a filter must

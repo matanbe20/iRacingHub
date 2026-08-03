@@ -5,7 +5,7 @@ import { FREE_CARS, FREE_TRACKS } from '../data/garage-defaults';
 import { getCurrentWeek } from '../utils/schedule';
 import { resolveTimeZone } from '../utils/raceTimes';
 import { readJSON, readRaw, writeJSON, writeRaw } from '../utils/storage';
-import type { Tab, Theme, TimeFormat, MySchedule, RaceEntry } from '../types';
+import type { AllSeriesView, Tab, Theme, TimeFormat, MySchedule, RaceEntry } from '../types';
 
 const ALL_CATEGORIES = ['SPORTS CAR', 'FORMULA CAR', 'OVAL', 'DIRT ROAD', 'DIRT OVAL', 'UNRANKED'];
 const ALL_CLASSES = ['R', 'D', 'C', 'B', 'A'];
@@ -66,12 +66,14 @@ export interface StoreState {
   sharedGarageTracks: string[];
 
   // Settings
-  /** Resolved IANA zone actually used for display — never empty. */
+  /** Resolved IANA zone actually used for display - never empty. */
   timeZone: string;
   /** True while following the browser zone, so a travelling user keeps up to date. */
   timeZoneAuto: boolean;
   timeFormat: TimeFormat;
   showRaceTimes: boolean;
+  /** Which layout the All Series tab renders in. */
+  allSeriesView: AllSeriesView;
   isSettingsModalOpen: boolean;
 
   // Filtered count
@@ -131,6 +133,7 @@ export interface StoreState {
   setTimeZone: (tz: string | null) => void;
   setTimeFormat: (fmt: TimeFormat) => void;
   toggleRaceTimes: () => void;
+  setAllSeriesView: (view: AllSeriesView) => void;
   openSettingsModal: () => void;
   closeSettingsModal: () => void;
 
@@ -242,7 +245,7 @@ function loadInitialState(): Partial<StoreState> {
     if (Array.isArray(savedOwned.cars)) ownedCars = new Set(savedOwned.cars);
     if (Array.isArray(savedOwned.tracks)) ownedTracks = migrateTrackSet(new Set(savedOwned.tracks));
   } else {
-    // First visit — pre-populate with items included with iRacing membership
+    // First visit - pre-populate with items included with iRacing membership
     ownedCars = new Set(FREE_CARS);
     ownedTracks = new Set(FREE_TRACKS);
   }
@@ -251,12 +254,13 @@ function loadInitialState(): Partial<StoreState> {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme: Theme = (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : (prefersDark ? 'dark' : 'light');
 
-  // Settings — default the timezone to the browser's and the clock to its locale.
+  // Settings - default the timezone to the browser's and the clock to its locale.
   let timeZoneAuto = true;
   let savedZone: string | null = null;
   let timeFormat: TimeFormat = Intl.DateTimeFormat().resolvedOptions().hour12 ? '12h' : '24h';
   let showRaceTimes = true;
-  const savedSettings = readJSON<{ timeZone?: unknown; timeZoneAuto?: unknown; timeFormat?: unknown; showRaceTimes?: unknown }>(SETTINGS_KEY);
+  let allSeriesView: AllSeriesView = 'card';
+  const savedSettings = readJSON<{ timeZone?: unknown; timeZoneAuto?: unknown; timeFormat?: unknown; showRaceTimes?: unknown; allSeriesView?: unknown }>(SETTINGS_KEY);
   if (savedSettings) {
     // resolveTimeZone() falls back to the browser zone if the stored IANA id is
     // unknown to this engine, so a stale name can never throw at render time.
@@ -267,6 +271,7 @@ function loadInitialState(): Partial<StoreState> {
     }
     if (savedSettings.timeFormat === '12h' || savedSettings.timeFormat === '24h') timeFormat = savedSettings.timeFormat;
     if (typeof savedSettings.showRaceTimes === 'boolean') showRaceTimes = savedSettings.showRaceTimes;
+    if (savedSettings.allSeriesView === 'card' || savedSettings.allSeriesView === 'list') allSeriesView = savedSettings.allSeriesView;
   }
   const timeZone = resolveTimeZone(timeZoneAuto ? null : savedZone);
 
@@ -339,7 +344,7 @@ function loadInitialState(): Partial<StoreState> {
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
   }
 
-  return { ...filters, mySchedule, favorites, ownedCars, ownedTracks, theme, activeTab, selectedWeek, sharedEntries, isShareModalOpen, sharedGarageCars, sharedGarageTracks, isGarageShareModalOpen, timeZone, timeZoneAuto, timeFormat, showRaceTimes };
+  return { ...filters, mySchedule, favorites, ownedCars, ownedTracks, theme, activeTab, selectedWeek, sharedEntries, isShareModalOpen, sharedGarageCars, sharedGarageTracks, isGarageShareModalOpen, timeZone, timeZoneAuto, timeFormat, showRaceTimes, allSeriesView };
 }
 
 function syncUrlParams(state: StoreState): void {
@@ -389,6 +394,7 @@ function saveSettings(state: StoreState): void {
     timeZoneAuto: state.timeZoneAuto,
     timeFormat: state.timeFormat,
     showRaceTimes: state.showRaceTimes,
+    allSeriesView: state.allSeriesView,
   });
 }
 
@@ -438,6 +444,7 @@ const useStore = create<StoreState>((set, get) => ({
   timeZoneAuto: initialState.timeZoneAuto ?? true,
   timeFormat: initialState.timeFormat ?? '24h',
   showRaceTimes: initialState.showRaceTimes ?? true,
+  allSeriesView: initialState.allSeriesView ?? 'card',
   isSettingsModalOpen: false,
 
   // Filter actions
@@ -562,7 +569,7 @@ const useStore = create<StoreState>((set, get) => ({
           );
           return { classFilterAdvanced: true, advancedClassMap: map };
         }
-        // Returning to previously customized state — just re-enable
+        // Returning to previously customized state - just re-enable
         return { classFilterAdvanced: true };
       }
       return { classFilterAdvanced: false };
@@ -698,6 +705,11 @@ const useStore = create<StoreState>((set, get) => ({
 
   toggleRaceTimes() {
     set(state => ({ showRaceTimes: !state.showRaceTimes }));
+    saveSettings(get());
+  },
+
+  setAllSeriesView(view) {
+    set({ allSeriesView: view });
     saveSettings(get());
   },
 

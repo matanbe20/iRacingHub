@@ -389,7 +389,7 @@
   position: static;
   height: 100%;
 }
-/* Below 768px the tab bar is fixed to the bottom of the window — inside a story
+/* Below 768px the tab bar is fixed to the bottom of the window - inside a story
    that would float it over the gallery, so keep framed chrome in its frame. */
 .sb-frame .tab-nav,
 .sb-frame .header {

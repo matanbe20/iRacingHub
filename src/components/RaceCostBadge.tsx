@@ -68,8 +68,8 @@ export default function RaceCostBadge({ readiness }: RaceCostBadgeProps) {
         onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
         title={
           (readiness.needsTrack && readiness.needsCar ? 'Need track + car' : readiness.needsTrack ? 'Need track' : 'Need car')
-          + (unpriced ? ' — iRacing publishes no separate price for it' : '')
-          + ' — click for options'
+          + (unpriced ? ' - iRacing publishes no separate price for it' : '')
+          + ' - click for options'
         }
       >
         {unpriced ? '$?' : priceTag(readiness.unlockCost)}

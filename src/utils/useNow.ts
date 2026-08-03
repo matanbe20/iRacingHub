@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 /**
- * One shared 1-second ticker for every live countdown on the page — hundreds of
+ * One shared 1-second ticker for every live countdown on the page - hundreds of
  * race cards must not each own a `setInterval`. The timer only runs while at
  * least one countdown is mounted.
  */

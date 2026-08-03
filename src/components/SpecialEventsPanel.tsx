@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SPECIAL_EVENTS } from '../data/special-events';
 import { IconGrid, IconList, IconTwitch, IconYouTube } from './icons';
+import ViewToggle from './ViewToggle';
 import type { SpecialEvent, SpecialEventType } from '../data/special-events';
 
 type EventStatus = 'active' | 'upcoming' | 'completed' | 'tbd';
@@ -31,8 +32,8 @@ function formatDateRange(start: string, end: string): string {
   const sd = s.getUTCDate();
   const ed = e.getUTCDate();
   const year = e.getUTCFullYear();
-  if (sm === em) return `${sm} ${sd}–${ed}, ${year}`;
-  return `${sm} ${sd} – ${em} ${ed}, ${year}`;
+  if (sm === em) return `${sm} ${sd}-${ed}, ${year}`;
+  return `${sm} ${sd} - ${em} ${ed}, ${year}`;
 }
 
 function typeBadgeClass(type: SpecialEventType): string {
@@ -185,7 +186,7 @@ function LiveEventHero({ event, now }: { event: SpecialEvent; now: Date }) {
           <iframe
             className="se-live-hero-iframe"
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&rel=0&hl=en&modestbranding=1`}
-            title={`${event.name} — Live Stream`}
+            title={`${event.name} - Live Stream`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
@@ -276,22 +277,14 @@ export default function SpecialEventsPanel() {
           <h2>Upcoming iRacing Special Events</h2>
           <span className="se-event-count">{upcoming.length} events</span>
         </div>
-        <div className="se-view-toggle">
-          <button
-            className={'se-view-btn' + (view === 'grid' ? ' active' : '')}
-            onClick={() => setView('grid')}
-            title="Grid view"
-          >
-            <IconGrid />
-          </button>
-          <button
-            className={'se-view-btn' + (view === 'list' ? ' active' : '')}
-            onClick={() => setView('list')}
-            title="List view"
-          >
-            <IconList />
-          </button>
-        </div>
+        <ViewToggle
+          value={view}
+          onChange={setView}
+          options={[
+            { value: 'grid', label: 'Grid view', icon: <IconGrid /> },
+            { value: 'list', label: 'List view', icon: <IconList /> },
+          ]}
+        />
       </div>
 
       <div className={containerClass}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import type { RaceEntry } from '../types';
-import { catClass, catLabel, groupCarsByClass } from '../utils/helpers';
+import { catClass, catLabel, groupCarsByClass, hasRaceDistance } from '../utils/helpers';
 
 function formatCarsForPDF(cars: string): string {
   const groups = groupCarsByClass(cars);
@@ -156,13 +156,13 @@ interface Props {
 
 export function SchedulePDFDocument({ entries, groups, groupOrder, today }: Props) {
   return (
-    <Document title="iRacing Hub — My Schedule" author="iracinghub.com">
+    <Document title="iRacing Hub - My Schedule" author="iracinghub.com">
       <Page size="A4" orientation="landscape" style={s.page}>
         {/* Header */}
         <View style={s.header} fixed>
           <View style={s.headerLeft}>
             <Text style={s.title}>iRacing Hub</Text>
-            <Text style={s.subtitle}>2026 Season 3 — My Schedule</Text>
+            <Text style={s.subtitle}>2026 Season 3 - My Schedule</Text>
           </View>
           <Text style={s.meta}>Generated {today}{'\n'}{entries.length} race{entries.length !== 1 ? 's' : ''} saved</Text>
         </View>
@@ -206,7 +206,7 @@ export function SchedulePDFDocument({ entries, groups, groupOrder, today }: Prop
                     <Text style={s.cell}>{e.track}</Text>
                   </View>
                   <View style={{ width: COL.laps }}>
-                    <Text style={s.cellCenter}>{e.laps || '—'}</Text>
+                    <Text style={s.cellCenter}>{hasRaceDistance(e.laps) ? e.laps : '-'}</Text>
                   </View>
                 </View>
               );

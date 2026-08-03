@@ -25,7 +25,7 @@ const FALLBACK_ZONES = [
   'America/Vancouver', 'America/Anchorage', 'Pacific/Honolulu', 'UTC',
 ];
 
-/** Minutes east of UTC for a zone right now — used to sort the picker sensibly. */
+/** Minutes east of UTC for a zone right now - used to sort the picker sensibly. */
 function offsetMinutes(tz: string, at: number): number {
   try {
     const parts = new Intl.DateTimeFormat('en-US', {
@@ -78,7 +78,7 @@ export default function SettingsModal() {
   const toggleRaceTimes = useStore(s => s.toggleRaceTimes);
 
   // Offsets are DST-dependent, so build the list once per open rather than at
-  // module load — but not on every render, since it's ~430 Intl formats.
+  // module load - but not on every render, since it's ~430 Intl formats.
   const zones = useMemo(() => (isOpen ? buildZoneList(Date.now()) : []), [isOpen]);
   const browserZone = useMemo(() => resolveTimeZone(null), []);
 
@@ -128,7 +128,7 @@ export default function SettingsModal() {
               value={timeZoneAuto ? '__auto__' : timeZone}
               onChange={e => setTimeZone(e.target.value === '__auto__' ? null : e.target.value)}
             >
-              <option value="__auto__">Auto — {browserZone.replace(/_/g, ' ')}</option>
+              <option value="__auto__">Auto - {browserZone.replace(/_/g, ' ')}</option>
               {zones.map(z => <option key={z.tz} value={z.tz}>{z.label}</option>)}
             </select>
             <span className="settings-hint">Race times are shown in this zone.</span>
